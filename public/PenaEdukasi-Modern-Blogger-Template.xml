@@ -1,22 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
-<html xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<html b:css='false' b:defaultwidgetversion='2' b:layoutsversion='3' b:responsive='true' b:templateUrl='' b:templateVersion='1.3.0' b:version='2' expr:dir='data:blog.languageDirection' lang='id' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
 <head>
-<meta charset='UTF-8'/>
-<meta content='width=device-width, initial-scale=1.0' name='viewport'/>
-<meta content='blogger' name='generator'/>
+<meta charset='utf-8'/>
+<meta content='width=device-width,initial-scale=1,minimum-scale=1,viewport-fit=cover' name='viewport'/>
+<meta content='IE=edge' http-equiv='X-UA-Compatible'/>
+<meta content='#1a8a9e' name='theme-color'/>
+<meta content='#1a8a9e' name='msapplication-navbutton-color'/>
+<meta content='#1a8a9e' name='apple-mobile-web-app-status-bar-style'/>
+
+<b:if cond='data:view.isHomepage'>
+  <title><data:blog.title/></title>
+<b:elseif cond='data:view.isPost or data:view.isPage'/>
+  <title><data:blog.pageName/> - <data:blog.title/></title>
+<b:elseif cond='data:view.search.label'/>
+  <title>Kategori: <data:view.search.label/> - <data:blog.title/></title>
+<b:else/>
+  <title><data:blog.pageTitle/></title>
+</b:if>
+
+<b:include data='blog' name='all-head-content'/>
+<link expr:href='data:blog.canonicalUrl' rel='canonical'/>
+
+<link href='https://fonts.googleapis.com' rel='preconnect'/>
+<link crossorigin='anonymous' href='https://fonts.gstatic.com' rel='preconnect'/>
 <link href='https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@400;500;600;700&amp;display=swap' rel='stylesheet'/>
-<title><data:blog.pageTitle/></title>
 
 <b:skin><![CDATA[
 /* ============================================
-   PENA EDUKASI MODERN BLOGGER TEMPLATE
+   PENA EDUKASI - MODERN BLOGGER TEMPLATE V2
    Background: #F8F9FA | Primary: #1a8a9e
-   Dark Mode + Light Mode Support
-   5 Grid Styles + Sticky Sidebar + Related Posts
    ============================================ */
 
-/* === CSS VARIABLES === */
 :root {
   --bg-primary: #F8F9FA;
   --bg-card: #FFFFFF;
@@ -36,15 +51,13 @@
   --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
   --radius: 12px;
   --radius-sm: 8px;
-  --radius-lg: 16px;
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-serif: 'Playfair Display', Georgia, serif;
   --topbar-h: 64px;
   --sidebar-w: 270px;
   --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
 }
 
-/* === RESET === */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
@@ -80,8 +93,7 @@ body.dark-mode .popular-item .pop-title { color: var(--text-dark-primary); }
 body.dark-mode .popular-item .pop-date { color: var(--text-dark-secondary); }
 body.dark-mode .popular-item { border-color: var(--border-dark); }
 body.dark-mode .category-tag { background: rgba(26,138,158,0.2); color: #5cc8db; }
-body.dark-mode .breadcrumb a,
-body.dark-mode .breadcrumb span { color: var(--text-dark-secondary); }
+body.dark-mode .breadcrumb a, body.dark-mode .breadcrumb span { color: var(--text-dark-secondary); }
 body.dark-mode .sidebar-brand h2 { color: #5cc8db; }
 body.dark-mode .sidebar-nav li a { color: var(--text-dark-primary); }
 body.dark-mode .sidebar-section-title { color: var(--text-dark-secondary); }
@@ -120,19 +132,14 @@ body.dark-mode .archive-list a { color: var(--text-dark-secondary); }
 .topbar-nav a { font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); transition: color var(--transition); }
 .topbar-nav a:hover { color: var(--accent); }
 .topbar-actions { display: flex; gap: 10px; align-items: center; }
-
-/* Theme Toggle */
 .theme-toggle {
   width: 36px; height: 36px; border-radius: 50%;
   border: 1px solid var(--border-color);
   background: var(--bg-card); color: var(--text-secondary);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
   transition: all var(--transition); font-size: 1rem;
 }
 .theme-toggle:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-/* Search Box */
 .search-box { position: relative; }
 .search-box input {
   width: 220px; padding: 8px 36px 8px 14px;
@@ -147,7 +154,7 @@ body.dark-mode .archive-list a { color: var(--text-dark-secondary); }
   color: var(--text-secondary); font-size: 0.85rem; pointer-events: none;
 }
 
-/* === SIDEBAR LEFT (FIXED) === */
+/* === SIDEBAR LEFT === */
 .sidebar-left {
   position: fixed; top: 0; left: 0; bottom: 0;
   width: var(--sidebar-w);
@@ -178,12 +185,11 @@ body.dark-mode .archive-list a { color: var(--text-dark-secondary); }
 }
 .sidebar-nav li a:hover { background: var(--accent-light); color: var(--accent); }
 .sidebar-nav li a .nav-icon { font-size: 1rem; width: 20px; text-align: center; }
-
-/* Popular Posts */
 .popular-item { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
 .popular-item:last-child { border-bottom: none; }
 .popular-item .pop-thumb { width: 60px; height: 60px; border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0; }
-.popular-item .pop-title { font-size: 0.82rem; font-weight: 600; line-height: 1.4; color: var(--text-primary); }
+.popular-item .pop-info { flex: 1; min-width: 0; }
+.popular-item .pop-title { font-size: 0.82rem; font-weight: 600; line-height: 1.4; color: var(--text-primary); display: block; }
 .popular-item .pop-date { font-size: 0.72rem; color: var(--text-secondary); margin-top: 3px; }
 
 /* === MAIN LAYOUT === */
@@ -229,8 +235,6 @@ body.dark-mode .archive-list a { color: var(--text-dark-secondary); }
   width: 4px; border-radius: 2px; background: var(--accent);
 }
 .grid-section .view-all { font-size: 0.85rem; font-weight: 600; color: var(--accent); }
-
-/* Grid Overlay Card */
 .grid-overlay-card { position: relative; border-radius: var(--radius); overflow: hidden; cursor: pointer; display: block; }
 .grid-overlay-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
 .grid-overlay-card:hover img { transform: scale(1.05); }
@@ -247,7 +251,7 @@ body.dark-mode .archive-list a { color: var(--text-dark-secondary); }
 .grid-overlay-title { color: #fff; font-size: 1rem; font-weight: 600; line-height: 1.4; }
 .grid-overlay-title.lg { font-size: 1.35rem; }
 
-/* 1. BENTO BOX GRID */
+/* 1. BENTO BOX */
 .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: 280px 200px; gap: 12px; }
 .bento-grid .bento-1 { grid-column: 1 / 3; grid-row: 1 / 3; }
 .bento-grid .bento-2 { grid-column: 3; grid-row: 1; }
@@ -255,14 +259,14 @@ body.dark-mode .archive-list a { color: var(--text-dark-secondary); }
 .bento-grid .bento-4 { grid-column: 3; grid-row: 2; }
 .bento-grid .bento-5 { grid-column: 4; grid-row: 2; }
 
-/* 2. EDITORIAL / MAGAZINE HERO */
+/* 2. EDITORIAL HERO */
 .editorial-grid { display: grid; grid-template-columns: 1.6fr 1fr; grid-template-rows: 200px 200px; gap: 12px; }
 .editorial-grid .ed-hero { grid-row: 1 / 3; }
 .editorial-grid .ed-2 { grid-column: 2; grid-row: 1; }
 .editorial-grid .ed-3 { grid-column: 2; grid-row: 2; }
 .editorial-extra { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
 
-/* 3. JUSTIFIED / TILED FLICKR */
+/* 3. JUSTIFIED FLICKR */
 .justified-grid { display: flex; flex-wrap: wrap; gap: 8px; }
 .justified-grid .j-item { flex: 1 1 auto; min-width: 150px; height: 220px; }
 .justified-grid .j-item:nth-child(1) { flex-basis: 38%; }
@@ -288,14 +292,14 @@ body.dark-mode .archive-list a { color: var(--text-dark-secondary); }
 }
 .square-grid .sq-item:hover .sq-overlay span { opacity: 1; transform: translateY(0); }
 
-/* 5. OVERLAPPING / ASYMMETRIC */
+/* 5. ASYMMETRIC */
 .asym-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 250px 220px; gap: 12px; }
 .asym-grid .asym-1 { grid-column: 1 / 3; grid-row: 1; }
 .asym-grid .asym-2 { grid-column: 3; grid-row: 1; margin-top: 30px; }
 .asym-grid .asym-3 { grid-column: 1; grid-row: 2; margin-top: -30px; }
 .asym-grid .asym-4 { grid-column: 2 / 4; grid-row: 2; }
 
-/* === ARTICLE CARDS (White bg) === */
+/* === ARTICLE CARDS === */
 .article-cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; }
 .article-card {
   background: var(--bg-card); border-radius: var(--radius); overflow: hidden;
@@ -332,7 +336,7 @@ body.dark-mode .archive-list a { color: var(--text-dark-secondary); }
 .breadcrumb a { color: var(--accent); }
 .post-title-single {
   font-family: var(--font-serif); font-size: 2.2rem; font-weight: 700;
-  line-height: 1.3; color: var(--text-primary); margin-bottom: 16px; text-wrap: balance;
+  line-height: 1.3; color: var(--text-primary); margin-bottom: 16px;
 }
 .post-meta-single {
   display: flex; gap: 16px; align-items: center;
@@ -362,7 +366,7 @@ body.dark-mode .archive-list a { color: var(--text-dark-secondary); }
 }
 .post-tags a:hover { background: var(--accent); color: #fff; }
 
-/* === RELATED POSTS (3 items) === */
+/* === RELATED POSTS === */
 .related-section { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border-color); }
 .related-section h3 {
   font-family: var(--font-serif); font-size: 1.3rem; font-weight: 700;
@@ -381,7 +385,7 @@ body.dark-mode .archive-list a { color: var(--text-dark-secondary); }
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 
-/* === SCROLL TO TOP (Elegant) === */
+/* === SCROLL TO TOP === */
 .scroll-top-btn {
   position: fixed; bottom: 28px; right: 28px;
   width: 46px; height: 46px; border-radius: 50%;
@@ -411,8 +415,6 @@ body.dark-mode .archive-list a { color: var(--text-dark-secondary); }
   text-align: center; margin-top: 30px; padding-top: 20px;
   border-top: 1px solid var(--border-color); font-size: 0.8rem; color: var(--text-secondary);
 }
-
-/* Comments */
 .comments-section { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-color); }
 
 /* Mobile */
@@ -477,24 +479,28 @@ body.dark-mode .archive-list a { color: var(--text-dark-secondary); }
 
 <b:template-skin>
 <![CDATA[
-body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
+body#layout .sidebar-left,
+body#layout .sidebar-right {
+  width: 300px;
+}
+body#layout .main-content {
+  width: 100%;
+}
 ]]>
 </b:template-skin>
+
 </head>
 
 <body>
-<b:class cond='data:blog.pageType == &quot;item&quot;' name='item-page'/>
-<b:class cond='data:blog.pageType == &quot;index&quot;' name='index-page'/>
+<b:class cond='data:view.isPost' name='item-page'/>
+<b:class cond='data:view.isHomepage or data:view.isLabelSearch or data:view.isArchive' name='index-page'/>
 
 <!-- Mobile Overlay -->
-<div class='mobile-overlay' id='mobileOverlay'>
-  <b:attr name='onclick' value='closeSidebar()'/>
-</div>
+<div class='mobile-overlay' id='mobileOverlay'></div>
 
 <!-- ============ SIDEBAR LEFT ============ -->
 <aside class='sidebar-left' id='sidebarLeft'>
-  <button class='sidebar-close-btn'>
-    <b:attr name='onclick' value='closeSidebar()'/>&#x2715;</button>
+  <button class='sidebar-close-btn' id='sidebarCloseBtn'>&#x2715;</button>
   <div class='sidebar-brand'>
     <h2><data:blog.title/></h2>
     <p>Membangun Generasi Cerdas</p>
@@ -503,7 +509,7 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
   <div class='sidebar-section'>
     <span class='sidebar-section-title'>Navigasi</span>
     <ul class='sidebar-nav'>
-      <li><a href='/'><span class='nav-icon'>&#127968;</span> Beranda</a></li>
+      <li><a expr:href='data:blog.homepageUrl'><span class='nav-icon'>&#127968;</span> Beranda</a></li>
       <li><a expr:href='data:blog.homepageUrl + &quot;search/label/Pendidikan&quot;'><span class='nav-icon'>&#128218;</span> Pendidikan</a></li>
       <li><a expr:href='data:blog.homepageUrl + &quot;search/label/Kurikulum&quot;'><span class='nav-icon'>&#128203;</span> Kurikulum</a></li>
       <li><a expr:href='data:blog.homepageUrl + &quot;search/label/Materi&quot;'><span class='nav-icon'>&#128221;</span> Materi</a></li>
@@ -529,7 +535,7 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
                 <b:if cond='data:post.featuredImage'>
                   <img class='pop-thumb' expr:alt='data:post.title' expr:src='resizeImage(data:post.featuredImage, 120, &quot;1:1&quot;)'/>
                 </b:if>
-                <div>
+                <div class='pop-info'>
                   <a class='pop-title' expr:href='data:post.url'><data:post.title/></a>
                   <div class='pop-date'><data:post.date/></div>
                 </div>
@@ -544,11 +550,10 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
 
 <!-- ============ TOPBAR ============ -->
 <header class='topbar'>
-  <button class='mobile-menu-btn'>
-    <b:attr name='onclick' value='openSidebar()'/>&#9776;</button>
+  <button class='mobile-menu-btn' id='mobileMenuBtn'>&#9776;</button>
   <a class='topbar-logo' expr:href='data:blog.homepageUrl'><data:blog.title/></a>
   <nav class='topbar-nav'>
-    <a href='/'>Beranda</a>
+    <a expr:href='data:blog.homepageUrl'>Beranda</a>
     <a expr:href='data:blog.homepageUrl + &quot;search/label/Pendidikan&quot;'>Pendidikan</a>
     <a expr:href='data:blog.homepageUrl + &quot;search/label/Kurikulum&quot;'>Kurikulum</a>
     <a expr:href='data:blog.homepageUrl + &quot;search/label/Tutorial&quot;'>Tutorial</a>
@@ -560,8 +565,7 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
         <span class='search-icon'>&#128269;</span>
       </form>
     </div>
-    <button class='theme-toggle' id='themeToggle' title='Dark Mode'>
-      <b:attr name='onclick' value='toggleDarkMode()'/>&#127769;</button>
+    <button class='theme-toggle' id='themeToggle' title='Dark Mode'>&#127769;</button>
   </div>
 </header>
 
@@ -571,7 +575,7 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
     <div class='main-content'>
 
       <!-- === HOMEPAGE: 5 GRID STYLES === -->
-      <b:if cond='data:blog.pageType == &quot;index&quot;'>
+      <b:if cond='data:view.isHomepage'>
 
         <!-- GRID 1: BENTO BOX (Pendidikan) -->
         <div class='grid-section' id='bentoSection'>
@@ -579,9 +583,7 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
             <h2 class='grid-section-title'>Pendidikan</h2>
             <a class='view-all' expr:href='data:blog.homepageUrl + &quot;search/label/Pendidikan&quot;'>Lihat Semua &#8594;</a>
           </div>
-          <div class='bento-grid' id='bentoGrid'>
-            <!-- JS populated -->
-          </div>
+          <div class='bento-grid' id='bentoGrid'></div>
         </div>
 
         <!-- GRID 2: EDITORIAL HERO (Kurikulum) -->
@@ -590,9 +592,7 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
             <h2 class='grid-section-title'>Kurikulum</h2>
             <a class='view-all' expr:href='data:blog.homepageUrl + &quot;search/label/Kurikulum&quot;'>Lihat Semua &#8594;</a>
           </div>
-          <div class='editorial-grid' id='editorialGrid'>
-            <!-- JS populated -->
-          </div>
+          <div class='editorial-grid' id='editorialGrid'></div>
         </div>
 
         <!-- GRID 3: JUSTIFIED FLICKR (Materi) -->
@@ -601,9 +601,7 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
             <h2 class='grid-section-title'>Materi</h2>
             <a class='view-all' expr:href='data:blog.homepageUrl + &quot;search/label/Materi&quot;'>Lihat Semua &#8594;</a>
           </div>
-          <div class='justified-grid' id='justifiedGrid'>
-            <!-- JS populated -->
-          </div>
+          <div class='justified-grid' id='justifiedGrid'></div>
         </div>
 
         <!-- GRID 4: SQUARE INSTAGRAM (Tutorial) -->
@@ -612,9 +610,7 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
             <h2 class='grid-section-title'>Tutorial</h2>
             <a class='view-all' expr:href='data:blog.homepageUrl + &quot;search/label/Tutorial&quot;'>Lihat Semua &#8594;</a>
           </div>
-          <div class='square-grid' id='squareGrid'>
-            <!-- JS populated -->
-          </div>
+          <div class='square-grid' id='squareGrid'></div>
         </div>
 
         <!-- GRID 5: ASYMMETRIC (Madrasah) -->
@@ -623,9 +619,7 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
             <h2 class='grid-section-title'>Madrasah</h2>
             <a class='view-all' expr:href='data:blog.homepageUrl + &quot;search/label/Madrasah&quot;'>Lihat Semua &#8594;</a>
           </div>
-          <div class='asym-grid' id='asymGrid'>
-            <!-- JS populated -->
-          </div>
+          <div class='asym-grid' id='asymGrid'></div>
         </div>
 
         <!-- LATEST ARTICLES HEADER -->
@@ -646,8 +640,8 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
           </b:widget-settings>
 
           <b:includable id='main' var='this'>
-            <!-- INDEX PAGE: Article Cards -->
-            <b:if cond='data:blog.pageType == &quot;index&quot;'>
+            <!-- INDEX PAGE -->
+            <b:if cond='data:view.isHomepage or data:view.isLabelSearch or data:view.isArchive'>
               <div class='article-cards-grid'>
                 <b:loop values='data:posts' var='post'>
                   <article class='article-card'>
@@ -680,8 +674,8 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
               </div>
             </b:if>
 
-            <!-- SINGLE POST PAGE -->
-            <b:if cond='data:blog.pageType == &quot;item&quot;'>
+            <!-- SINGLE POST -->
+            <b:if cond='data:view.isPost'>
               <b:loop values='data:posts' var='post'>
                 <article class='post-wrapper'>
                   <nav class='breadcrumb'>
@@ -725,12 +719,10 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
                     </div>
                   </b:if>
 
-                  <!-- RELATED POSTS: 3 Artikel Terkait -->
+                  <!-- RELATED POSTS -->
                   <div class='related-section'>
                     <h3>Artikel Terkait</h3>
-                    <div class='related-grid' id='relatedPosts'>
-                      <!-- JS populated -->
-                    </div>
+                    <div class='related-grid' id='relatedPosts'></div>
                   </div>
 
                   <!-- Comments -->
@@ -746,7 +738,7 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
             </b:if>
 
             <!-- STATIC PAGE -->
-            <b:if cond='data:blog.pageType == &quot;static_page&quot;'>
+            <b:if cond='data:view.isPage'>
               <b:loop values='data:posts' var='post'>
                 <article class='post-wrapper'>
                   <h1 class='post-title-single'><data:post.title/></h1>
@@ -759,6 +751,7 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
 
           </b:includable>
 
+          <!-- Required includables for Blog widget v2 -->
           <b:includable id='comments' var='post'>
             <div class='comments-block'>
               <div class='comments-content'>
@@ -776,15 +769,28 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
           <b:includable id='iframe_comments' var='post'>
             <b:if cond='data:post.embedCommentForm'>
               <iframe allowtransparency='true' class='blogger-iframe-color498' frameborder='0' height='410' id='comment-editor' name='comment-editor' scrolling='no' style='display:block;width:100%;' width='100%'>
-                <b:attr expr:value='data:post.commentFormIframeSrc' name='src'/>
+                <data:post.commentFormIframeSrc/>
               </iframe>
             </b:if>
           </b:includable>
 
-          <b:includable id='nextprev' var='post'>
+          <b:includable id='nextprev'>
+            <b:if cond='data:newerPageUrl or data:olderPageUrl'>
+              <div style='display:flex;justify-content:space-between;margin-top:30px;'>
+                <b:if cond='data:newerPageUrl'>
+                  <a expr:href='data:newerPageUrl' style='color:var(--accent);font-weight:600;'>&#8592; Lebih Baru</a>
+                </b:if>
+                <b:if cond='data:olderPageUrl'>
+                  <a expr:href='data:olderPageUrl' style='color:var(--accent);font-weight:600;'>Lebih Lama &#8594;</a>
+                </b:if>
+              </div>
+            </b:if>
           </b:includable>
 
           <b:includable id='postQuickEdit' var='post'>
+            <b:if cond='data:post.editUrl'>
+              <a class='post-edit' expr:href='data:post.editUrl' style='font-size:0.8rem;color:var(--accent);' title='Edit'>&#9998; Edit</a>
+            </b:if>
           </b:includable>
 
           <b:includable id='feedLinks'>
@@ -796,12 +802,27 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
           <b:includable id='backlinks' var='post'>
           </b:includable>
 
+          <b:includable id='post' var='post'>
+          </b:includable>
+
+          <b:includable id='headerByline' var='post'>
+          </b:includable>
+
+          <b:includable id='footerByline' var='post'>
+          </b:includable>
+
+          <b:includable id='shareButtons' var='post'>
+          </b:includable>
+
+          <b:includable id='postCommentsAndAd' var='post'>
+          </b:includable>
+
         </b:widget>
       </b:section>
 
     </div>
 
-    <!-- ============ SIDEBAR RIGHT (STICKY) ============ -->
+    <!-- ============ SIDEBAR RIGHT ============ -->
     <aside class='sidebar-right'>
       <div class='sidebar-right-inner'>
         <div class='sidebar-section'>
@@ -874,23 +895,20 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
       <div class='footer-links'>
         <h4>Halaman</h4>
         <ul>
-          <li><a href='/'>Beranda</a></li>
+          <li><a expr:href='data:blog.homepageUrl'>Beranda</a></li>
           <li><a href='/p/tentang.html'>Tentang</a></li>
           <li><a href='/p/kontak.html'>Kontak</a></li>
           <li><a href='/p/privacy-policy.html'>Kebijakan Privasi</a></li>
         </ul>
       </div>
     </div>
-    <div class='footer-bottom' id='footerYear'>
-      <!-- Year set by JS -->
-    </div>
+    <div class='footer-bottom' id='footerYear'></div>
   </footer>
 
 </div>
 
-<!-- SCROLL TO TOP BUTTON -->
-<button class='scroll-top-btn' id='scrollTopBtn' title='Kembali ke Atas'>
-  <b:attr name='onclick' value='window.scrollTo({top:0,behavior:&quot;smooth&quot;})'/>&#8593;</button>
+<!-- SCROLL TO TOP -->
+<button class='scroll-top-btn' id='scrollTopBtn' title='Kembali ke Atas'>&#8593;</button>
 
 <!-- ============ JAVASCRIPT ============ -->
 <script>
@@ -898,194 +916,190 @@ body#layout .sidebar-left, body#layout .sidebar-right { width: 300px; }
 
 // Footer year
 (function(){
-  var el = document.getElementById('footerYear');
+  var el=document.getElementById('footerYear');
   if(el){
-    var blogTitle = document.querySelector('.topbar-logo');
-    var name = blogTitle ? blogTitle.textContent : 'Pena Edukasi';
-    el.innerHTML = '\u00A9 ' + new Date().getFullYear() + ' ' + name + '. All Rights Reserved.';
+    var t=document.querySelector('.topbar-logo');
+    var n=t?t.textContent:'Pena Edukasi';
+    el.innerHTML='\u00A9 '+new Date().getFullYear()+' '+n+'. All Rights Reserved.';
   }
 })();
 
-// === DARK MODE TOGGLE ===
-function toggleDarkMode() {
-  var body = document.body;
-  var btn = document.getElementById('themeToggle');
-  body.classList.toggle('dark-mode');
-  if (body.classList.contains('dark-mode')) {
-    btn.innerHTML = '\u2600';
-    try { localStorage.setItem('pe-theme', 'dark'); } catch(e) {}
-  } else {
-    btn.innerHTML = '\uD83C\uDF19';
-    try { localStorage.setItem('pe-theme', 'light'); } catch(e) {}
-  }
-}
-(function() {
-  try {
-    var saved = localStorage.getItem('pe-theme');
-    if (saved === 'dark') {
+// === DARK MODE ===
+(function(){
+  var btn=document.getElementById('themeToggle');
+  function setDark(isDark){
+    if(isDark){
       document.body.classList.add('dark-mode');
-      var btn = document.getElementById('themeToggle');
-      if (btn) btn.innerHTML = '\u2600';
+      if(btn)btn.innerHTML='\u2600';
+      try{localStorage.setItem('pe-theme','dark');}catch(e){}
+    }else{
+      document.body.classList.remove('dark-mode');
+      if(btn)btn.innerHTML='\uD83C\uDF19';
+      try{localStorage.setItem('pe-theme','light');}catch(e){}
     }
-  } catch(e) {}
+  }
+  try{
+    var saved=localStorage.getItem('pe-theme');
+    if(saved==='dark')setDark(true);
+  }catch(e){}
+  if(btn)btn.addEventListener('click',function(){
+    setDark(!document.body.classList.contains('dark-mode'));
+  });
 })();
 
 // === SCROLL TO TOP ===
-window.addEventListener('scroll', function() {
-  var btn = document.getElementById('scrollTopBtn');
-  if (btn) {
-    if (window.scrollY > 400) {
-      btn.classList.add('visible');
-    } else {
-      btn.classList.remove('visible');
-    }
-  }
-});
+(function(){
+  var btn=document.getElementById('scrollTopBtn');
+  if(!btn)return;
+  window.addEventListener('scroll',function(){
+    if(window.scrollY>400){btn.classList.add('visible');}
+    else{btn.classList.remove('visible');}
+  });
+  btn.addEventListener('click',function(){
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+})();
 
 // === MOBILE SIDEBAR ===
-function openSidebar() {
-  document.getElementById('sidebarLeft').classList.add('open');
-  document.getElementById('mobileOverlay').classList.add('active');
-}
-function closeSidebar() {
-  document.getElementById('sidebarLeft').classList.remove('open');
-  document.getElementById('mobileOverlay').classList.remove('active');
-}
+(function(){
+  var sidebar=document.getElementById('sidebarLeft');
+  var overlay=document.getElementById('mobileOverlay');
+  var openBtn=document.getElementById('mobileMenuBtn');
+  var closeBtn=document.getElementById('sidebarCloseBtn');
+  function openSidebar(){
+    if(sidebar)sidebar.classList.add('open');
+    if(overlay)overlay.classList.add('active');
+  }
+  function closeSidebar(){
+    if(sidebar)sidebar.classList.remove('open');
+    if(overlay)overlay.classList.remove('active');
+  }
+  if(openBtn)openBtn.addEventListener('click',openSidebar);
+  if(closeBtn)closeBtn.addEventListener('click',closeSidebar);
+  if(overlay)overlay.addEventListener('click',closeSidebar);
+})();
 
 // === FEED HELPER ===
-function fetchFeed(label, count, callback) {
-  var url = '/feeds/posts/summary/-/' + label + '?alt=json&max-results=' + count;
-  var script = document.createElement('script');
-  var cbName = '__feedCb_' + label.replace(/[^a-zA-Z]/g,'');
-  window[cbName] = function(data) {
-    callback(data.feed.entry || []);
-    try { delete window[cbName]; } catch(e) { window[cbName] = undefined; }
-  };
-  script.src = url + '&callback=' + cbName;
-  document.body.appendChild(script);
+function peGetThumb(e){
+  if(e.media$thumbnail)return e.media$thumbnail.url.replace(/\/s72-c/,'/s600');
+  var c=e.content?e.content.$t:(e.summary?e.summary.$t:'');
+  var m=c.match(/<img[^>]+src=["']([^"']+)/);
+  return m?m[1]:'https://via.placeholder.com/600x400/1a8a9e/ffffff?text=Pena+Edukasi';
 }
-function getThumb(entry) {
-  if (entry.media$thumbnail) return entry.media$thumbnail.url.replace(/\/s72-c/,'/s600');
-  var c = entry.content ? entry.content.$t : (entry.summary ? entry.summary.$t : '');
-  var m = c.match(/<img[^>]+src=["']([^"']+)/);
-  return m ? m[1] : 'https://via.placeholder.com/600x400/1a8a9e/ffffff?text=Pena+Edukasi';
-}
-function getLink(entry) {
-  for (var i = 0; i < entry.link.length; i++) {
-    if (entry.link[i].rel === 'alternate') return entry.link[i].href;
-  }
+function peGetLink(e){
+  for(var i=0;i<e.link.length;i++){if(e.link[i].rel==='alternate')return e.link[i].href;}
   return '#';
 }
-function getTitle(entry) { return entry.title.$t; }
-function getCat(entry) { return entry.category ? entry.category[0].term : ''; }
+function peGetTitle(e){return e.title.$t;}
+function peGetCat(e){return e.category?e.category[0].term:'';}
 
-function makeOverlayCard(entry, cls, large) {
-  var titleCls = large ? 'grid-overlay-title lg' : 'grid-overlay-title';
-  return '<a href="' + getLink(entry) + '" class="grid-overlay-card ' + cls + '">' +
-    '<img src="' + getThumb(entry) + '" alt="' + getTitle(entry).replace(/"/g,'') + '"/>' +
-    '<div class="grid-overlay"><span class="grid-cat">' + getCat(entry) + '</span>' +
-    '<div class="' + titleCls + '">' + getTitle(entry) + '</div></div></a>';
+function peOverlayCard(e,cls,lg){
+  var tc=lg?'grid-overlay-title lg':'grid-overlay-title';
+  var t=peGetTitle(e).replace(/"/g,'&amp;quot;');
+  return '<a href="'+peGetLink(e)+'" class="grid-overlay-card '+cls+'">'+
+    '<img src="'+peGetThumb(e)+'" alt="'+t+'"/>'+
+    '<div class="grid-overlay"><span class="grid-cat">'+peGetCat(e)+'</span>'+
+    '<div class="'+tc+'">'+peGetTitle(e)+'</div></div></a>';
 }
 
-// Grid 1: Bento Box (Pendidikan)
-fetchFeed('Pendidikan', 5, function(entries) {
-  var g = document.getElementById('bentoGrid');
-  if (!g || entries.length < 1) return;
-  var html = '';
-  for (var i = 0; i < Math.min(entries.length, 5); i++) {
-    html += makeOverlayCard(entries[i], 'bento-' + (i+1), i === 0);
-  }
-  g.innerHTML = html;
+function peFetchLabel(label,count,cb){
+  var s=document.createElement('script');
+  var cn='__peCb_'+label.replace(/[^a-zA-Z0-9]/g,'')+'_'+Math.random().toString(36).substr(2,5);
+  window[cn]=function(d){
+    cb(d.feed?d.feed.entry||[]:[]);
+    try{delete window[cn];}catch(x){window[cn]=undefined;}
+  };
+  s.src='/feeds/posts/summary/-/'+encodeURIComponent(label)+'?alt=json-in-script&max-results='+count+'&callback='+cn;
+  document.body.appendChild(s);
+}
+
+// Grid 1: Bento (Pendidikan)
+peFetchLabel('Pendidikan',5,function(en){
+  var g=document.getElementById('bentoGrid');
+  if(!g||en.length<1)return;
+  var h='';
+  for(var i=0;i<Math.min(en.length,5);i++){h+=peOverlayCard(en[i],'bento-'+(i+1),i===0);}
+  g.innerHTML=h;
 });
 
-// Grid 2: Editorial Hero (Kurikulum)
-fetchFeed('Kurikulum', 5, function(entries) {
-  var g = document.getElementById('editorialGrid');
-  if (!g || entries.length < 1) return;
-  var html = makeOverlayCard(entries[0], 'ed-hero', true);
-  if (entries[1]) html += makeOverlayCard(entries[1], 'ed-2', false);
-  if (entries[2]) html += makeOverlayCard(entries[2], 'ed-3', false);
-  g.innerHTML = html;
-  if (entries.length > 3) {
-    var extra = document.createElement('div');
-    extra.className = 'editorial-extra';
-    var eh = '';
-    for (var i = 3; i < Math.min(entries.length, 5); i++) {
-      eh += makeOverlayCard(entries[i], '', false);
-    }
-    extra.innerHTML = eh;
-    g.parentNode.appendChild(extra);
+// Grid 2: Editorial (Kurikulum)
+peFetchLabel('Kurikulum',5,function(en){
+  var g=document.getElementById('editorialGrid');
+  if(!g||en.length<1)return;
+  var h=peOverlayCard(en[0],'ed-hero',true);
+  if(en[1])h+=peOverlayCard(en[1],'ed-2',false);
+  if(en[2])h+=peOverlayCard(en[2],'ed-3',false);
+  g.innerHTML=h;
+  if(en.length>3){
+    var ex=document.createElement('div');
+    ex.className='editorial-extra';
+    var eh='';
+    for(var i=3;i<Math.min(en.length,5);i++){eh+=peOverlayCard(en[i],'',false);}
+    ex.innerHTML=eh;
+    g.parentNode.appendChild(ex);
   }
 });
 
-// Grid 3: Justified Flickr (Materi)
-fetchFeed('Materi', 5, function(entries) {
-  var g = document.getElementById('justifiedGrid');
-  if (!g || entries.length < 1) return;
-  var html = '';
-  for (var i = 0; i < Math.min(entries.length, 5); i++) {
-    html += makeOverlayCard(entries[i], 'j-item', false);
-  }
-  g.innerHTML = html;
+// Grid 3: Justified (Materi)
+peFetchLabel('Materi',5,function(en){
+  var g=document.getElementById('justifiedGrid');
+  if(!g||en.length<1)return;
+  var h='';
+  for(var i=0;i<Math.min(en.length,5);i++){h+=peOverlayCard(en[i],'j-item',false);}
+  g.innerHTML=h;
 });
 
-// Grid 4: Square Instagram (Tutorial)
-fetchFeed('Tutorial', 5, function(entries) {
-  var g = document.getElementById('squareGrid');
-  if (!g || entries.length < 1) return;
-  var html = '';
-  for (var i = 0; i < Math.min(entries.length, 5); i++) {
-    html += '<a href="' + getLink(entries[i]) + '" class="sq-item">' +
-      '<img src="' + getThumb(entries[i]) + '" alt="' + getTitle(entries[i]).replace(/"/g,'') + '"/>' +
-      '<div class="sq-overlay"><span>' + getTitle(entries[i]) + '</span></div></a>';
+// Grid 4: Square (Tutorial)
+peFetchLabel('Tutorial',5,function(en){
+  var g=document.getElementById('squareGrid');
+  if(!g||en.length<1)return;
+  var h='';
+  for(var i=0;i<Math.min(en.length,5);i++){
+    var t=peGetTitle(en[i]).replace(/"/g,'&amp;quot;');
+    h+='<a href="'+peGetLink(en[i])+'" class="sq-item">'+
+      '<img src="'+peGetThumb(en[i])+'" alt="'+t+'"/>'+
+      '<div class="sq-overlay"><span>'+peGetTitle(en[i])+'</span></div></a>';
   }
-  g.innerHTML = html;
+  g.innerHTML=h;
 });
 
 // Grid 5: Asymmetric (Madrasah)
-fetchFeed('Madrasah', 5, function(entries) {
-  var g = document.getElementById('asymGrid');
-  if (!g || entries.length < 1) return;
-  var html = '';
-  var cls = ['asym-1','asym-2','asym-3','asym-4','asym-5'];
-  for (var i = 0; i < Math.min(entries.length, 5); i++) {
-    html += makeOverlayCard(entries[i], cls[i] || '', i === 0);
-  }
-  g.innerHTML = html;
+peFetchLabel('Madrasah',5,function(en){
+  var g=document.getElementById('asymGrid');
+  if(!g||en.length<1)return;
+  var h='';
+  var cls=['asym-1','asym-2','asym-3','asym-4','asym-5'];
+  for(var i=0;i<Math.min(en.length,5);i++){h+=peOverlayCard(en[i],cls[i]||'',i===0);}
+  g.innerHTML=h;
 });
 
 // === RELATED POSTS (3 Artikel Terkait) ===
-(function() {
-  var container = document.getElementById('relatedPosts');
-  if (!container) return;
-  var cats = document.querySelectorAll('.post-tags a');
-  var label = '';
-  if (cats.length > 0) {
-    label = cats[0].textContent.replace('#','').trim();
-  }
-  if (!label) return;
-
-  var url = '/feeds/posts/summary/-/' + encodeURIComponent(label) + '?alt=json&max-results=4';
-  var currentUrl = window.location.href;
-
-  var script = document.createElement('script');
-  window.__relatedCb = function(data) {
-    var entries = data.feed.entry || [];
-    var html = '';
-    var count = 0;
-    for (var i = 0; i < entries.length && count < 3; i++) {
-      var link = getLink(entries[i]);
-      if (link === currentUrl) continue;
-      html += '<a href="' + link + '" class="related-card">' +
-        '<img src="' + getThumb(entries[i]) + '" alt="' + getTitle(entries[i]).replace(/"/g,'') + '"/>' +
-        '<h4>' + getTitle(entries[i]) + '</h4></a>';
-      count++;
+(function(){
+  var c=document.getElementById('relatedPosts');
+  if(!c)return;
+  var tags=document.querySelectorAll('.post-tags a');
+  var label='';
+  if(tags.length>0){label=tags[0].textContent.replace('#','').trim();}
+  if(!label)return;
+  var cur=window.location.href;
+  var s=document.createElement('script');
+  var cn='__peRelated'+Math.random().toString(36).substr(2,5);
+  window[cn]=function(d){
+    var en=d.feed?d.feed.entry||[]:[]; var h=''; var ct=0;
+    for(var i=0;i<en.length&&ct<3;i++){
+      var lk=peGetLink(en[i]);
+      if(lk===cur)continue;
+      var t=peGetTitle(en[i]).replace(/"/g,'&amp;quot;');
+      h+='<a href="'+lk+'" class="related-card">'+
+        '<img src="'+peGetThumb(en[i])+'" alt="'+t+'"/>'+
+        '<h4>'+peGetTitle(en[i])+'</h4></a>';
+      ct++;
     }
-    container.innerHTML = html;
-    try { delete window.__relatedCb; } catch(e) { window.__relatedCb = undefined; }
+    c.innerHTML=h;
+    try{delete window[cn];}catch(x){window[cn]=undefined;}
   };
-  script.src = url + '&callback=__relatedCb';
-  document.body.appendChild(script);
+  s.src='/feeds/posts/summary/-/'+encodeURIComponent(label)+'?alt=json-in-script&max-results=4&callback='+cn;
+  document.body.appendChild(s);
 })();
 
 //]]>
