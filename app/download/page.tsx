@@ -22,25 +22,18 @@ export default function DownloadPage() {
   const [isDownloading, setIsDownloading] = useState(false)
   const [downloaded, setDownloaded] = useState(false)
 
-  const handleDownload = async () => {
+  const handleDownload = () => {
     setIsDownloading(true)
-    try {
-      const response = await fetch("/api/download-template")
-      const blob = await response.blob()
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement("a")
-      a.href = url
-      a.download = "PenaEdukasi-Modern-Blogger-Template.xml"
-      document.body.appendChild(a)
-      a.click()
-      window.URL.revokeObjectURL(url)
-      a.remove()
-      setDownloaded(true)
-    } catch {
-      alert("Gagal mengunduh. Silakan coba lagi.")
-    } finally {
+    const a = document.createElement("a")
+    a.href = "/PenaEdukasi-Modern-Blogger-Template.xml"
+    a.download = "PenaEdukasi-Modern-Blogger-Template.xml"
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    setTimeout(() => {
       setIsDownloading(false)
-    }
+      setDownloaded(true)
+    }, 800)
   }
 
   const features = [
