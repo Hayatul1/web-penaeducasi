@@ -2,7 +2,7 @@
 
 import { useRef } from "react"
 import Link from "next/link"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight, Download } from "lucide-react"
 import { ThemeToggle } from "./theme-toggle"
 
 const categories = [
@@ -60,6 +60,14 @@ export function TopBar() {
         >
           <ChevronRight className="h-4 w-4" />
         </button>
+
+        <Link
+          href="/download"
+          className="flex shrink-0 items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-sm transition-all hover:opacity-90"
+        >
+          <Download className="h-3.5 w-3.5" />
+          <span className="hidden sm:inline">Download XML</span>
+        </Link>
 
         <ThemeToggle />
       </div>
