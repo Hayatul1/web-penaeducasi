@@ -522,7 +522,7 @@ body#layout .main-content {
     <span class='sidebar-section-title'>Populer</span>
     <div id='popularPosts'>
       <b:section class='popular' id='popular-section' maxwidgets='1' showaddelement='no'>
-        <b:widget id='PopularPosts1' locked='false' title='Populer' type='PopularPosts' version='2'>
+        <b:widget id='PopularPosts1' locked='false' title='ARTIKEL POPULER' type='PopularPosts' version='2' visible='true'>
           <b:widget-settings>
             <b:widget-setting name='numItemsToShow'>5</b:widget-setting>
             <b:widget-setting name='showThumbnails'>true</b:widget-setting>
@@ -633,10 +633,33 @@ body#layout .main-content {
 
       <!-- === BLOG POSTS WIDGET === -->
       <b:section class='main' id='main-section' maxwidgets='1' showaddelement='no'>
-        <b:widget id='Blog1' locked='true' title='Blog Posts' type='Blog' version='2'>
+        <b:widget id='Blog1' locked='true' title='Postingan Blog' type='Blog' version='2' visible='true'>
           <b:widget-settings>
+            <b:widget-setting name='commentLabel'>$type={blogger}</b:widget-setting>
+            <b:widget-setting name='showShareButtons'>true</b:widget-setting>
+            <b:widget-setting name='authorLabel'>by</b:widget-setting>
+            <b:widget-setting name='style.unittype'>TextAndImage</b:widget-setting>
+            <b:widget-setting name='timestampLabel'>-</b:widget-setting>
+            <b:widget-setting name='reactionsLabel'/>
+            <b:widget-setting name='showAuthorProfile'>true</b:widget-setting>
+            <b:widget-setting name='style.layout'>1x1</b:widget-setting>
+            <b:widget-setting name='showLocation'>false</b:widget-setting>
+            <b:widget-setting name='showTimestamp'>true</b:widget-setting>
+            <b:widget-setting name='postsPerAd'>1</b:widget-setting>
+            <b:widget-setting name='style.bordercolor'>#ffffff</b:widget-setting>
             <b:widget-setting name='showDateHeader'>false</b:widget-setting>
             <b:widget-setting name='style.textcolor'>#1e3a5f</b:widget-setting>
+            <b:widget-setting name='showCommentLink'>true</b:widget-setting>
+            <b:widget-setting name='style.urlcolor'>#1a8a9e</b:widget-setting>
+            <b:widget-setting name='postLocationLabel'>Location:</b:widget-setting>
+            <b:widget-setting name='showAuthor'>true</b:widget-setting>
+            <b:widget-setting name='style.linkcolor'>#1a8a9e</b:widget-setting>
+            <b:widget-setting name='style.bgcolor'>#ffffff</b:widget-setting>
+            <b:widget-setting name='showLabels'>true</b:widget-setting>
+            <b:widget-setting name='postLabelsLabel'>Tags</b:widget-setting>
+            <b:widget-setting name='showBacklinks'>false</b:widget-setting>
+            <b:widget-setting name='showInlineAds'>false</b:widget-setting>
+            <b:widget-setting name='showReactions'>false</b:widget-setting>
           </b:widget-settings>
 
           <b:includable id='main' var='this'>
@@ -834,11 +857,13 @@ body#layout .main-content {
         <div class='sidebar-section'>
           <span class='sidebar-section-title'>Label / Kategori</span>
           <b:section class='labels' id='label-section' maxwidgets='1' showaddelement='no'>
-            <b:widget id='Label1' locked='false' title='Label' type='Label' version='2'>
+            <b:widget id='Label1' locked='false' title='KATEGORI' type='Label' version='2' visible='true'>
               <b:widget-settings>
                 <b:widget-setting name='sorting'>ALPHA</b:widget-setting>
-                <b:widget-setting name='display'>CLOUD</b:widget-setting>
-                <b:widget-setting name='showType'>CLOUD</b:widget-setting>
+                <b:widget-setting name='display'>LIST</b:widget-setting>
+                <b:widget-setting name='selectedLabelsList'/>
+                <b:widget-setting name='showType'>ALL</b:widget-setting>
+                <b:widget-setting name='showFreqNumbers'>false</b:widget-setting>
               </b:widget-settings>
               <b:includable id='main' var='this'>
                 <div class='tag-cloud'>
@@ -853,9 +878,16 @@ body#layout .main-content {
         <div class='sidebar-section'>
           <span class='sidebar-section-title'>Arsip</span>
           <b:section class='archive' id='archive-section' maxwidgets='1' showaddelement='no'>
-            <b:widget id='BlogArchive1' locked='false' title='Arsip' type='BlogArchive' version='2'>
+            <b:widget id='BlogArchive1' locked='false' title='ARSIP' type='BlogArchive' version='2' visible='true'>
               <b:widget-settings>
-                <b:widget-setting name='showStyle'>FLAT</b:widget-setting>
+                <b:widget-setting name='showStyle'>MENU</b:widget-setting>
+                <b:widget-setting name='yearPattern'>yyyy</b:widget-setting>
+                <b:widget-setting name='showWeekEnd'>true</b:widget-setting>
+                <b:widget-setting name='monthPattern'>MMMM</b:widget-setting>
+                <b:widget-setting name='dayPattern'>MMM dd</b:widget-setting>
+                <b:widget-setting name='weekPattern'>MM/dd</b:widget-setting>
+                <b:widget-setting name='chronological'>false</b:widget-setting>
+                <b:widget-setting name='showPosts'>true</b:widget-setting>
                 <b:widget-setting name='frequency'>MONTHLY</b:widget-setting>
               </b:widget-settings>
               <b:includable id='main' var='this'>
