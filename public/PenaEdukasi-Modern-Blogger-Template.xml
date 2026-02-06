@@ -27,7 +27,7 @@
 
 <b:skin><![CDATA[
 /* ================================================
-   PENA EDUKASI - MODERN BLOGGER TEMPLATE FINAL
+   PENA EDUKASI - MODERN BLOGGER TEMPLATE
    ================================================ */
 
 :root {
@@ -92,6 +92,7 @@ body.dark-mode .sb-title::after{background:var(--border-dark);}
 body.dark-mode .cat-pill{background:rgba(26,138,158,0.15);color:#5eead4;}
 body.dark-mode .cat-pill:hover{background:var(--accent);color:#fff;}
 body.dark-mode .grid-title{color:var(--text-dark-primary);}
+body.dark-mode .main-content-inner{background:var(--bg-dark-card);border-color:var(--border-dark);}
 body.dark-mode .article-card{background:var(--bg-dark-card);border-color:var(--border-dark);}
 body.dark-mode .card-title a{color:var(--text-dark-primary);}
 body.dark-mode .card-excerpt{color:var(--text-dark-secondary);}
@@ -120,6 +121,7 @@ body.dark-mode .archive-list a{color:var(--text-dark-secondary);}
 body.dark-mode .sidebar-copyright{color:var(--text-dark-secondary);}
 body.dark-mode .mobile-overlay.active{background:rgba(0,0,0,0.7);}
 body.dark-mode .close-sb{background:var(--bg-dark-card);border-color:var(--border-dark);color:var(--text-dark-primary);}
+body.dark-mode .view-all{color:#5eead4;}
 
 /* ========== SIDEBAR LEFT ========== */
 .sidebar-left{
@@ -158,8 +160,7 @@ body.dark-mode .close-sb{background:var(--bg-dark-card);border-color:var(--borde
   display:none;position:absolute;top:12px;right:12px;
   width:30px;height:30px;border-radius:50%;border:1px solid var(--border);
   background:var(--bg-card);cursor:pointer;font-size:1rem;
-  color:var(--text-secondary);align-items:center;justify-content:center;
-  line-height:1;
+  color:var(--text-secondary);align-items:center;justify-content:center;line-height:1;
 }
 
 /* ========== TOPBAR ========== */
@@ -206,6 +207,11 @@ body.dark-mode .close-sb{background:var(--bg-dark-card);border-color:var(--borde
 .main-wrapper{margin-left:var(--sidebar-w);padding-top:var(--topbar-h);min-height:100vh;display:flex;flex-direction:column;}
 .content-area{max-width:1400px;width:100%;margin:0 auto;padding:28px 24px;display:flex;gap:28px;flex:1;}
 .main-content{flex:1;min-width:0;}
+.main-content-inner{
+  background:var(--bg-card);border-radius:var(--radius);
+  border:1px solid var(--border);box-shadow:var(--shadow-sm);
+  padding:28px 24px;
+}
 
 /* ========== SIDEBAR RIGHT ========== */
 .sidebar-right{width:var(--sidebar-r-w);flex-shrink:0;}
@@ -249,7 +255,7 @@ body.dark-mode .close-sb{background:var(--bg-dark-card);border-color:var(--borde
 .archive-list a:hover{color:var(--accent);}
 
 /* ========== GRID SECTIONS ========== */
-.grid-section{margin-bottom:40px;}
+.grid-section{margin-bottom:36px;}
 .grid-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
 .grid-title{
   font-family:var(--font-serif);font-size:1.45rem;font-weight:700;
@@ -263,17 +269,17 @@ body.dark-mode .close-sb{background:var(--bg-dark-card);border-color:var(--borde
 .view-all:hover{color:var(--accent-hover);}
 
 /* Overlay Card */
-.ov-card{position:relative;border-radius:var(--radius);overflow:hidden;display:block;}
+.ov-card{position:relative;border-radius:var(--radius-sm);overflow:hidden;display:block;}
 .ov-card img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s var(--ease);}
 .ov-card:hover img{transform:scale(1.04);}
-.ov-info{position:absolute;bottom:0;left:0;right:0;padding:18px;background:linear-gradient(0deg,rgba(0,0,0,0.72) 0%,rgba(0,0,0,0.08) 70%,transparent 100%);}
+.ov-info{position:absolute;bottom:0;left:0;right:0;padding:16px;background:linear-gradient(0deg,rgba(0,0,0,0.72) 0%,rgba(0,0,0,0.08) 70%,transparent 100%);}
 .ov-cat{display:inline-block;padding:3px 10px;background:var(--accent);color:#fff;border-radius:4px;font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
-.ov-ttl{color:#fff;font-size:0.88rem;font-weight:600;line-height:1.35;}
-.ov-ttl.lg{font-size:1.2rem;line-height:1.3;}
+.ov-ttl{color:#fff;font-size:0.84rem;font-weight:600;line-height:1.35;}
+.ov-ttl.lg{font-size:1.15rem;line-height:1.3;}
 .ov-date{color:rgba(255,255,255,0.75);font-size:0.72rem;margin-top:3px;}
 
 /* 1. BENTO BOX */
-.bento-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;grid-template-rows:200px 200px;gap:10px;}
+.bento-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;grid-template-rows:195px 195px;gap:10px;}
 .bento-grid .b-1{grid-column:1;grid-row:1/3;}
 .bento-grid .b-2{grid-column:2;grid-row:1;}
 .bento-grid .b-3{grid-column:3;grid-row:1;}
@@ -289,7 +295,7 @@ body.dark-mode .close-sb{background:var(--bg-dark-card);border-color:var(--borde
 
 /* 3. JUSTIFIED FLICKR */
 .jf-grid{display:flex;flex-wrap:wrap;gap:8px;}
-.jf-grid .jf-item{flex:1 1 auto;height:210px;min-width:130px;}
+.jf-grid .jf-item{flex:1 1 auto;height:200px;min-width:130px;}
 .jf-grid .jf-item:nth-child(1){flex-basis:40%;}
 .jf-grid .jf-item:nth-child(2){flex-basis:28%;}
 .jf-grid .jf-item:nth-child(3){flex-basis:28%;}
@@ -307,21 +313,21 @@ body.dark-mode .close-sb{background:var(--bg-dark-card);border-color:var(--borde
 .sq-item:hover .sq-ov span{opacity:1;transform:translateY(0);}
 
 /* 5. ASYMMETRIC */
-.as-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:240px 210px;gap:10px;}
+.as-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:230px 200px;gap:10px;}
 .as-grid .a-1{grid-column:1/3;grid-row:1;}
 .as-grid .a-2{grid-column:3;grid-row:1;margin-top:25px;}
 .as-grid .a-3{grid-column:1;grid-row:2;margin-top:-25px;}
 .as-grid .a-4{grid-column:2/4;grid-row:2;}
 
-/* ========== ARTICLE CARDS ========== */
-.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px;}
+/* ========== ARTICLE CARDS (index) ========== */
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:28px;}
 .article-card{
   background:var(--bg-card);border-radius:var(--radius);overflow:hidden;
   border:1px solid var(--border);box-shadow:var(--shadow-sm);
   transition:all var(--tr);
 }
 .article-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px);}
-.card-thumb{width:100%;height:185px;object-fit:cover;}
+.card-thumb{width:100%;height:180px;object-fit:cover;}
 .card-body{padding:16px;}
 .card-cat{
   display:inline-block;padding:3px 10px;background:var(--accent-light);color:var(--accent);
@@ -345,12 +351,12 @@ body.dark-mode .close-sb{background:var(--bg-dark-card);border-color:var(--borde
 }
 
 /* ========== SINGLE POST ========== */
-.post-wrap{max-width:780px;margin:0 auto;}
+.post-wrap{max-width:100%;}
 .breadcrumb{font-size:0.84rem;color:var(--text-muted);margin-bottom:20px;display:flex;flex-wrap:wrap;gap:4px;}
 .breadcrumb a{color:var(--accent);}
 .breadcrumb a:hover{text-decoration:underline;}
 .post-title-single{
-  font-family:var(--font-serif);font-size:2.2rem;font-weight:700;
+  font-family:var(--font-serif);font-size:2rem;font-weight:700;
   line-height:1.3;color:var(--text-primary);margin-bottom:16px;
 }
 .post-meta-s{
@@ -358,25 +364,25 @@ body.dark-mode .close-sb{background:var(--bg-dark-card);border-color:var(--borde
   font-size:0.85rem;color:var(--text-secondary);
   margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--border);
 }
-.post-featured-img{width:100%;height:auto;border-radius:var(--radius);margin-bottom:32px;}
-.post-body-content{font-size:1.05rem;line-height:1.85;color:var(--text-primary);}
-.post-body-content h2,.post-body-content h3{font-family:var(--font-serif);margin:32px 0 14px;font-weight:700;}
-.post-body-content h2{font-size:1.55rem;}
-.post-body-content h3{font-size:1.3rem;}
-.post-body-content p{margin-bottom:18px;}
-.post-body-content img{border-radius:var(--radius);margin:24px 0;}
+.post-featured-img{width:100%;height:auto;border-radius:var(--radius-sm);margin-bottom:28px;}
+.post-body-content{font-size:1.02rem;line-height:1.85;color:var(--text-primary);}
+.post-body-content h2,.post-body-content h3{font-family:var(--font-serif);margin:28px 0 14px;font-weight:700;}
+.post-body-content h2{font-size:1.5rem;}
+.post-body-content h3{font-size:1.25rem;}
+.post-body-content p{margin-bottom:16px;}
+.post-body-content img{border-radius:var(--radius-sm);margin:20px 0;}
 .post-body-content a{color:var(--accent);text-decoration:underline;}
 .post-body-content blockquote{
-  border-left:4px solid var(--accent);padding:18px 22px;margin:24px 0;
+  border-left:4px solid var(--accent);padding:16px 20px;margin:20px 0;
   background:var(--accent-light);border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-style:italic;
 }
-.post-body-content ul,.post-body-content ol{margin:0 0 18px 24px;}
+.post-body-content ul,.post-body-content ol{margin:0 0 16px 24px;}
 .post-body-content ul{list-style:disc;}
 .post-body-content ol{list-style:decimal;}
 .post-body-content li{margin-bottom:6px;}
-.post-body-content pre{background:#1e293b;color:#e2e8f0;padding:18px;border-radius:var(--radius-sm);overflow-x:auto;margin:20px 0;font-size:0.9rem;}
+.post-body-content pre{background:#1e293b;color:#e2e8f0;padding:16px;border-radius:var(--radius-sm);overflow-x:auto;margin:18px 0;font-size:0.9rem;}
 .post-body-content code{font-family:'Fira Code',monospace;font-size:0.9em;}
-.post-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:32px;padding-top:22px;border-top:1px solid var(--border);}
+.post-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:28px;padding-top:20px;border-top:1px solid var(--border);}
 .post-tags a{
   display:inline-block;padding:6px 16px;background:var(--accent-light);color:var(--accent);
   border-radius:var(--radius-full);font-size:0.8rem;font-weight:500;transition:all var(--tr);
@@ -384,23 +390,23 @@ body.dark-mode .close-sb{background:var(--bg-dark-card);border-color:var(--borde
 .post-tags a:hover{background:var(--accent);color:#fff;}
 
 /* ========== RELATED POSTS ========== */
-.related-section{margin-top:48px;padding-top:32px;border-top:1px solid var(--border);}
-.related-section h3{font-family:var(--font-serif);font-size:1.3rem;font-weight:700;margin-bottom:20px;color:var(--text-primary);}
+.related-section{margin-top:40px;padding-top:28px;border-top:1px solid var(--border);}
+.related-section h3{font-family:var(--font-serif);font-size:1.25rem;font-weight:700;margin-bottom:18px;color:var(--text-primary);}
 .related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
 .related-card{
-  background:var(--bg-card);border-radius:var(--radius);overflow:hidden;
+  background:var(--bg-card);border-radius:var(--radius-sm);overflow:hidden;
   border:1px solid var(--border);transition:all var(--tr);display:block;
 }
 .related-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
-.related-card img{width:100%;height:145px;object-fit:cover;}
+.related-card img{width:100%;height:140px;object-fit:cover;}
 .related-card h4{
-  padding:12px 14px;font-size:0.88rem;font-weight:600;line-height:1.4;color:var(--text-primary);
+  padding:12px 14px;font-size:0.86rem;font-weight:600;line-height:1.4;color:var(--text-primary);
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
 }
 
 /* ========== COMMENTS ========== */
-.comments-block{margin-top:40px;padding-top:24px;border-top:1px solid var(--border);}
-.comments-block h3{font-family:var(--font-serif);font-size:1.3rem;font-weight:700;margin-bottom:16px;}
+.comments-block{margin-top:36px;padding-top:24px;border-top:1px solid var(--border);}
+.comments-block h3{font-family:var(--font-serif);font-size:1.25rem;font-weight:700;margin-bottom:16px;}
 
 /* ========== SCROLL TO TOP ========== */
 .scroll-top{
@@ -412,17 +418,22 @@ body.dark-mode .close-sb{background:var(--bg-dark-card);border-color:var(--borde
 .scroll-top.show{display:flex;}
 .scroll-top:hover{transform:translateY(-3px);box-shadow:0 6px 24px rgba(26,138,158,0.5);}
 
+/* ========== PAGINATION ========== */
+.pager{display:flex;justify-content:space-between;margin-top:28px;padding-top:20px;border-top:1px solid var(--border);}
+.pager a{color:var(--accent);font-weight:600;font-size:0.9rem;transition:color var(--tr);}
+.pager a:hover{color:var(--accent-hover);}
+
 /* ========== FOOTER ========== */
-.footer-wrap{background:var(--bg-card);border-top:1px solid var(--border);margin-top:60px;padding:40px 24px 20px;}
-.footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;}
-.footer-about h3{font-family:var(--font-serif);font-size:1.15rem;color:var(--accent);margin-bottom:10px;}
+.footer-wrap{background:var(--bg-card);border-top:1px solid var(--border);margin-top:50px;padding:36px 24px 18px;}
+.footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:36px;}
+.footer-about h3{font-family:var(--font-serif);font-size:1.1rem;color:var(--accent);margin-bottom:10px;}
 .footer-about p{font-size:0.85rem;color:var(--text-secondary);line-height:1.6;}
-.footer-links h4{font-size:0.78rem;font-weight:700;margin-bottom:14px;text-transform:uppercase;letter-spacing:1px;color:var(--text-primary);}
+.footer-links h4{font-size:0.78rem;font-weight:700;margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;color:var(--text-primary);}
 .footer-links ul{list-style:none;}
 .footer-links li{margin-bottom:7px;}
 .footer-links a{font-size:0.85rem;color:var(--text-secondary);}
 .footer-links a:hover{color:var(--accent);}
-.footer-bottom{text-align:center;margin-top:30px;padding-top:20px;border-top:1px solid var(--border);font-size:0.78rem;color:var(--text-muted);}
+.footer-bottom{text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid var(--border);font-size:0.78rem;color:var(--text-muted);}
 
 /* ========== MOBILE ========== */
 .mobile-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:195;}
@@ -450,14 +461,15 @@ body.dark-mode .close-sb{background:var(--bg-dark-card);border-color:var(--borde
   .mobile-overlay.active{display:block;}
   .topbar{left:0;}
   .main-wrapper{margin-left:0;}
-  .content-area{padding:16px;gap:16px;}
-  .cards-grid{grid-template-columns:1fr;margin-top:24px;}
+  .content-area{padding:14px;gap:14px;}
+  .main-content-inner{padding:18px 14px;}
+  .cards-grid{grid-template-columns:1fr;margin-top:20px;}
   .related-grid{grid-template-columns:1fr;}
   .sq-grid{grid-template-columns:repeat(2,1fr);}
   .jf-grid .jf-item{min-width:100%;height:170px;}
   .bento-grid{grid-template-columns:1fr;grid-template-rows:auto;}
   .bento-grid .b-1{grid-column:1;}
-  .post-title-single{font-size:1.6rem;}
+  .post-title-single{font-size:1.5rem;}
   .scroll-top{bottom:18px;right:18px;width:40px;height:40px;font-size:1rem;}
 }
 ]]></b:skin>
@@ -554,57 +566,9 @@ body#layout .main-content {
 <div class='main-wrapper'>
   <div class='content-area'>
     <div class='main-content'>
+      <div class='main-content-inner'>
 
-      <!-- HOMEPAGE: 5 GRID STYLES -->
-      <b:if cond='data:view.isHomepage'>
-        <div class='grid-section' id='bentoSection'>
-          <div class='grid-header'>
-            <h2 class='grid-title'>Pendidikan</h2>
-            <a class='view-all' expr:href='data:blog.homepageUrl + &quot;search/label/Pendidikan&quot;'>Lihat Semua &#8250;</a>
-          </div>
-          <div class='bento-grid' id='bentoGrid'></div>
-        </div>
-
-        <div class='grid-section' id='editorialSection'>
-          <div class='grid-header'>
-            <h2 class='grid-title'>Kurikulum</h2>
-            <a class='view-all' expr:href='data:blog.homepageUrl + &quot;search/label/Kurikulum&quot;'>Lihat Semua &#8250;</a>
-          </div>
-          <div class='ed-grid' id='edGrid'></div>
-        </div>
-
-        <div class='grid-section' id='justifiedSection'>
-          <div class='grid-header'>
-            <h2 class='grid-title'>Materi</h2>
-            <a class='view-all' expr:href='data:blog.homepageUrl + &quot;search/label/Materi&quot;'>Lihat Semua &#8250;</a>
-          </div>
-          <div class='jf-grid' id='jfGrid'></div>
-        </div>
-
-        <div class='grid-section' id='squareSection'>
-          <div class='grid-header'>
-            <h2 class='grid-title'>Tutorial</h2>
-            <a class='view-all' expr:href='data:blog.homepageUrl + &quot;search/label/Tutorial&quot;'>Lihat Semua &#8250;</a>
-          </div>
-          <div class='sq-grid' id='sqGrid'></div>
-        </div>
-
-        <div class='grid-section' id='asymSection'>
-          <div class='grid-header'>
-            <h2 class='grid-title'>Madrasah</h2>
-            <a class='view-all' expr:href='data:blog.homepageUrl + &quot;search/label/Madrasah&quot;'>Lihat Semua &#8250;</a>
-          </div>
-          <div class='as-grid' id='asGrid'></div>
-        </div>
-
-        <div class='grid-section'>
-          <div class='grid-header'>
-            <h2 class='grid-title'>Artikel Terbaru</h2>
-          </div>
-        </div>
-      </b:if>
-
-      <!-- BLOG POSTS WIDGET -->
+      <!-- ========== BLOG WIDGET ========== -->
       <b:section class='main' id='main-section' maxwidgets='1' showaddelement='no'>
         <b:widget id='Blog1' locked='true' title='Postingan Blog' type='Blog' version='2' visible='true'>
           <b:widget-settings>
@@ -635,184 +599,251 @@ body#layout .main-content {
             <b:widget-setting name='showReactions'>false</b:widget-setting>
           </b:widget-settings>
 
-          <!-- MAIN: Entry point -->
+          <!-- ===== MAIN INCLUDABLE ===== -->
           <b:includable id='main' var='this'>
-            <b:if cond='data:view.isMultipleItems'>
+
+            <!-- === HOMEPAGE === -->
+            <b:if cond='data:view.isHomepage'>
+              <!-- Grid 1: Bento Box - Pendidikan -->
+              <div class='grid-section' id='bentoSection'>
+                <div class='grid-header'>
+                  <h2 class='grid-title'>Pendidikan</h2>
+                  <a class='view-all' expr:href='data:blog.homepageUrl + &quot;search/label/Pendidikan&quot;'>Lihat Semua &#8250;</a>
+                </div>
+                <div class='bento-grid' id='bentoGrid'></div>
+              </div>
+              <!-- Grid 2: Editorial - Kurikulum -->
+              <div class='grid-section' id='editorialSection'>
+                <div class='grid-header'>
+                  <h2 class='grid-title'>Kurikulum</h2>
+                  <a class='view-all' expr:href='data:blog.homepageUrl + &quot;search/label/Kurikulum&quot;'>Lihat Semua &#8250;</a>
+                </div>
+                <div class='ed-grid' id='edGrid'></div>
+              </div>
+              <!-- Grid 3: Justified Flickr - Materi -->
+              <div class='grid-section' id='justifiedSection'>
+                <div class='grid-header'>
+                  <h2 class='grid-title'>Materi</h2>
+                  <a class='view-all' expr:href='data:blog.homepageUrl + &quot;search/label/Materi&quot;'>Lihat Semua &#8250;</a>
+                </div>
+                <div class='jf-grid' id='jfGrid'></div>
+              </div>
+              <!-- Grid 4: Square Instagram - Tutorial -->
+              <div class='grid-section' id='squareSection'>
+                <div class='grid-header'>
+                  <h2 class='grid-title'>Tutorial</h2>
+                  <a class='view-all' expr:href='data:blog.homepageUrl + &quot;search/label/Tutorial&quot;'>Lihat Semua &#8250;</a>
+                </div>
+                <div class='sq-grid' id='sqGrid'></div>
+              </div>
+              <!-- Grid 5: Asymmetric - Madrasah -->
+              <div class='grid-section' id='asymSection'>
+                <div class='grid-header'>
+                  <h2 class='grid-title'>Madrasah</h2>
+                  <a class='view-all' expr:href='data:blog.homepageUrl + &quot;search/label/Madrasah&quot;'>Lihat Semua &#8250;</a>
+                </div>
+                <div class='as-grid' id='asGrid'></div>
+              </div>
+              <!-- Artikel Terbaru -->
+              <div class='grid-section'>
+                <div class='grid-header'>
+                  <h2 class='grid-title'>Artikel Terbaru</h2>
+                </div>
+              </div>
               <div class='cards-grid'>
                 <b:loop values='data:posts' var='post'>
-                  <b:include data='post' name='postCardItem'/>
+                  <article class='article-card'>
+                    <a expr:href='data:post.url'>
+                      <b:if cond='data:post.featuredImage'>
+                        <img class='card-thumb' expr:alt='data:post.title' expr:src='resizeImage(data:post.featuredImage, 600, &quot;16:9&quot;)'/>
+                      <b:else/>
+                        <img alt='No Image' class='card-thumb' src='https://via.placeholder.com/600x340/1a8a9e/ffffff?text=Pena+Edukasi'/>
+                      </b:if>
+                    </a>
+                    <div class='card-body'>
+                      <b:if cond='data:post.labels'>
+                        <b:loop index='i' values='data:post.labels' var='label'>
+                          <b:if cond='data:i == 0'>
+                            <span class='card-cat'><data:label.name/></span>
+                          </b:if>
+                        </b:loop>
+                      </b:if>
+                      <h3 class='card-title'><a expr:href='data:post.url'><data:post.title/></a></h3>
+                      <p class='card-excerpt'><data:post.snippets.short/></p>
+                      <div class='card-meta'>
+                        <span><data:post.author/></span>
+                        <span><data:post.date/></span>
+                      </div>
+                    </div>
+                  </article>
                 </b:loop>
               </div>
             </b:if>
+
+            <!-- === LABEL / SEARCH / ARCHIVE (multiple items, not homepage) === -->
+            <b:if cond='data:view.isMultipleItems and not data:view.isHomepage'>
+              <b:if cond='data:view.search.label'>
+                <div class='grid-header' style='margin-bottom:20px;'>
+                  <h2 class='grid-title'>Kategori: <data:view.search.label/></h2>
+                </div>
+              </b:if>
+              <div class='cards-grid'>
+                <b:loop values='data:posts' var='post'>
+                  <article class='article-card'>
+                    <a expr:href='data:post.url'>
+                      <b:if cond='data:post.featuredImage'>
+                        <img class='card-thumb' expr:alt='data:post.title' expr:src='resizeImage(data:post.featuredImage, 600, &quot;16:9&quot;)'/>
+                      <b:else/>
+                        <img alt='No Image' class='card-thumb' src='https://via.placeholder.com/600x340/1a8a9e/ffffff?text=Pena+Edukasi'/>
+                      </b:if>
+                    </a>
+                    <div class='card-body'>
+                      <b:if cond='data:post.labels'>
+                        <b:loop index='i' values='data:post.labels' var='label'>
+                          <b:if cond='data:i == 0'>
+                            <span class='card-cat'><data:label.name/></span>
+                          </b:if>
+                        </b:loop>
+                      </b:if>
+                      <h3 class='card-title'><a expr:href='data:post.url'><data:post.title/></a></h3>
+                      <p class='card-excerpt'><data:post.snippets.short/></p>
+                      <div class='card-meta'>
+                        <span><data:post.author/></span>
+                        <span><data:post.date/></span>
+                      </div>
+                    </div>
+                  </article>
+                </b:loop>
+              </div>
+            </b:if>
+
+            <!-- === SINGLE POST === -->
             <b:if cond='data:view.isPost'>
               <b:loop values='data:posts' var='post'>
-                <b:include data='post' name='postSingleItem'/>
+                <article class='post-wrap'>
+                  <nav class='breadcrumb'>
+                    <a expr:href='data:blog.homepageUrl'>Beranda</a> <span>&#8250;</span>
+                    <b:if cond='data:post.labels'>
+                      <b:loop index='i' values='data:post.labels' var='label'>
+                        <b:if cond='data:i == 0'>
+                          <a expr:href='data:label.url'><data:label.name/></a> <span>&#8250;</span>
+                        </b:if>
+                      </b:loop>
+                    </b:if>
+                    <span><data:post.title/></span>
+                  </nav>
+
+                  <h1 class='post-title-single'><data:post.title/></h1>
+
+                  <div class='post-meta-s'>
+                    <span>&#9998; <data:post.author/></span>
+                    <span>&#128197; <data:post.date/></span>
+                    <b:if cond='data:post.labels'>
+                      <b:loop index='i' values='data:post.labels' var='label'>
+                        <b:if cond='data:i == 0'>
+                          <span class='card-cat'><data:label.name/></span>
+                        </b:if>
+                      </b:loop>
+                    </b:if>
+                  </div>
+
+                  <b:if cond='data:post.featuredImage'>
+                    <img class='post-featured-img' expr:alt='data:post.title' expr:src='resizeImage(data:post.featuredImage, 1200, &quot;16:9&quot;)'/>
+                  </b:if>
+
+                  <div class='post-body-content'>
+                    <data:post.body/>
+                  </div>
+
+                  <b:if cond='data:post.labels'>
+                    <div class='post-tags'>
+                      <b:loop values='data:post.labels' var='label'>
+                        <a expr:href='data:label.url'>#<data:label.name/></a>
+                      </b:loop>
+                    </div>
+                  </b:if>
+
+                  <!-- 3 Related Posts -->
+                  <div class='related-section'>
+                    <h3>Artikel Terkait</h3>
+                    <div class='related-grid' id='relatedPosts'></div>
+                  </div>
+
+                  <!-- Share Buttons -->
+                  <div style='margin-top:24px;padding-top:18px;border-top:1px solid var(--border);'>
+                    <b:if cond='data:post.shareUrl'>
+                      <span style='font-size:0.85rem;color:var(--text-secondary);font-weight:600;'>Bagikan:</span>
+                      <a expr:href='&quot;https://www.facebook.com/sharer/sharer.php?u=&quot; + data:post.url' rel='nofollow noopener' style='display:inline-block;margin:0 6px;color:var(--accent);font-weight:600;font-size:0.85rem;' target='_blank'>Facebook</a>
+                      <a expr:href='&quot;https://twitter.com/intent/tweet?url=&quot; + data:post.url + &quot;&amp;text=&quot; + data:post.title' rel='nofollow noopener' style='display:inline-block;margin:0 6px;color:var(--accent);font-weight:600;font-size:0.85rem;' target='_blank'>Twitter</a>
+                      <a expr:href='&quot;https://api.whatsapp.com/send?text=&quot; + data:post.title + &quot; &quot; + data:post.url' rel='nofollow noopener' style='display:inline-block;margin:0 6px;color:var(--accent);font-weight:600;font-size:0.85rem;' target='_blank'>WhatsApp</a>
+                    </b:if>
+                  </div>
+
+                  <!-- Comments -->
+                  <div class='comments-block'>
+                    <b:if cond='data:post.allowComments'>
+                      <h3>Komentar (<data:post.numberOfComments/>)</h3>
+                      <div class='comments-content'>
+                        <b:if cond='data:post.embedCommentForm'>
+                          <iframe allowtransparency='true' class='blogger-iframe-color498' frameborder='0' height='410' id='comment-editor' name='comment-editor' scrolling='no' style='display:block;width:100%;' width='100%'>
+                            <data:post.commentFormIframeSrc/>
+                          </iframe>
+                        <b:else/>
+                          <b:if cond='data:post.allowNewComments'>
+                            <a expr:href='data:post.commentFormIframeSrc' style='color:var(--accent);font-weight:600;'>Posting Komentar</a>
+                          </b:if>
+                        </b:if>
+                      </div>
+                    </b:if>
+                  </div>
+                </article>
               </b:loop>
             </b:if>
+
+            <!-- === STATIC PAGE === -->
             <b:if cond='data:view.isPage'>
               <b:loop values='data:posts' var='post'>
-                <b:include data='post' name='postPageItem'/>
+                <article class='post-wrap'>
+                  <nav class='breadcrumb'>
+                    <a expr:href='data:blog.homepageUrl'>Beranda</a> <span>&#8250;</span>
+                    <span><data:post.title/></span>
+                  </nav>
+                  <h1 class='post-title-single'><data:post.title/></h1>
+                  <div class='post-body-content'>
+                    <data:post.body/>
+                  </div>
+                </article>
               </b:loop>
             </b:if>
-          </b:includable>
 
-          <!-- CARD (Index View) -->
-          <b:includable id='postCardItem' var='post'>
-            <article class='article-card'>
-              <a expr:href='data:post.url'>
-                <b:if cond='data:post.featuredImage'>
-                  <img class='card-thumb' expr:alt='data:post.title' expr:src='resizeImage(data:post.featuredImage, 600, &quot;16:9&quot;)'/>
-                <b:else/>
-                  <img alt='No Image' class='card-thumb' src='https://via.placeholder.com/600x340/1a8a9e/ffffff?text=Pena+Edukasi'/>
-                </b:if>
-              </a>
-              <div class='card-body'>
-                <b:if cond='data:post.labels'>
-                  <b:loop index='i' values='data:post.labels' var='label'>
-                    <b:if cond='data:i == 0'>
-                      <span class='card-cat'><data:label.name/></span>
-                    </b:if>
-                  </b:loop>
-                </b:if>
-                <h3 class='card-title'><a expr:href='data:post.url'><data:post.title/></a></h3>
-                <p class='card-excerpt'><data:post.snippets.short/></p>
-                <div class='card-meta'>
-                  <span><data:post.author/></span>
-                  <span><data:post.date/></span>
-                </div>
-              </div>
-            </article>
-          </b:includable>
-
-          <!-- SINGLE POST View -->
-          <b:includable id='postSingleItem' var='post'>
-            <article class='post-wrap'>
-              <nav class='breadcrumb'>
-                <a expr:href='data:blog.homepageUrl'>Beranda</a> <span>&#8250;</span>
-                <b:if cond='data:post.labels'>
-                  <b:loop index='i' values='data:post.labels' var='label'>
-                    <b:if cond='data:i == 0'>
-                      <a expr:href='data:label.url'><data:label.name/></a> <span>&#8250;</span>
-                    </b:if>
-                  </b:loop>
-                </b:if>
-                <span><data:post.title/></span>
-              </nav>
-
-              <h1 class='post-title-single'><data:post.title/></h1>
-
-              <div class='post-meta-s'>
-                <span>&#9998; <data:post.author/></span>
-                <span>&#128197; <data:post.date/></span>
-                <b:if cond='data:post.labels'>
-                  <b:loop index='i' values='data:post.labels' var='label'>
-                    <b:if cond='data:i == 0'>
-                      <span class='card-cat'><data:label.name/></span>
-                    </b:if>
-                  </b:loop>
-                </b:if>
-              </div>
-
-              <b:if cond='data:post.featuredImage'>
-                <img class='post-featured-img' expr:alt='data:post.title' expr:src='resizeImage(data:post.featuredImage, 1200, &quot;16:9&quot;)'/>
-              </b:if>
-
-              <div class='post-body-content'>
-                <data:post.body/>
-              </div>
-
-              <b:if cond='data:post.labels'>
-                <div class='post-tags'>
-                  <b:loop values='data:post.labels' var='label'>
-                    <a expr:href='data:label.url'>#<data:label.name/></a>
-                  </b:loop>
-                </div>
-              </b:if>
-
-              <!-- 3 Related Posts -->
-              <div class='related-section'>
-                <h3>Artikel Terkait</h3>
-                <div class='related-grid' id='relatedPosts'></div>
-              </div>
-
-              <!-- Comments -->
-              <div class='comments-block'>
-                <b:if cond='data:post.allowComments'>
-                  <h3>Komentar</h3>
-                  <b:include data='post' name='comments'/>
-                </b:if>
-              </div>
-            </article>
-          </b:includable>
-
-          <!-- STATIC PAGE View -->
-          <b:includable id='postPageItem' var='post'>
-            <article class='post-wrap'>
-              <nav class='breadcrumb'>
-                <a expr:href='data:blog.homepageUrl'>Beranda</a> <span>&#8250;</span>
-                <span><data:post.title/></span>
-              </nav>
-              <h1 class='post-title-single'><data:post.title/></h1>
-              <div class='post-body-content'>
-                <data:post.body/>
-              </div>
-            </article>
-          </b:includable>
-
-          <!-- Comments System -->
-          <b:includable id='comments' var='post'>
-            <div class='comments-content'>
-              <b:if cond='data:post.embedCommentForm'>
-                <b:include data='post' name='iframe_comments'/>
-              <b:else/>
-                <b:if cond='data:post.allowNewComments'>
-                  <a expr:href='data:post.commentFormIframeSrc' style='color:var(--accent);font-weight:600;'>Posting Komentar</a>
-                </b:if>
-              </b:if>
-            </div>
-          </b:includable>
-
-          <b:includable id='iframe_comments' var='post'>
-            <b:if cond='data:post.embedCommentForm'>
-              <iframe allowtransparency='true' class='blogger-iframe-color498' frameborder='0' height='410' id='comment-editor' name='comment-editor' scrolling='no' style='display:block;width:100%;' width='100%'>
-                <data:post.commentFormIframeSrc/>
-              </iframe>
-            </b:if>
-          </b:includable>
-
-          <b:includable id='nextprev'>
-            <b:if cond='data:newerPageUrl or data:olderPageUrl'>
-              <div style='display:flex;justify-content:space-between;margin-top:30px;'>
-                <b:if cond='data:newerPageUrl'>
-                  <a expr:href='data:newerPageUrl' style='color:var(--accent);font-weight:600;'>&#8592; Lebih Baru</a>
-                </b:if>
-                <b:if cond='data:olderPageUrl'>
-                  <a expr:href='data:olderPageUrl' style='color:var(--accent);font-weight:600;'>Lebih Lama &#8594;</a>
-                </b:if>
+            <!-- Pagination -->
+            <b:if cond='data:view.isMultipleItems'>
+              <div class='pager'>
+                <b:if cond='data:newerPageUrl'><a expr:href='data:newerPageUrl'>&#8592; Lebih Baru</a></b:if>
+                <b:if cond='data:olderPageUrl'><a expr:href='data:olderPageUrl'>Lebih Lama &#8594;</a></b:if>
               </div>
             </b:if>
+
           </b:includable>
 
-          <b:includable id='postQuickEdit' var='post'>
-            <b:if cond='data:post.editUrl'>
-              <a class='post-edit' expr:href='data:post.editUrl' style='font-size:0.8rem;color:var(--accent);' title='Edit'>&#9998; Edit</a>
-            </b:if>
-          </b:includable>
-
-          <b:includable id='feedLinks'/>
-          <b:includable id='feedLinksBody' var='links'/>
-          <b:includable id='backlinks' var='post'/>
-          <b:includable id='post' var='post'>
-            <b:include data='post' name='postCardItem'/>
-          </b:includable>
+          <!-- Required empty includables -->
+          <b:includable id='post' var='post'/>
           <b:includable id='headerByline' var='post'/>
           <b:includable id='footerByline' var='post'/>
           <b:includable id='shareButtons' var='post'/>
           <b:includable id='postCommentsAndAd' var='post'/>
+          <b:includable id='feedLinks'/>
+          <b:includable id='feedLinksBody' var='links'/>
+          <b:includable id='backlinks' var='post'/>
+          <b:includable id='comments' var='post'/>
+          <b:includable id='iframe_comments' var='post'/>
+          <b:includable id='nextprev'/>
+          <b:includable id='postQuickEdit' var='post'/>
 
         </b:widget>
       </b:section>
 
+      </div>
     </div>
 
     <!-- ========== SIDEBAR RIGHT ========== -->
@@ -1087,7 +1118,7 @@ peFetch('Madrasah',5,function(en){
   g.innerHTML=h;
 });
 
-// 3 Related Posts
+// 3 Related Posts (on single post page)
 (function(){
   var c=document.getElementById('relatedPosts');if(!c)return;
   var tags=document.querySelectorAll('.post-tags a');var label='';
