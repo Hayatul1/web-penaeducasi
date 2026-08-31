@@ -1,3 +1,4 @@
+export const runtime = 'edge';
 import Link from "next/link"
 import { SidebarLeft } from "@/components/sidebar-left"
 import { TopBar } from "@/components/top-bar"
