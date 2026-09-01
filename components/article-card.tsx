@@ -5,9 +5,9 @@ export function ArticleCard({ article }: { article: Article }) {
   return (
     <Link
       href={`/post/${article.slug}`}
-      className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-primary/30"
+      className="group flex flex-col overflow-hidden rounded-none border-b border-border bg-card pb-4 shadow-none transition-all duration-200 md:rounded-xl md:border md:bg-card md:p-0 md:shadow-sm md:hover:-translate-y-1 md:hover:shadow-lg md:hover:border-primary/30"
     >
-      <div className="relative aspect-video overflow-hidden">
+      <div className="relative aspect-video w-full overflow-hidden">
         <img
           src={article.image || "/placeholder.svg"}
           alt={article.title}
@@ -18,8 +18,8 @@ export function ArticleCard({ article }: { article: Article }) {
           {article.category}
         </span>
       </div>
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-card-foreground group-hover:text-primary transition-colors">
+      <div className="flex flex-1 flex-col gap-2 p-4 md:p-4">
+        <h3 className="line-clamp-2 text-base font-bold leading-snug text-card-foreground group-hover:text-primary transition-colors md:text-sm md:font-semibold">
           {article.title}
         </h3>
         <div className="mt-auto flex items-center gap-2 pt-2 text-xs text-muted-foreground">
@@ -34,7 +34,7 @@ export function ArticleCardSmall({ article }: { article: Article }) {
   return (
     <Link
       href={`/post/${article.slug}`}
-      className="group flex gap-3 rounded-xl border border-border bg-card p-3 shadow-sm transition-all hover:shadow-md hover:border-primary/30"
+      className="group flex gap-3 border-b border-border bg-card p-4 transition-all md:rounded-xl md:border md:p-3 md:shadow-sm md:hover:shadow-md md:hover:border-primary/30"
     >
       <img
         src={article.image || "/placeholder.svg"}
@@ -43,10 +43,10 @@ export function ArticleCardSmall({ article }: { article: Article }) {
         loading="lazy"
       />
       <div className="flex flex-col justify-center gap-1">
-        <h4 className="line-clamp-2 text-xs font-semibold text-card-foreground group-hover:text-primary transition-colors">
+        <h4 className="line-clamp-2 text-sm font-semibold text-card-foreground group-hover:text-primary transition-colors md:text-xs">
           {article.title}
         </h4>
-        <span className="text-[10px] text-muted-foreground">{article.date}</span>
+        <span className="text-xs text-muted-foreground md:text-[10px]">{article.date}</span>
       </div>
     </Link>
   )
