@@ -28,7 +28,8 @@ export function TopBar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-lg">
-      <div className="mx-auto flex max-w-[1400px] items-center gap-2 px-4">
+      {/* Tambahkan pl-[70px] lg:pl-4 di sini agar tidak menabrak hamburger di mobile */}
+      <div className="mx-auto flex max-w-[1400px] items-center gap-2 pl-[70px] pr-4 lg:px-4">
         <button
           onClick={() => scroll(-1)}
           className="hidden shrink-0 items-center justify-center rounded-full border border-border bg-card p-1.5 text-foreground shadow-sm transition-colors hover:bg-primary hover:text-primary-foreground md:flex"

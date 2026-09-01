@@ -30,10 +30,10 @@ export function SidebarLeft() {
 
   return (
     <>
-      {/* Mobile Hamburger */}
+      {/* Mobile Hamburger - Perbaikan posisi top-4 agar sejajar */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed top-4 left-4 z-50 flex h-11 w-11 items-center justify-center rounded-xl bg-card text-card-foreground shadow-md border border-border lg:hidden"
+        className="fixed top-4 left-4 z-50 flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-card text-card-foreground shadow-md lg:hidden"
         aria-label="Buka menu"
       >
         <Menu className="h-5 w-5" />
@@ -42,14 +42,14 @@ export function SidebarLeft() {
       {/* Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-[60] bg-foreground/30 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-[60] bg-black/60 lg:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar - Perbaikan bg-white dark:bg-slate-900 agar tidak transparan */}
       <aside
-        className={`fixed top-0 left-0 z-[70] h-screen w-[270px] border-r border-sidebar-border bg-sidebar-background flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        className={`fixed top-0 left-0 z-[70] h-screen w-[270px] border-r border-sidebar-border bg-white dark:bg-slate-900 text-card-foreground flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -79,7 +79,7 @@ export function SidebarLeft() {
             <input
               type="search"
               placeholder="Cari artikel..."
-              className="w-full rounded-lg border border-input bg-background py-2.5 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/20"
+              className="w-full rounded-lg border border-input bg-transparent py-2.5 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/20"
               aria-label="Cari artikel"
             />
           </div>
@@ -95,7 +95,7 @@ export function SidebarLeft() {
                   <Link
                     href={item.href}
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
                   >
                     <Icon className="h-[18px] w-[18px] flex-shrink-0" />
                     {item.label}
