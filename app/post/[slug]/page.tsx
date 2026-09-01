@@ -13,17 +13,17 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const related = getRelatedArticles(article.id, 3)
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen w-full overflow-x-hidden">
       <SidebarLeft />
 
-      <div className="flex min-h-screen flex-1 flex-col lg:ml-[270px]">
+      <div className="flex min-h-screen flex-1 flex-col lg:ml-[270px] w-full min-w-0">
         <TopBar />
 
-        <div className="mx-auto flex w-full max-w-[1400px] flex-1 gap-5 px-4 py-5">
-          <main className="min-w-0 flex-1" id="main-content" role="main">
+        <div className="mx-auto flex w-full max-w-[1400px] flex-1 gap-5 px-0 md:px-4 py-0 md:py-5">
+          <main className="min-w-0 flex-1 w-full" id="main-content" role="main">
             <article itemScope itemType="https://schema.org/BlogPosting">
               {/* Breadcrumb */}
-              <nav aria-label="Breadcrumb" className="mb-5 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
+              <nav aria-label="Breadcrumb" className="mb-5 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground px-4 md:px-0 pt-3 md:pt-0">
                 <Link href="/" className="font-medium text-primary hover:underline">Home</Link>
                 <span className="text-muted-foreground/50">{'\u00BB'}</span>
                 <Link href={`/category/${article.category.toLowerCase()}`} className="font-medium text-primary hover:underline">
@@ -33,14 +33,14 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
               {/* Title */}
               <h1
-                className="mb-5 font-serif text-2xl font-bold leading-tight text-foreground md:text-3xl lg:text-4xl text-balance"
+                className="mb-5 font-serif text-2xl font-bold leading-tight text-foreground md:text-3xl lg:text-4xl text-balance px-4 md:px-0"
                 itemProp="headline"
               >
                 {article.title}
               </h1>
 
               {/* Meta */}
-              <div className="mb-6 flex items-center gap-4 border-b border-border pb-5">
+              <div className="mb-6 flex items-center gap-4 border-b border-border pb-5 px-4 md:px-0">
                 <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
                   PE
                 </div>
@@ -55,7 +55,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
               </div>
 
               {/* Featured Image */}
-              <div className="mb-8 overflow-hidden rounded-2xl">
+              <div className="mb-8 overflow-hidden rounded-none md:rounded-2xl">
                 <img
                   src={article.image || "/placeholder.svg"}
                   alt={article.title}
@@ -65,7 +65,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
               </div>
 
               {/* Post Body */}
-              <div className="prose prose-lg max-w-none" itemProp="articleBody">
+              <div className="prose prose-lg max-w-none px-4 md:px-0" itemProp="articleBody">
                 <p className="text-base leading-relaxed text-foreground">
                   Pendidikan merupakan fondasi utama dalam membangun peradaban yang maju. Dalam konteks Indonesia, pendidikan menjadi kunci untuk mewujudkan cita-cita bangsa yang tertuang dalam Pembukaan UUD 1945, yaitu mencerdaskan kehidupan bangsa. Oleh karena itu, setiap upaya untuk meningkatkan kualitas pendidikan perlu mendapat dukungan penuh dari seluruh elemen masyarakat.
                 </p>
@@ -102,7 +102,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
               </div>
 
               {/* Tags */}
-              <div className="mt-8 border-t border-border pt-5">
+              <div className="mt-8 border-t border-border pt-5 px-4 md:px-0">
                 <span className="text-xs font-semibold text-muted-foreground">Tags:</span>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {["Pendidikan", "Strategi Belajar", "Guru", "Kurikulum"].map((tag) => (
@@ -120,15 +120,15 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
             {/* Related Articles */}
             <section className="mt-12 border-t border-border pt-8">
-              <h2 className="relative mb-6 pl-4 text-lg font-bold text-foreground before:absolute before:left-0 before:top-1/2 before:h-full before:w-1 before:-translate-y-1/2 before:rounded-full before:bg-primary">
+              <h2 className="relative mb-6 pl-4 text-lg font-bold text-foreground before:absolute before:left-0 before:top-1/2 before:h-full before:w-1 before:-translate-y-1/2 before:rounded-full before:bg-primary px-4 md:px-0 ml-0">
                 Artikel Terkait
               </h2>
-              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 px-4 md:px-0">
                 {related.map((rel) => (
                   <Link
                     key={rel.id}
                     href={`/post/${rel.slug}`}
-                    className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg hover:border-primary/30"
+                    className="group overflow-hidden rounded-none md:rounded-xl border-b md:border border-border bg-card shadow-none md:shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg hover:border-primary/30 pb-4 md:pb-0"
                   >
                     <div className="aspect-video overflow-hidden">
                       <img
@@ -138,7 +138,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
                         loading="lazy"
                       />
                     </div>
-                    <div className="p-4">
+                    <div className="p-4 md:p-4">
                       <h3 className="line-clamp-2 text-sm font-semibold text-card-foreground group-hover:text-primary transition-colors">
                         {rel.title}
                       </h3>
