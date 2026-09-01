@@ -47,15 +47,118 @@ useEffect(() => {
 // ==========================================
 // CEK COOKIE GOOGLE TRANSLATE
 // ==========================================
+
 const cookies = document.cookie.split("; ")
+
 const googtransCookie = cookies.find((row) =>
-  row.startsWith("googtrans=")
+row.startsWith("googtrans=")
 )
 
 if (googtransCookie?.includes("/en")) {
-  setLang("EN")
+setLang("EN")
 } else {
-  setLang("ID")
+setLang("ID")
+}
+
+// ==========================================
+// SEMBUNYIKAN SEMUA BANNER GOOGLE TRANSLATE
+// ==========================================
+
+const hideGoogleTranslateBar = () => {
+// Kembalikan posisi halaman
+document.documentElement.style.top = "0px"
+document.documentElement.style.marginTop = "0px"
+
+document.body.style.top = "0px"
+document.body.style.marginTop = "0px"
+
+// Sembunyikan banner Google Translate
+const banners = document.querySelectorAll(
+  ".goog-te-banner-frame, iframe.goog-te-banner-frame"
+)
+
+banners.forEach((banner) => {
+  const element = banner as HTMLElement
+
+  element.style.setProperty(
+    "display",
+    "none",
+    "important"
+  )
+
+  element.style.setProperty(
+    "visibility",
+    "hidden",
+    "important"
+  )
+
+  element.style.setProperty(
+    "height",
+    "0px",
+    "important"
+  )
+})
+
+}
+
+// Jalankan langsung
+hideGoogleTranslateBar()
+
+// ==========================================
+// MUTATION OBSERVER
+// Memantau elemen baru dari Google Translate
+// ==========================================
+
+const observer = new MutationObserver(() => {
+hideGoogleTranslateBar()
+})
+
+observer.observe(document.documentElement, {
+childList: true,
+subtree: true,
+attributes: true,
+attributeFilter: ["style", "class"],
+})
+
+// ==========================================
+// LOAD GOOGLE TRANSLATE
+// ==========================================
+
+if (!document.getElementById("google-translate-script")) {
+window.googleTranslateElementInit = () => {
+new window.google.translate.TranslateElement(
+{
+pageLanguage: "id",
+includedLanguages: "id,en",
+autoDisplay: false,
+},
+"google_translate_element"
+)
+
+  // Pastikan banner langsung disembunyikan
+  hideGoogleTranslateBar()
+}
+
+const script = document.createElement("script")
+
+script.id = "google-translate-script"
+
+script.src =
+  "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+
+script.async = true
+
+document.body.appendChild(script)
+
+}
+
+// ==========================================
+// CLEANUP
+// ==========================================
+
+return () => {
+observer.disconnect()
+}
 }
 
 // ==========================================
