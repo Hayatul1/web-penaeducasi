@@ -27,9 +27,9 @@ export function TopBar() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-lg">
-      {/* Tambahkan pl-[70px] lg:pl-4 di sini agar tidak menabrak hamburger di mobile */}
-      <div className="mx-auto flex max-w-[1400px] items-center gap-2 pl-[70px] pr-4 lg:px-4">
+    <header className="sticky top-0 z-40 w-full overflow-hidden border-b border-border bg-background/80 backdrop-blur-lg">
+      {/* w-full dan max-w-full mencegah layar bergeser ke samping, min-w-0 mengaktifkan scroll */}
+      <div className="mx-auto flex w-full max-w-[1400px] items-center gap-2 pl-[70px] pr-4 lg:px-4">
         <button
           onClick={() => scroll(-1)}
           className="hidden shrink-0 items-center justify-center rounded-full border border-border bg-card p-1.5 text-foreground shadow-sm transition-colors hover:bg-primary hover:text-primary-foreground md:flex"
@@ -38,9 +38,10 @@ export function TopBar() {
           <ChevronLeft className="h-4 w-4" />
         </button>
 
+        {/* Bagian ini menjaga agar kategori tetap bisa di-scroll ke samping kanan/kiri di HP */}
         <div
           ref={scrollRef}
-          className="flex flex-1 items-center gap-2 overflow-x-auto py-3 scrollbar-hide"
+          className="flex flex-1 min-w-0 items-center gap-2 overflow-x-auto py-3 scrollbar-hide"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {categories.map((cat) => (
