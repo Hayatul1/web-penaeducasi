@@ -33,7 +33,7 @@ export function SidebarLeft() {
       {/* Mobile Hamburger */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed top-4 left-4 z-50 flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-card text-card-foreground shadow-md lg:hidden"
+        className="fixed top-2 left-4 z-50 flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-card text-card-foreground shadow-md lg:hidden"
         aria-label="Buka menu"
       >
         <Menu className="h-5 w-5" />
