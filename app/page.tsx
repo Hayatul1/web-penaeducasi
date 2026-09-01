@@ -9,6 +9,11 @@ import {
   JustifiedGrid,
   SquareGrid,
   AsymmetricGrid,
+  NewspaperGrid,
+  TimelineGrid,
+  PolaroidGrid,
+  FeatureListGrid,
+  ReelGrid,
 } from "@/components/home-grids"
 import { LatestArticles } from "@/components/latest-articles"
 import { allArticles } from "@/lib/sample-data"
@@ -51,6 +56,13 @@ export default function Home() {
 
             {/* 5. Overlapping / Asymmetric Grid */}
             <AsymmetricGrid articles={pad(madrasah, 5)} />
+
+            {/* Four additional modern article grid designs */}
+            <NewspaperGrid articles={pad(allArticles.filter((a) => a.category === "Parenting"), 5)} />
+            <TimelineGrid articles={pad(allArticles.filter((a) => a.category === "Tips"), 5)} />
+            <PolaroidGrid articles={pad(allArticles.filter((a) => a.category === "Berita"), 5)} />
+            <FeatureListGrid articles={pad(allArticles.filter((a) => a.category === "Parenting"), 5)} />
+            <ReelGrid articles={pad(allArticles.filter((a) => a.category === "Pendidikan"), 5)} />
 
             {/* Latest Articles with UX Cards */}
             <LatestArticles />
