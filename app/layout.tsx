@@ -2,6 +2,7 @@ import React from "react"
 import type { Metadata, Viewport } from "next"
 import { Inter, Playfair_Display } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Providers } from "@/components/providers" // <-- Tambahan untuk NextAuth Session
 
 import "./globals.css"
 
@@ -29,9 +30,11 @@ export default function RootLayout({
     <html lang="id" suppressHydrationWarning>
       {/* overflow-x-hidden ditambahkan untuk mengunci layar agar tidak bisa digeser ke samping */}
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased overflow-x-hidden`}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          {children}
-        </ThemeProvider>
+        <Providers> {/* <-- Dibungkus Providers di sini agar useSession aktif */}
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+            {children}
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   )
