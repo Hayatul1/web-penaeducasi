@@ -1,0 +1,55 @@
+[33m004f5d3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m fix: update configuration for cloudflare deployment
+[33ma27e2a1[m fix: add styled-components compiler config
+[33m4779586[m fix: add styled-components dependency
+[33m5dc3f25[m refactor: optimasi viewport dan metadata untuk sanity studio
+[33mdbe68ab[m feat: menambah skema artikel untuk dasbor sanity
+[33m929d8a9[m feat: hubungkan halaman utama dengan database sanity
+[33m200f5e1[m feat: setup integrasi sanity cms
+[33m059c314[m fix: sejajarkan grid bento box pendidikan di desktop
+[33m3f88415[m fix: add edge runtime export for nextauth v5
+[33m136c250[m fix: update nextauth to beta handlers for cloudflare
+[33m5b4dd80[m fix: add edge runtime for nextauth
+[33maf21933[m fix: force legacy peer deps to solve cloudflare crash
+[33m157adc2[m fix: force trigger cloudflare build
+[33m9bd2aa9[m fix: update build command for dependency conflict
+[33m7faebe0[m trigger: deploy ulang cloudflare
+[33mcf17073[m trigger: redeploy cloudflare
+[33m7022e01[m chore: hapus pnpm-lock.yaml
+[33m7bc1d7b[m fix: resolve peer dependency conflict for build
+[33m6e317c9[m feat: implementasi login otomatis Google menggunakan NextAuth di desktop
+[33m10d02fb[m feat: mengganti fitur Google Translate dengan tombol auto-login Google di tampilan desktop
+[33mc0df1d7[m Update Google Translate hide banner
+[33mb6d262b[m Hide Google Translate banner and improve language switcher
+[33m7b36978[m update desain top bar menu
+[33mfb33302[m Optimasi tampilan mobile edge-to-edge di halaman artikel
+[33m3512683[m Optimasi ArticleCard agar edge-to-edge dan teks ideal di mobile
+[33m3c11ec0[m Final fix layout mobile edge-to-edge dan overflow
+[33m31f55d8[m Memperbarui top-bar dan layout mobile edge-to-edge
+[33mbc60773[m Optimasi ukuran gambar dan teks mobile serta scroller topbar
+[33m4b4818b[m Memperbarui susunan grid di page.tsx
+[33mfb2a37b[m Memperbarui tampilan grid mobile
+[33me67a037[m Menyelesaikan konflik merge pada sidebar-left
+[33m712c7f2[m Menyimpan perbaikan menu mobile
+[33mbdb0057[m Fix button position in sidebar-left component
+[33maa90c60[m Update sidebar-left.tsx
+[33me3ef6f1[m Ubah runtime menjadi edge untuk halaman artikel
+[33m2ba2652[m Hapus wrangler.toml untuk beralih ke next-on-pages
+[33m4ddfed6[m Perbarui direktori assets wrangler
+[33m743f3bd[m Hapus binding assets wrangler
+[33me501b3e[m Perbaiki konfigurasi assets wrangler
+[33m748d63e[m Tambah konfigurasi assets di wrangler.toml
+[33m1574b5e[m Tambah file wrangler.toml
+[33m9c997a6[m Upload web Pena Edukasi
+[33md330835[m Add README.md
+[33mcc33d82[m Restored v1: Initial commit from v0
+[33m2dc8a6b[m feat: merge complete Blogger template with new CSS design\n\nIncorporate all  elements and update CSS for new design
+[33mb38067c[m fix: improve Blogger template rendering and styling\n\nRefactor XML templates to fix single post and static page display; add white background for content area.
+[33m6c3ac63[m refactor: rewrite Blogger template XML with precise layout\n\nFix single post and static page rendering issues and replicate layout.
+[33medcac9e[m refactor: rewrite XML template for Blogger with updated design\n\nUpdate XML template to match screenshot layout and design
+[33m4355767[m fix: correct widget settings in Blogger template\n\nFix invalid settings for Label1, BlogArchive1, Blog1, and PopularPosts1 widgets.
+[33mdc49111[m feat: update Blogger template to version 2 with correct format
+[33m22182b8[m fix: correct XML template errors for Blogger compatibility\n\nFix self-closing divs, document.write(), and invalid syntax for V2 widgets.
+[33mfa8e032[m feat: save XML template as static file and update download page\n\nSave XML directly to public folder and update download page and topbar links.
+[33m500aca8[m feat: add complete Blogger XML template and download page\n\nCreate XML template and API route for download, and update homepage.
+[33mffd68cb[m feat: create Blogger XML template and download page\n\nGenerate modern XML template and add download page in Next.js.
+[33mb53aef8[m Initial commit from v0
