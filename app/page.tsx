@@ -15,7 +15,6 @@ import {
   FeatureListGrid,
   ReelGrid,
 } from "@/components/home-grids"
-import { LatestArticles } from "@/components/latest-articles"
 import { getPublishedArticles } from "@/lib/sample-data";
 
 export const runtime = 'edge'; // Pertahankan jika menggunakan edge runtime
