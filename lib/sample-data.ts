@@ -7,8 +7,28 @@ export interface Article {
   date: string
   image: string
   slug: string
+  content?: string // Menampung isi HTML artikel lengkap dari Studio
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_STUDIO_API_URL || "https://studio.penaeducasi.com/api/articles";
+
+function formatDate(dateString: string | null | undefined): string {
+  if (!dateString) return "1 Feb 2026";
+  try {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('id-ID', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    }).format(date);
+  } catch (e) {
+    return "1 Feb 2026";
+  }
+}
+
+// ============================================================================
+// 1. DATA ASLI BAWAAN (STATIC FALLBACK) - DIKEMBALIKAN UTUH 100%
+// ============================================================================
 const images = [
   "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
   "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&h=400&fit=crop",
@@ -56,22 +76,104 @@ export function generateArticles(count: number): Article[] {
   return Array.from({ length: count }, (_, i) => ({
     id: `article-${i + 1}`,
     title: titles[i % titles.length],
-    excerpt:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    excerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     category: categories[i % categories.length],
     author: "Pena Edukasi",
     date: `${(i % 28) + 1} Feb 2026`,
     image: images[i % images.length],
     slug: `article-${i + 1}`,
+    content: "<p>Konten detail belum ditambahkan melalui Studio.</p>"
   }))
 }
 
 export const allArticles = generateArticles(20)
 
-export function getArticlesByCategory(category: string, limit = 5): Article[] {
-  return allArticles.filter((a) => a.category.toLowerCase() === category.toLowerCase()).slice(0, limit)
+// ============================================================================
+// 2. FUNGSI FETCH & PENGGABUNGAN DATA (STUDIO API + DATA STATIS)
+// ============================================================================
+
+export async function getPublishedArticles(): Promise<Article[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}?status=published`, {
+      next: { revalidate: 30 }
+    });
+
+    if (!res.ok) throw new Error("API Gagal");
+    
+    const responseData = await res.json();
+    const studioData = responseData.data || [];
+
+    // Ubah format data dari Studio agar sesuai dengan struktur Web
+    const apiArticles: Article[] = studioData.map((item: any) => ({
+      id: String(item.id),
+      title: item.title,
+      excerpt: item.excerpt || "Baca selengkapnya mengenai artikel ini di Pena Edukasi.",
+      category: item.category || "Pendidikan",
+      author: item.author || "Pena Edukasi",
+      date: formatDate(item.created_at),
+      image: item.image_url && item.image_url.trim() !== "" ? item.image_url : images[0],
+      slug: item.slug
+    }));
+
+    // TRIK "MAGIC MERGE": Gabungkan artikel Studio dengan artikel statis
+    // Jika slug dari artikel statis sudah dipakai di Studio, maka artikel statis dihapus (Ditimpa)
+    const apiSlugs = new Set(apiArticles.map(a => a.slug));
+    const mergedArticles = [
+      ...apiArticles,
+      ...allArticles.filter(a => !apiSlugs.has(a.slug))
+    ];
+
+    return mergedArticles;
+  } catch (error) {
+    console.error("Gagal mengambil data dari Studio API:", error);
+    return allArticles; // Jika Studio down, kembalikan 20 data asli
+  }
 }
 
-export function getRelatedArticles(currentId: string, limit = 3): Article[] {
-  return allArticles.filter((a) => a.id !== currentId).slice(0, limit)
+export async function getArticleBySlug(slug: string): Promise<Article | null> {
+  try {
+    // Cek ke Studio API Terlebih Dahulu
+    const res = await fetch(`${API_BASE_URL}/${slug}`, {
+      next: { revalidate: 30 }
+    });
+
+    if (res.ok) {
+      const responseData = await res.json();
+      const item = responseData.data;
+
+      if (item) {
+        return {
+          id: String(item.id),
+          title: item.title,
+          excerpt: item.excerpt || "",
+          category: item.category || "Pendidikan",
+          author: item.author || "Pena Edukasi",
+          date: formatDate(item.created_at),
+          image: item.image_url && item.image_url.trim() !== "" ? item.image_url : images[0],
+          slug: item.slug,
+          content: item.content
+        };
+      }
+    }
+  } catch (error) {
+    console.error(`Gagal fetching artikel dari Studio:`, error);
+  }
+
+  // Jika di Studio tidak ada, cari di daftar artikel Statis bawaan
+  const staticArticle = allArticles.find((a) => a.slug === slug);
+  return staticArticle || null;
+}
+
+export async function getArticlesByCategory(category: string, limit = 5): Promise<Article[]> {
+  const articles = await getPublishedArticles();
+  return articles
+    .filter((a) => a.category.toLowerCase() === category.toLowerCase())
+    .slice(0, limit);
+}
+
+export async function getRelatedArticles(currentSlug: string, limit = 3): Promise<Article[]> {
+  const articles = await getPublishedArticles();
+  return articles
+    .filter((a) => a.slug !== currentSlug)
+    .slice(0, limit);
 }
