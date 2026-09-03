@@ -17,6 +17,14 @@ import {
 } from "@/components/home-grids"
 import { LatestArticles } from "@/components/latest-articles"
 import { allArticles } from "@/lib/sample-data"
+import { getPublishedArticles } from "@/lib/sample-data";
+
+export const runtime = 'edge'; // Pertahankan jika menggunakan edge runtime
+
+export default async function Page() {
+  const articles = await getPublishedArticles(); // <-- Menarik data asli dari Studio CMS
+  // ...
+}
 
 export default function Home() {
   const pendidikan = allArticles.filter((a) => a.category === "Pendidikan")
