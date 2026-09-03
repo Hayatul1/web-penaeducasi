@@ -16,7 +16,6 @@ import {
   ReelGrid,
 } from "@/components/home-grids"
 import { LatestArticles } from "@/components/latest-articles"
-import { allArticles } from "@/lib/sample-data"
 import { getPublishedArticles } from "@/lib/sample-data";
 
 export const runtime = 'edge'; // Pertahankan jika menggunakan edge runtime
