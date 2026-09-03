@@ -5,12 +5,20 @@ import { TopBar } from "@/components/top-bar"
 import { SidebarRight } from "@/components/sidebar-right"
 import { Footer } from "@/components/footer"
 import { ScrollToTop } from "@/components/scroll-to-top"
-import { allArticles, getRelatedArticles } from "@/lib/sample-data"
+import { getArticleBySlug, getRelatedArticles } from "@/lib/sample-data" // [UBAH 1] Menggunakan fungsi async
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const article = allArticles.find((a) => a.slug === slug) ?? allArticles[0]
-  const related = getRelatedArticles(article.id, 3)
+  
+  // [UBAH 2] Menggunakan await untuk memanggil data API secara dinamis
+  const article = await getArticleBySlug(slug)
+  
+  if (!article) {
+    return <div className="flex min-h-screen w-full items-center justify-center font-bold">Artikel tidak ditemukan.</div>
+  }
+
+  // [UBAH 3] Tambahkan await agar fungsi .map() di bawah tidak error
+  const related = await getRelatedArticles(article.id, 3)
 
   return (
     <div className="flex min-h-screen w-full overflow-x-hidden">
@@ -64,42 +72,12 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
                 />
               </div>
 
-              {/* Post Body */}
-              <div className="prose prose-lg max-w-none px-4 md:px-0" itemProp="articleBody">
-                <p className="text-base leading-relaxed text-foreground">
-                  Pendidikan merupakan fondasi utama dalam membangun peradaban yang maju. Dalam konteks Indonesia, pendidikan menjadi kunci untuk mewujudkan cita-cita bangsa yang tertuang dalam Pembukaan UUD 1945, yaitu mencerdaskan kehidupan bangsa. Oleh karena itu, setiap upaya untuk meningkatkan kualitas pendidikan perlu mendapat dukungan penuh dari seluruh elemen masyarakat.
-                </p>
-
-                <h2 className="mb-4 mt-8 text-xl font-bold text-foreground md:text-2xl">
-                  Pentingnya Pendidikan Berkualitas
-                </h2>
-                <p className="text-base leading-relaxed text-foreground">
-                  Pendidikan berkualitas tidak hanya tentang transfer pengetahuan, tetapi juga tentang pembentukan karakter, pengembangan keterampilan berpikir kritis, dan penanaman nilai-nilai moral. Guru sebagai ujung tombak pendidikan memiliki peran strategis dalam mewujudkan hal ini.
-                </p>
-
-                <h3 className="mb-3 mt-6 text-lg font-bold text-foreground">
-                  Strategi Implementasi
-                </h3>
-                <p className="text-base leading-relaxed text-foreground">
-                  Beberapa strategi yang dapat diterapkan untuk meningkatkan kualitas pendidikan antara lain:
-                </p>
-
-                <ul className="my-4 list-disc space-y-2 pl-6 text-base text-foreground">
-                  <li>Penerapan metode pembelajaran aktif dan kolaboratif</li>
-                  <li>Integrasi teknologi dalam proses belajar mengajar</li>
-                  <li>Pengembangan kurikulum yang relevan dengan kebutuhan zaman</li>
-                  <li>Peningkatan kompetensi guru melalui pelatihan berkelanjutan</li>
-                  <li>Pelibatan orang tua dan masyarakat dalam proses pendidikan</li>
-                </ul>
-
-                <blockquote className="my-6 rounded-r-xl border-l-4 border-primary bg-secondary/50 p-5 text-base italic text-foreground">
-                  {'"Pendidikan adalah senjata paling ampuh yang bisa kamu gunakan untuk mengubah dunia." - Nelson Mandela'}
-                </blockquote>
-
-                <p className="text-base leading-relaxed text-foreground">
-                  Dengan menerapkan strategi-strategi di atas secara konsisten, kita dapat membangun generasi yang tidak hanya cerdas secara intelektual, tetapi juga memiliki karakter yang kuat dan berakhlak mulia. Ini adalah investasi terbaik untuk masa depan bangsa dan negara kita.
-                </p>
-              </div>
+              {/* Post Body - [UBAH 4] Menampilkan format HTML langsung dari CMS Studio Pena Edukasi */}
+              <div 
+                className="prose prose-lg max-w-none px-4 md:px-0 text-base leading-relaxed text-foreground" 
+                itemProp="articleBody"
+                dangerouslySetInnerHTML={{ __html: article.content || '' }}
+              />
 
               {/* Tags */}
               <div className="mt-8 border-t border-border pt-5 px-4 md:px-0">
