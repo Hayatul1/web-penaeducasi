@@ -8,6 +8,7 @@ export interface Article {
   image: string
   slug: string
   content?: string
+  tags?: string // Properti tags berhasil ditambahkan ke interface
 }
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_STUDIO_API_URL || "https://studio.penaeducasi.com/api/articles";
@@ -82,7 +83,7 @@ export function generateArticles(count: number): Article[] {
     date: `${(i % 28) + 1} Feb 2026`,
     image: images[i % images.length],
     slug: `article-${i + 1}`,
-    // ISI KONTEN LENGKAP UNTUK ARTIKEL BAWAAN:
+    tags: "", 
     content: `
       <p class="text-base leading-relaxed text-foreground">
         Pendidikan merupakan fondasi utama dalam membangun peradaban yang maju. Dalam konteks Indonesia, pendidikan menjadi kunci untuk mewujudkan cita-cita bangsa yang tertuang dalam Pembukaan UUD 1945, yaitu mencerdaskan kehidupan bangsa. Oleh karena itu, setiap upaya untuk meningkatkan kualitas pendidikan perlu mendapat dukungan penuh dari seluruh elemen masyarakat.
@@ -122,17 +123,15 @@ export const allArticles = generateArticles(20)
 // FUNGSI PENGAMBILAN DATA DARI STUDIO (API)
 // ---------------------------------------------------------------------------
 
-export async function getArticleBySlug(slug: string): Promise<Article | undefined> {
+export async function getPublishedArticles(): Promise<Article[]> {
   try {
-    const res = await fetch(`${API_BASE_URL}/${slug}`, { next: { revalidate: 30 } });
-    if (!res.ok) return undefined;
+    const res = await fetch(`${API_BASE_URL}?status=published`, { next: { revalidate: 30 } });
+    if (!res.ok) throw new Error("API Gagal");
     
     const responseData = await res.json();
-    const item = responseData.data;
-    
-    if (!item) return undefined;
+    const studioData = responseData.data || [];
 
-    return {
+    const apiArticles: Article[] = studioData.map((item: any) => ({
       id: String(item.id),
       title: item.title,
       excerpt: item.excerpt || "Baca selengkapnya mengenai artikel ini di Pena Edukasi.",
@@ -140,15 +139,9 @@ export async function getArticleBySlug(slug: string): Promise<Article | undefine
       author: item.author || "Pena Edukasi",
       date: formatDate(item.created_at),
       image: item.image_url && item.image_url.trim() !== "" ? item.image_url : images[0],
-      content: item.content || "",
       slug: item.slug,
-      tags: item.tags || "" // <--- PASTIKAN BARIS INI DITAMBAHKAN DI SINI
-    };
-  } catch (error) {
-    console.error("Gagal memuat detail artikel:", error);
-    return undefined;
-  }
-}
+      tags: item.tags || ""
+    }));
 
     // Gabungkan artikel Studio dengan artikel statis bawaan
     const apiSlugs = new Set(apiArticles.map(a => a.slug));
@@ -168,17 +161,20 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
         return {
           id: String(item.id),
           title: item.title,
-          excerpt: item.excerpt || "",
+          excerpt: item.excerpt || "Baca selengkapnya mengenai artikel ini di Pena Edukasi.",
           category: item.category || "Pendidikan",
           author: item.author || "Pena Edukasi",
           date: formatDate(item.created_at),
           image: item.image_url && item.image_url.trim() !== "" ? item.image_url : images[0],
           slug: item.slug,
-          content: item.content
+          content: item.content || "",
+          tags: item.tags || "" 
         };
       }
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error("Gagal memuat detail artikel:", error);
+  }
   
   return allArticles.find((a) => a.slug === slug) || null;
 }
@@ -188,7 +184,6 @@ export async function getArticlesByCategory(category: string, limit = 5): Promis
   return articles.filter((a) => a.category.toLowerCase() === category.toLowerCase()).slice(0, limit);
 }
 
-// PARAMETER DIKEMBALIKAN KE currentId AGAR COCOK DENGAN TEMPLATE
 export async function getRelatedArticles(currentId: string, limit = 3): Promise<Article[]> {
   const articles = await getPublishedArticles();
   return articles.filter((a) => a.id !== currentId).slice(0, limit);
