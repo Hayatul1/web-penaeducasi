@@ -1,5 +1,7 @@
 export const runtime = 'edge';
-import Link from "next/link"
+import Link from "next/link";
+import { notFound } from "next/navigation";
+// ... (impor komponen lainnya)
 import { SidebarLeft } from "@/components/sidebar-left"
 import { TopBar } from "@/components/top-bar"
 import { SidebarRight } from "@/components/sidebar-right"
@@ -81,27 +83,26 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
                {/* Tags Dinamis dari Database Studio */}
                <div className="mt-8 border-t border-border pt-5 px-4 md:px-0">
-               <span className="text-xs font-semibold text-muted-foreground">Tags:</span>
-              <div className="mt-2 flex flex-wrap gap-2">
-              {article.tags ? (
-              article.tags.split(',').map((tag: string, index: number) => {
-            const cleanTag = tag.trim();
-          const slugTag = cleanTag.toLowerCase().replace(/\s+/g, '-');
-         return (
-          <Link
+  <span className="text-xs font-semibold text-muted-foreground">Tags:</span>
+  <div className="mt-2 flex flex-wrap gap-2">
+    {article.tags ? (
+      article.tags.split(',').map((tag: string, index: number) => {
+        const cleanTag = tag.trim();
+        const slugTag = cleanTag.toLowerCase().replace(/\s+/g, '-');
+        return (
+          <span
             key={index}
-            href={`/category/${slugTag}`}
-            className="rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
+            className="rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground"
           >
             {cleanTag}
-          </Link>
+          </span>
         );
       })
     ) : (
       <span className="text-xs text-muted-foreground">Tidak ada tag</span>
     )}
   </div>
- </div>
+</div>
             </article>
 
             {/* Related Articles */}
