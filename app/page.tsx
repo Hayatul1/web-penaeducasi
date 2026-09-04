@@ -15,21 +15,27 @@ import {
   FeatureListGrid,
   ReelGrid,
 } from "@/components/home-grids"
+import { LatestArticles } from "@/components/latest-articles"
 import { getPublishedArticles } from "@/lib/sample-data";
-// (Catatan: Jika ada import komponen <LatestArticles /> di file asli, letakkan di bawah ini)
 
 export const runtime = 'edge';
 
-// HANYA ADA SATU EXPORT DEFAULT (Telah digabungkan menjadi fungsi Async)
 export default async function Home() {
-  // Mengambil data dinamis dari Studio CMS dan menyimpannya ke variabel allArticles
-  const allArticles = await getPublishedArticles(); 
+  // 1. Mengambil data dinamis + fallback '|| []' mencegah error jika database kosong
+  const allArticles = (await getPublishedArticles()) || []; 
 
-  const pendidikan = allArticles.filter((a: any) => a.category === "Pendidikan")
-  const kurikulum = allArticles.filter((a: any) => a.category === "Kurikulum")
-  const materi = allArticles.filter((a: any) => a.category === "Materi")
-  const tutorial = allArticles.filter((a: any) => a.category === "Tutorial")
-  const madrasah = allArticles.filter((a: any) => a.category === "Madrasah")
+  // 2. Fungsi filter yang dioptimalkan agar kebal terhadap salah ketik (case-insensitive)
+  const getByCategory = (cat: string) => 
+    allArticles.filter((a: any) => a?.category?.toLowerCase() === cat.toLowerCase());
+
+  const pendidikan = getByCategory("Pendidikan")
+  const kurikulum = getByCategory("Kurikulum")
+  const materi = getByCategory("Materi")
+  const tutorial = getByCategory("Tutorial")
+  const madrasah = getByCategory("Madrasah")
+  const parenting = getByCategory("Parenting")
+  const tips = getByCategory("Tips")
+  const berita = getByCategory("Berita")
 
   const pad = (arr: any[], needed: number) => {
     if (arr.length >= needed) return arr.slice(0, needed)
@@ -53,14 +59,14 @@ export default async function Home() {
             <SquareGrid articles={pad(tutorial, 5)} />
             <AsymmetricGrid articles={pad(madrasah, 5)} />
 
-            <NewspaperGrid articles={pad(allArticles.filter((a: any) => a.category === "Parenting"), 5)} />
-            <TimelineGrid articles={pad(allArticles.filter((a: any) => a.category === "Tips"), 5)} />
-            <PolaroidGrid articles={pad(allArticles.filter((a: any) => a.category === "Berita"), 5)} />
-            <FeatureListGrid articles={pad(allArticles.filter((a: any) => a.category === "Parenting"), 5)} />
-            <ReelGrid articles={pad(allArticles.filter((a: any) => a.category === "Pendidikan"), 5)} />
+            <NewspaperGrid articles={pad(parenting, 5)} />
+            <TimelineGrid articles={pad(tips, 5)} />
+            <PolaroidGrid articles={pad(berita, 5)} />
+            <FeatureListGrid articles={pad(parenting, 5)} />
+            <ReelGrid articles={pad(pendidikan, 5)} />
 
-            {/* Pastikan komponen LatestArticles sudah di-import di bagian atas jika menggunakan ini */}
-            {/* <LatestArticles /> */}
+            {/* Latest Articles with UX Cards */}
+            <LatestArticles />
           </main>
 
           <SidebarRight />
