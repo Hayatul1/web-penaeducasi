@@ -138,7 +138,8 @@ export async function getPublishedArticles(): Promise<Article[]> {
       author: item.author || "Pena Edukasi",
       date: formatDate(item.created_at),
       image: item.image_url && item.image_url.trim() !== "" ? item.image_url : images[0],
-      slug: item.slug
+      slug: item.slug,
+      tags: item.tags || "" // <-- TAMBAHKAN BARIS INI
     }));
 
     // Gabungkan artikel Studio dengan artikel statis bawaan
