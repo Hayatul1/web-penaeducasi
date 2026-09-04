@@ -2,12 +2,19 @@ import React from "react"
 import type { Metadata, Viewport } from "next"
 import { Inter, Playfair_Display } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
-import { Providers } from "@/components/providers" // <-- Tambahan untuk NextAuth Session
+import { Providers } from "@/components/providers"
 
 import "./globals.css"
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" })
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+})
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+})
 
 export const metadata: Metadata = {
   title: "Pena Edukasi - Membangun Generasi Cerdas dan Berakhlak",
@@ -27,11 +34,27 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="id" suppressHydrationWarning>
-      {/* overflow-x-hidden ditambahkan untuk mengunci layar agar tidak bisa digeser ke samping */}
-      <body className={`${inter.variable} ${playfair.variable} font-sans antialiased overflow-x-hidden`}>
-        <Providers> {/* <-- Dibungkus Providers di sini agar useSession aktif */}
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+    <html
+      lang="id"
+      suppressHydrationWarning
+      className="overflow-x-clip"
+    >
+      <body
+        className={`
+          ${inter.variable}
+          ${playfair.variable}
+          font-sans
+          antialiased
+          overflow-x-clip
+        `}
+      >
+        <Providers>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
             {children}
           </ThemeProvider>
         </Providers>
