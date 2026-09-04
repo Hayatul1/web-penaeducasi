@@ -6,12 +6,18 @@ import { Footer } from "@/components/footer";
 
 export const runtime = 'edge';
 
-export default async function CategoryPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
-  const allArticles = await getPublishedArticles();
+// Perbaikan 1: params dijadikan tipe Promise
+export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
+  // Perbaikan 2: wajib await params sebelum mengambil slug
+  const resolvedParams = await params;
+  const slug = resolvedParams.slug;
+
+  // Mencegah error jika getPublishedArticles gagal memuat
+  const allArticles = (await getPublishedArticles()) || [];
   
+  // Perbaikan 3: Menggunakan optional chaining (?.) untuk mencegah crash jika ada artikel tanpa kategori
   const filteredArticles = allArticles.filter(
-    (a: any) => a.category.toLowerCase() === slug.toLowerCase()
+    (a: any) => a?.category?.toLowerCase() === slug?.toLowerCase()
   );
 
   return (
@@ -24,7 +30,7 @@ export default async function CategoryPage({ params }: { params: { slug: string 
         <div className="mx-auto w-full max-w-[1200px] px-4 py-8 md:py-12 flex-1">
           <div className="mb-8 border-b pb-4">
             <h1 className="text-3xl md:text-4xl font-extrabold capitalize text-gray-900 tracking-tight">
-              Kategori: {slug.replace('-', ' ')}
+              Kategori: {slug?.replace(/-/g, ' ')}
             </h1>
             <p className="text-gray-500 mt-2 text-lg">
               Menampilkan {filteredArticles.length} artikel terbaru.
@@ -43,7 +49,6 @@ export default async function CategoryPage({ params }: { params: { slug: string 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {filteredArticles.map((article: any) => (
                 <div key={article.id} className="group flex flex-col bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300">
-                  {/* Thumbnail Image */}
                   <div className="relative h-52 w-full overflow-hidden bg-gray-100">
                     {article.image ? (
                       <img
@@ -58,7 +63,6 @@ export default async function CategoryPage({ params }: { params: { slug: string 
                     )}
                   </div>
                   
-                  {/* Card Content */}
                   <div className="p-6 flex flex-col flex-1">
                     <h2 className="font-bold text-xl mb-3 text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors leading-snug">
                       {article.title}
@@ -67,7 +71,6 @@ export default async function CategoryPage({ params }: { params: { slug: string 
                       {article.excerpt}
                     </p>
                     
-                    {/* Footer Card */}
                     <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
                       <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-md">
                         {article.date}
