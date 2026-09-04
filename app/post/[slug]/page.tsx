@@ -90,12 +90,14 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         const cleanTag = tag.trim();
         const slugTag = cleanTag.toLowerCase().replace(/\s+/g, '-');
         return (
-          <span
+          
+          <Link
             key={index}
+            href={`/tag/${slugTag}`}
             className="rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground"
           >
             {cleanTag}
-          </span>
+          </Link>
         );
       })
     ) : (
