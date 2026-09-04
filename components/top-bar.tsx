@@ -30,7 +30,6 @@ export function TopBar() {
   const { data: session, status } = useSession()
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
 
-  /* Scroll kategori ke kiri/kanan */
   const scroll = (dir: number) => {
     if (scrollRef.current) {
       scrollRef.current.scrollBy({
@@ -81,14 +80,10 @@ export function TopBar() {
 
         {/* ================= AREA KANAN ================= */}
         <div className="flex shrink-0 items-center gap-2.5 pl-2">
-          
-          {/* AUTHENTICATION GOOGLE (HANYA DESKTOP) */}
           <div className="hidden md:flex items-center">
             {status === "loading" ? (
-              /* Skeleton Loading saat memuat sesi */
               <div className="h-9 w-28 animate-pulse rounded-xl bg-muted" />
             ) : session?.user ? (
-              /* TAMPILAN SAAT SUDAH LOGIN */
               <div className="relative">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
@@ -110,7 +105,6 @@ export function TopBar() {
                   </span>
                 </button>
 
-                {/* Dropdown Menu User */}
                 {isUserMenuOpen && (
                   <div className="absolute right-0 z-50 mt-2 w-48 rounded-xl border border-border bg-card p-2 shadow-lg">
                     <div className="px-3 py-2 border-b border-border mb-1">
@@ -128,7 +122,6 @@ export function TopBar() {
                 )}
               </div>
             ) : (
-              /* TAMPILAN SAAT BELUM LOGIN */
               <button
                 onClick={() => signIn("google")}
                 className="flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-1.5 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-muted"

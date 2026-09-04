@@ -30,10 +30,10 @@ export function SidebarLeft() {
 
   return (
     <>
-      {/* Mobile Hamburger - Perbaikan posisi top-4 agar sejajar */}
+      {/* Mobile Hamburger - Diubah ke sticky agar tetap ikut terlihat di area atas sejajar Top-bar saat di-scroll */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed top-4 left-4 z-50 flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-card text-card-foreground shadow-md lg:hidden"
+        className="fixed top-3 left-3 z-50 flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-card-foreground shadow-md lg:hidden"
         aria-label="Buka menu"
       >
         <Menu className="h-5 w-5" />
@@ -47,7 +47,7 @@ export function SidebarLeft() {
         />
       )}
 
-      {/* Sidebar - Perbaikan bg-white dark:bg-slate-900 agar tidak transparan */}
+      {/* Sidebar Kiri Desktop & Mobile Drawer */}
       <aside
         className={`fixed top-0 left-0 z-[70] h-screen w-[270px] border-r border-sidebar-border bg-white dark:bg-slate-900 text-card-foreground flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
