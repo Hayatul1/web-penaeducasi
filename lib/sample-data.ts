@@ -122,15 +122,17 @@ export const allArticles = generateArticles(20)
 // FUNGSI PENGAMBILAN DATA DARI STUDIO (API)
 // ---------------------------------------------------------------------------
 
-export async function getPublishedArticles(): Promise<Article[]> {
+export async function getArticleBySlug(slug: string): Promise<Article | undefined> {
   try {
-    const res = await fetch(`${API_BASE_URL}?status=published`, { next: { revalidate: 30 } });
-    if (!res.ok) throw new Error("API Gagal");
+    const res = await fetch(`${API_BASE_URL}/${slug}`, { next: { revalidate: 30 } });
+    if (!res.ok) return undefined;
     
     const responseData = await res.json();
-    const studioData = responseData.data || [];
+    const item = responseData.data;
+    
+    if (!item) return undefined;
 
-    const apiArticles: Article[] = studioData.map((item: any) => ({
+    return {
       id: String(item.id),
       title: item.title,
       excerpt: item.excerpt || "Baca selengkapnya mengenai artikel ini di Pena Edukasi.",
@@ -138,9 +140,15 @@ export async function getPublishedArticles(): Promise<Article[]> {
       author: item.author || "Pena Edukasi",
       date: formatDate(item.created_at),
       image: item.image_url && item.image_url.trim() !== "" ? item.image_url : images[0],
+      content: item.content || "",
       slug: item.slug,
-      tags: item.tags || "" // <-- TAMBAHKAN BARIS INI
-    }));
+      tags: item.tags || "" // <--- PASTIKAN BARIS INI DITAMBAHKAN DI SINI
+    };
+  } catch (error) {
+    console.error("Gagal memuat detail artikel:", error);
+    return undefined;
+  }
+}
 
     // Gabungkan artikel Studio dengan artikel statis bawaan
     const apiSlugs = new Set(apiArticles.map(a => a.slug));
