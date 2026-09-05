@@ -19,14 +19,22 @@ import {
 
 import { LatestArticles } from "@/components/latest-articles"
 import { getPublishedArticles } from "@/lib/sample-data"
+import { getPageViews } from "@/lib/google-analytics"
 
-export const runtime = "edge"
+export const runtime = "edge" // Tetap aman digunakan di Cloudflare!
 
 export default async function Home() {
   // =============================================================
-  // DATA ARTIKEL
+  // DATA ARTIKEL & INTEGRASI GA4 VIEWS
   // =============================================================
-  const allArticles = (await getPublishedArticles()) || []
+  const allArticlesRaw = (await getPublishedArticles()) || []
+
+  const allArticles = await Promise.all(
+    allArticlesRaw.map(async (article: any) => {
+      const views = await getPageViews(article.slug)
+      return { ...article, views }
+    })
+  )
 
   // =============================================================
   // FILTER KATEGORI
@@ -71,20 +79,8 @@ export default async function Home() {
         overflow-x-clip
       "
     >
-      {/* =========================================================
-          SIDEBAR KIRI
-          ========================================================= */}
       <SidebarLeft />
 
-      {/* =========================================================
-          AREA UTAMA
-
-          Desktop:
-          diberi margin kiri 270px karena SidebarLeft fixed.
-
-          Mobile:
-          margin kiri 0.
-          ========================================================= */}
       <div
         className="
           flex
@@ -96,20 +92,8 @@ export default async function Home() {
           lg:ml-[270px]
         "
       >
-        {/* =======================================================
-            TOP BAR
-
-            Sticky terhadap viewport/page scroll.
-            ======================================================= */}
         <TopBar />
 
-        {/* =======================================================
-            CONTENT + RIGHT SIDEBAR
-
-            PENTING:
-            Tidak menggunakan overflow-hidden / overflow-auto
-            di container ini agar sticky bekerja terhadap page.
-            ======================================================= */}
         <div
           className="
             mx-auto
@@ -125,9 +109,6 @@ export default async function Home() {
             md:py-5
           "
         >
-          {/* =====================================================
-              MAIN CONTENT
-              ===================================================== */}
           <main
             className="
               min-w-0
@@ -137,67 +118,26 @@ export default async function Home() {
             id="main-content"
             role="main"
           >
-            <BentoBoxGrid
-              articles={pad(pendidikan, 5)}
-            />
+            <BentoBoxGrid articles={pad(pendidikan, 5)} />
+            <EditorialGrid articles={pad(kurikulum, 5)} />
+            <JustifiedGrid articles={pad(materi, 5)} />
+            <SquareGrid articles={pad(tutorial, 5)} />
+            <AsymmetricGrid articles={pad(madrasah, 5)} />
+            <NewspaperGrid articles={pad(parenting, 5)} />
+            <TimelineGrid articles={pad(tips, 5)} />
+            <PolaroidGrid articles={pad(berita, 5)} />
+            <FeatureListGrid articles={pad(parenting, 5)} />
+            <ReelGrid articles={pad(pendidikan, 5)} />
 
-            <EditorialGrid
-              articles={pad(kurikulum, 5)}
-            />
-
-            <JustifiedGrid
-              articles={pad(materi, 5)}
-            />
-
-            <SquareGrid
-              articles={pad(tutorial, 5)}
-            />
-
-            <AsymmetricGrid
-              articles={pad(madrasah, 5)}
-            />
-
-            <NewspaperGrid
-              articles={pad(parenting, 5)}
-            />
-
-            <TimelineGrid
-              articles={pad(tips, 5)}
-            />
-
-            <PolaroidGrid
-              articles={pad(berita, 5)}
-            />
-
-            <FeatureListGrid
-              articles={pad(parenting, 5)}
-            />
-
-            <ReelGrid
-              articles={pad(pendidikan, 5)}
-            />
-
-            {/* Latest Articles */}
             <LatestArticles />
           </main>
 
-          {/* =====================================================
-              RIGHT SIDEBAR
-
-              Sticky dilakukan di dalam komponen SidebarRight.
-              ===================================================== */}
           <SidebarRight />
         </div>
 
-        {/* =======================================================
-            FOOTER
-            ======================================================= */}
         <Footer />
       </div>
 
-      {/* =========================================================
-          SCROLL TO TOP
-          ========================================================= */}
       <ScrollToTop />
     </div>
   )
