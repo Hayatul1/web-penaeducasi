@@ -9,6 +9,7 @@ export interface Article {
   slug: string
   content?: string
   tags?: string // Properti tags berhasil ditambahkan ke interface
+  views?: number //
 }
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_STUDIO_API_URL || "https://studio.penaeducasi.com/api/articles";

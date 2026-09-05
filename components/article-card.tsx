@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { Eye } from "lucide-react"
 import type { Article } from "@/lib/sample-data"
 
 export function ArticleCard({ article }: { article: Article }) {
@@ -22,8 +23,12 @@ export function ArticleCard({ article }: { article: Article }) {
         <h3 className="line-clamp-2 text-base font-bold leading-snug text-card-foreground group-hover:text-primary transition-colors md:text-sm md:font-semibold">
           {article.title}
         </h3>
-        <div className="mt-auto flex items-center gap-2 pt-2 text-xs text-muted-foreground">
+        <div className="mt-auto flex items-center justify-between pt-2 text-xs text-muted-foreground">
           <span>{article.date}</span>
+          <div className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded text-card-foreground">
+            <Eye className="w-3.5 h-3.5 text-muted-foreground" />
+            <span>{article.views ?? 0}</span>
+          </div>
         </div>
       </div>
     </Link>
@@ -42,11 +47,17 @@ export function ArticleCardSmall({ article }: { article: Article }) {
         className="h-16 w-24 flex-shrink-0 rounded-lg object-cover"
         loading="lazy"
       />
-      <div className="flex flex-col justify-center gap-1">
+      <div className="flex flex-col justify-between flex-1 gap-1">
         <h4 className="line-clamp-2 text-sm font-semibold text-card-foreground group-hover:text-primary transition-colors md:text-xs">
           {article.title}
         </h4>
-        <span className="text-xs text-muted-foreground md:text-[10px]">{article.date}</span>
+        <div className="flex items-center justify-between text-xs text-muted-foreground md:text-[10px]">
+          <span>{article.date}</span>
+          <div className="flex items-center gap-1 bg-muted px-1.5 py-0.5 rounded text-card-foreground">
+            <Eye className="w-3 h-3 text-muted-foreground" />
+            <span>{article.views ?? 0}</span>
+          </div>
+        </div>
       </div>
     </Link>
   )
