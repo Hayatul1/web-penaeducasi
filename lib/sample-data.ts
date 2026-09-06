@@ -144,9 +144,30 @@ export async function getPublishedArticles(): Promise<Article[]> {
       tags: item.tags || ""
     }));
 
-    // Gabungkan artikel Studio dengan artikel statis bawaan
+    // Gabungkan artikel Studio dengan artikel statis bawaan, 
+    // TAPI abaikan/buang artikel dummy yang ID-nya berformat 'article-X' jika Studio sudah memiliki artikel baru
     const apiSlugs = new Set(apiArticles.map(a => a.slug));
-    return [...apiArticles, ...allArticles.filter(a => !apiSlugs.has(a.slug))];
+    
+    // Saring artikel dummy: buang yang bawaan template jika API Studio sudah terisi
+    const filteredDummyArticles = allArticles.filter(a => {
+      // Jika slug sudah ada di API, jangan pakai dummy
+      if (apiSlugs.has(a.slug)) return false;
+      
+      // Jika ini adalah artikel dummy bawaan (id berawalan 'article-') 
+      // dan Anda sudah mulai mempublikasikan artikel di Studio, kita bisa menyembunyikannya 
+      // agar tidak terjadi duplikat judul/konten lama.
+      // (Opsional: baris di bawah ini memastikan artikel dummy lama 'article-1' s.d 'article-20' 
+      // tidak muncul lagi jika Anda sudah migrasi ke Studio)
+      if (a.id.startsWith('article-') && apiArticles.length > 0) {
+        // Cek apakah judulnya mirip/sama dengan yang sudah ada di Studio
+        const isDuplicateTitle = apiArticles.some(apiArt => apiArt.title.toLowerCase() === a.title.toLowerCase());
+        if (isDuplicateTitle) return false;
+      }
+      
+      return true;
+    });
+
+    return [...apiArticles, ...filteredDummyArticles];
   } catch (error) {
     return allArticles;
   }
