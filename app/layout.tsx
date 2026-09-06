@@ -60,8 +60,8 @@ export default function RootLayout({
           </ThemeProvider>
         </Providers>
         
-        {/* Tambahan Komponen Google Analytics */}
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID as string} />
+        {/* Tambahan Komponen Google Analytics dengan ID Langsung */}
+        <GoogleAnalytics gaId="G-GMYBYK18JV" />
       </body>
     </html>
   )
