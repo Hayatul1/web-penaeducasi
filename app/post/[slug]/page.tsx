@@ -215,23 +215,15 @@ export default async function PostPage({
               </div>
 
               {/* =================================================
-                  FEATURED IMAGE & CAPTION
+                  FEATURED IMAGE
                   ================================================= */}
-              <div className="mb-8">
-                <div className="overflow-hidden rounded-none md:rounded-2xl">
-                  <img
-                    src={article.image || "/placeholder.svg"}
-                    alt={article.image_alt || article.title}
-                    className="aspect-video w-full object-cover"
-                    fetchPriority="high"
-                  />
-                </div>
-                
-                {article.image_caption && (
-                  <p className="mt-3 text-center text-sm text-muted-foreground italic px-4 md:px-0">
-                    {article.image_caption}
-                  </p>
-                )}
+              <div className="mb-8 overflow-hidden rounded-none md:rounded-2xl">
+                <img
+                  src={article.image || "/placeholder.svg"}
+                  alt={article.title}
+                  className="aspect-video w-full object-cover"
+                  fetchPriority="high"
+                />
               </div>
 
               {/* =================================================
