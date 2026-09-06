@@ -6,6 +6,8 @@ export interface Article {
   author: string
   date: string
   image: string
+  image_alt?: string     // Tambahkan ini
+  image_caption?: string // Tambahkan ini
   slug: string
   content?: string
   tags?: string // Properti tags berhasil ditambahkan ke interface
