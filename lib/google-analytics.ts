@@ -1,21 +1,32 @@
 import { SignJWT, importPKCS8 } from 'jose';
 
-export async function getPageViews(slug: string) {
+export async function getPageViews(slug: string): Promise<number> {
   try {
-    const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
-    const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
-    const propertyId = process.env.GA_PROPERTY_ID;
+    const clientEmail = process.env.GOOGLE_CLIENT_EMAIL?.trim();
+    const propertyId = process.env.GA_PROPERTY_ID?.trim();
+    let rawKey = process.env.GOOGLE_PRIVATE_KEY || '';
 
-    if (!clientEmail || !privateKey || !propertyId) {
+    if (!clientEmail || !rawKey || !propertyId) {
+      return 0;
+    }
+
+    // Bersihkan tanda kutip dan normalisasi baris baru
+    rawKey = rawKey.trim().replace(/^["']|["']$/g, '');
+    if (rawKey.includes('\\n')) {
+      rawKey = rawKey.replace(/\\n/g, '\n');
+    }
+
+    // Validasi pencegah InvalidCharacterError sebelum diproses jose
+    if (!rawKey.includes('BEGIN PRIVATE KEY')) {
       return 0;
     }
 
     // 1. Buat Token JWT yang didukung Cloudflare Edge
     const algorithm = 'RS256';
-    const privateKeyObj = await importPKCS8(privateKey, algorithm);
+    const privateKeyObj = await importPKCS8(rawKey, algorithm);
     
     const iat = Math.floor(Date.now() / 1000);
-    const exp = iat + 3600; // Kadaluarsa dalam 1 jam
+    const exp = iat + 3600;
 
     const token = await new SignJWT({
       iss: clientEmail,
@@ -36,12 +47,15 @@ export async function getPageViews(slug: string) {
         grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
         assertion: token,
       }),
-      // Jangan di-cache, token selalu baru
       cache: 'no-store', 
     });
 
     const tokenData = await tokenRes.json();
     const accessToken = tokenData.access_token;
+
+    if (!accessToken) {
+      return 0;
+    }
 
     // 3. Tarik data dari Google Analytics 4 via REST API
     const gaRes = await fetch(
@@ -66,7 +80,6 @@ export async function getPageViews(slug: string) {
             },
           },
         }),
-        // Revalidate agar Cloudflare tidak caching data view selamanya
         next: { revalidate: 60 } 
       }
     );
@@ -74,10 +87,10 @@ export async function getPageViews(slug: string) {
     const gaData = await gaRes.json();
     const views = gaData.rows?.[0]?.metricValues?.[0]?.value || '0';
 
-    return parseInt(views);
+    return parseInt(views, 10);
 
-  } catch (error) {
-    console.error('GA4 Edge Error:', error);
-    return 0; // Kembalikan 0 jika gagal, agar web tidak crash
+  } catch {
+    // Mengembalikan 0 secara aman tanpa memicu error merah di layar lokal
+    return 0; 
   }
 }
