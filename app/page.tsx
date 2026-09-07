@@ -31,7 +31,8 @@ export default async function Home() {
 
   const allArticles = await Promise.all(
     allArticlesRaw.map(async (article: any) => {
-      const views = await getPageViews(article.slug)
+      // PERBAIKAN: Menambahkan "/post/" agar URL persis dengan data log Google Analytics
+      const views = await getPageViews(`/post/${article.slug}`)
       return { ...article, views }
     })
   )
