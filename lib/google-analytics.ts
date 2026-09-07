@@ -2,8 +2,8 @@ import { SignJWT, importPKCS8 } from 'jose';
 
 export async function getPageViews(slug: string) {
   try {
-    const clientEmail = process.env.GA_CLIENT_EMAIL;
-    const privateKey = process.env.GA_PRIVATE_KEY?.replace(/\\n/g, '\n');
+    const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
+    const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
     const propertyId = process.env.GA_PROPERTY_ID;
 
     if (!clientEmail || !privateKey || !propertyId) {

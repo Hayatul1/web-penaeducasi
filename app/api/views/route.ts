@@ -14,8 +14,8 @@ export async function GET(request: Request) {
       return NextResponse.json({ views: 0 });
     }
 
-    const clientEmail = process.env.GA_CLIENT_EMAIL;
-    const privateKey = process.env.GA_PRIVATE_KEY?.replace(/\\n/g, '\n');
+    const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
+    const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
     const propertyId = process.env.GA_PROPERTY_ID;
 
     if (!clientEmail || !privateKey || !propertyId) {
