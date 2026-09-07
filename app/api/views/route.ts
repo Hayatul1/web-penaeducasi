@@ -1,21 +1,12 @@
-import { BetaAnalyticsDataClient } from '@google-analytics/data';
 import { NextResponse } from 'next/server';
+import { SignJWT, importPKCS8 } from 'jose';
 
-// Mematikan cache agar view selalu up-to-date
+// WAJIB: Agar berjalan mulus di Cloudflare Pages (Edge)
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
-
-// Inisialisasi koneksi ke Google Analytics menggunakan data dari .env.local
-const analyticsDataClient = new BetaAnalyticsDataClient({
-  credentials: {
-    client_email: process.env.GA_CLIENT_EMAIL,
-    // Penting: Replace \n agar format key terbaca dengan benar di Next.js
-    private_key: process.env.GA_PRIVATE_KEY?.replace(/\\n/g, '\n'), 
-  },
-});
 
 export async function GET(request: Request) {
   try {
-    // Mengambil URL artikel yang sedang dibuka (contoh: /pendidikan/kurikulum-berbasis-kompetensi)
     const { searchParams } = new URL(request.url);
     const slug = searchParams.get('slug');
 
@@ -23,35 +14,84 @@ export async function GET(request: Request) {
       return NextResponse.json({ views: 0 });
     }
 
-    // Meminta data ke Google Analytics
-    const [response] = await analyticsDataClient.runReport({
-      property: `properties/${process.env.GA_PROPERTY_ID}`,
-      dateRanges: [
-        {
-          startDate: '2020-01-01', // Mulai dari awal web dibuat
-          endDate: 'today',
-        },
-      ],
-      dimensions: [{ name: 'pagePath' }],
-      metrics: [{ name: 'screenPageViews' }],
-      dimensionFilter: {
-        filter: {
-          fieldName: 'pagePath',
-          stringFilter: {
-            value: slug,
-            matchType: 'EXACT',
-          },
-        },
-      },
+    const clientEmail = process.env.GA_CLIENT_EMAIL;
+    const privateKey = process.env.GA_PRIVATE_KEY?.replace(/\\n/g, '\n');
+    const propertyId = process.env.GA_PROPERTY_ID;
+
+    if (!clientEmail || !privateKey || !propertyId) {
+      return NextResponse.json({ views: 0 });
+    }
+
+    // 1. Buat Token JWT dengan 'jose' (Cloudflare Friendly)
+    const algorithm = 'RS256';
+    const privateKeyObj = await importPKCS8(privateKey, algorithm);
+    
+    const iat = Math.floor(Date.now() / 1000);
+    const exp = iat + 3600;
+
+    const token = await new SignJWT({
+      iss: clientEmail,
+      sub: clientEmail,
+      aud: 'https://oauth2.googleapis.com/token',
+      scope: 'https://www.googleapis.com/auth/analytics.readonly',
+    })
+      .setProtectedHeader({ alg: algorithm, typ: 'JWT' })
+      .setExpirationTime(exp)
+      .setIssuedAt(iat)
+      .sign(privateKeyObj);
+
+    // 2. Minta Access Token ke Google
+    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+        assertion: token,
+      }),
+      cache: 'no-store',
     });
 
-    // Mengambil nilai angka dari response Google
-    const views = response.rows?.length ? response.rows[0].metricValues[0].value : 0;
+    const tokenData = await tokenRes.json();
+    const accessToken = tokenData.access_token;
 
-    return NextResponse.json({ views: parseInt(views || '0') });
-    
+    if (!accessToken) {
+      return NextResponse.json({ views: 0 });
+    }
+
+    // 3. Ambil data report dari GA4 Data API
+    const gaRes = await fetch(
+      `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          dateRanges: [{ startDate: '2020-01-01', endDate: 'today' }],
+          dimensions: [{ name: 'pagePath' }],
+          metrics: [{ name: 'screenPageViews' }],
+          dimensionFilter: {
+            filter: {
+              fieldName: 'pagePath',
+              stringFilter: {
+                value: slug,
+                matchType: 'EXACT',
+              },
+            },
+          },
+        }),
+        next: { revalidate: 60 }, // Cache selama 60 detik di Cloudflare
+      }
+    );
+
+    const gaData = await gaRes.json();
+    const views = gaData.rows?.[0]?.metricValues?.[0]?.value || '0';
+
+    return NextResponse.json({ views: parseInt(views) });
+
   } catch (error) {
-    console.error('Error fetching GA Views:', error);
+    console.error('Error fetching GA Views on Edge:', error);
     return NextResponse.json({ views: 0 });
   }
 }
