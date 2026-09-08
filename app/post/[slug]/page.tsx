@@ -227,10 +227,11 @@ export default async function PostPage({
               </div>
 
               {/* =================================================
-                  ARTICLE BODY
+                  ARTICLE BODY (Ditambahkan article-container di sini)
                   ================================================= */}
               <div
                 className="
+                  article-container
                   prose
                   prose-lg
                   max-w-none
