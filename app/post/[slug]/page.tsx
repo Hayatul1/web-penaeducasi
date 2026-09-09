@@ -242,10 +242,14 @@ export default async function PostPage({
                   md:px-0
                 "
                 itemProp="articleBody"
-                dangerouslySetInnerHTML={{
-                  __html: article.content || "",
-                }}
-              />
+               >
+                <div
+                  className="article-container-inner"
+                  dangerouslySetInnerHTML={{
+                    __html: article.content || "",
+                  }}
+                />
+              </div>
 
               {/* =================================================
                   TAGS
