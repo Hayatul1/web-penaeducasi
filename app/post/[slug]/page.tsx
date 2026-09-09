@@ -234,6 +234,7 @@ export default async function PostPage({
                   article-container
                   prose
                   prose-lg
+                  dark:prose-invert
                   max-w-none
                   px-4
                   text-base
