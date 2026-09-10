@@ -3,9 +3,8 @@ import { MetadataRoute } from 'next';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://web.penaeducasi.com';
 
-  // 1. HALAMAN STATIS
-  // Halaman yang jarang berubah atau memiliki URL tetap
-  const staticRoutes: MetadataRoute.Sitemap = [
+  // 1. RUTE STATIS (Beranda & Halaman Tetap)
+  const routes: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
       lastModified: new Date(),
@@ -13,38 +12,52 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/tentang-kami`,
+      url: `${baseUrl}/p/kontak`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: 'yearly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/kontak`,
+      url: `${baseUrl}/p/tentang-kami`,
       lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.5,
-    },
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    }
   ];
 
-  // 2. HALAMAN DINAMIS (Contoh: Artikel/Blog)
-  // Ganti blok ini dengan logika fetch ke API atau database Anda
-  // const response = await fetch('https://api.penaeducasi.com/articles');
-  // const articles = await response.json();
-  
-  // Simulasi data yang didapat dari database:
-  const articles = [
-    { slug: 'belajar-seo-dasar', updatedAt: '2026-09-01T10:00:00Z' },
-    { slug: 'tutorial-nextjs-cloudflare', updatedAt: '2026-09-10T14:30:00Z' }
-  ];
+  try {
+    // 2. RUTE DINAMIS (Menarik Artikel dari Cloudflare Worker)
+    // URL ditambahkan parameter ?status=published agar draf tidak masuk ke Google
+    const postsResponse = await fetch('https://penaeducasi-studio-api.penaeducasi.workers.dev/api/articles?status=published', {
+      headers: {
+        'Authorization': 'Basic ' + Buffer.from(`${process.env.API_USERNAME}:${process.env.API_PASSWORD}`).toString('base64'),
+        'Content-Type': 'application/json',
+      },
+      // Cache selama 1 jam agar tidak menghabiskan kuota Worker Anda
+      next: { revalidate: 3600 } 
+    });
 
-  const dynamicRoutes: MetadataRoute.Sitemap = articles.map((article) => ({
-    url: `${baseUrl}/blog/${article.slug}`,
-    // Menggunakan tanggal aktual dari database agar Google merayapi ulang dengan tepat
-    lastModified: new Date(article.updatedAt), 
-    changeFrequency: 'weekly',
-    priority: 0.7,
-  }));
+    if (postsResponse.ok) {
+      const responseJson = await postsResponse.json();
+      
+      // Berdasarkan kode Worker Anda, array artikel berada di dalam properti "data"
+      const articles = responseJson.data || [];
 
-  // 3. GABUNGKAN KEDUANYA
-  return [...staticRoutes, ...dynamicRoutes];
+      const postRoutes: MetadataRoute.Sitemap = articles.map((post: any) => ({
+        url: `${baseUrl}/post/${post.slug}`,
+        // Menggunakan created_at dari database Worker sebagai acuan tanggal
+        lastModified: new Date(post.created_at || new Date()),
+        changeFrequency: 'weekly',
+        priority: 0.7,
+      }));
+
+      // Gabungkan rute artikel ke sitemap utama
+      routes.push(...postRoutes);
+    }
+  } catch (error) {
+    console.error("Gagal mengambil data artikel untuk sitemap:", error);
+    // Jika API sedang down, sitemap tidak akan error 500, melainkan tetap menampilkan rute statis
+  }
+
+  return routes;
 }
