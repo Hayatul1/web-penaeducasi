@@ -13,7 +13,7 @@ export function LatestArticles() {
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {latest.map((article) => (
-          <ArticleCard key={article.id} article={article} />
+          <ArticleCard key={article.id} article={article} hideViews={true} />
         ))}
       </div>
     </section>
