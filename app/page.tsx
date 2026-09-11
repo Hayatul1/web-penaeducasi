@@ -19,16 +19,29 @@ import {
 
 import { LatestArticles } from "@/components/latest-articles"
 import { getPublishedArticles } from "@/lib/sample-data"
+import { getPageViews } from "@/lib/google-analytics"
 
 export const runtime = "edge" // Tetap aman digunakan di Cloudflare!
 
 export default async function Home() {
-  // 1. TARIK DATA LOKAL (Instan seketika!)
+  // =============================================================
+  // DATA ARTIKEL & INTEGRASI GA4 VIEWS
+  // =============================================================
   const allArticlesRaw = (await getPublishedArticles()) || []
 
-  // 2. FILTER KATEGORI (Fungsi utuh 100%)
+  const allArticles = await Promise.all(
+    allArticlesRaw.map(async (article: any) => {
+      // PERBAIKAN: Menambahkan "/post/" agar URL persis dengan data log Google Analytics
+      const views = await getPageViews(`/post/${article.slug}`)
+      return { ...article, views }
+    })
+  )
+
+  // =============================================================
+  // FILTER KATEGORI
+  // =============================================================
   const getByCategory = (cat: string) =>
-    allArticlesRaw.filter(
+    allArticles.filter(
       (a: any) =>
         a?.category?.toLowerCase() === cat.toLowerCase()
     )
@@ -42,25 +55,70 @@ export default async function Home() {
   const tips = getByCategory("Tips")
   const berita = getByCategory("Berita")
 
-  // 3. FUNGSI PAD / FALLBACK (Fungsi utuh 100%)
+  // =============================================================
+  // PAD / FALLBACK
+  // =============================================================
   const pad = (arr: any[], needed: number) => {
     if (arr.length >= needed) {
       return arr.slice(0, needed)
     }
-    const extra = allArticlesRaw.filter(
-      (a: any) => !arr.find((e: any) => e.id === a.id)
+
+    const extra = allArticles.filter(
+      (a: any) =>
+        !arr.find((e: any) => e.id === a.id)
     )
+
     return [...arr, ...extra].slice(0, needed)
   }
 
-  // 4. RENDER UI UTAMA (Tanpa menunggu API Google sama sekali)
   return (
-    <div className="flex min-h-screen w-full overflow-x-clip">
+    <div
+      className="
+        flex
+        min-h-screen
+        w-full
+        overflow-x-clip
+      "
+    >
       <SidebarLeft />
-      <div className="flex min-h-screen min-w-0 flex-1 flex-col w-full lg:ml-[270px]">
+
+      <div
+        className="
+          flex
+          min-h-screen
+          min-w-0
+          flex-1
+          flex-col
+          w-full
+          lg:ml-[270px]
+        "
+      >
         <TopBar />
-        <div className="mx-auto flex w-full max-w-[1400px] flex-1 items-stretch gap-5 px-0 py-0 md:px-4 md:py-5">
-          <main className="min-w-0 w-full flex-1" id="main-content" role="main">
+
+        <div
+          className="
+            mx-auto
+            flex
+            w-full
+            max-w-[1400px]
+            flex-1
+            items-stretch
+            gap-5
+            px-0
+            py-0
+            md:px-4
+            md:py-5
+          "
+        >
+          <main
+            className="
+              min-w-0
+              w-full
+              flex-1
+            "
+            id="main-content"
+            role="main"
+          >
             <BentoBoxGrid articles={pad(pendidikan, 5)} />
             <EditorialGrid articles={pad(kurikulum, 5)} />
             <JustifiedGrid articles={pad(materi, 5)} />
@@ -71,13 +129,16 @@ export default async function Home() {
             <PolaroidGrid articles={pad(berita, 5)} />
             <FeatureListGrid articles={pad(parenting, 5)} />
             <ReelGrid articles={pad(pendidikan, 5)} />
-            
+
             <LatestArticles />
           </main>
+
           <SidebarRight />
         </div>
+
         <Footer />
       </div>
+
       <ScrollToTop />
     </div>
   )
