@@ -12,8 +12,25 @@ function formatViews(num: number): string {
   return num.toString()
 }
 
-// SISTEM CACHE MEMORI ANTI-SPAM
+// SISTEM ANTREAN & CACHE ANTI-BLOKIR CLOUDFLARE
 const globalViewCache = new Map<string, Promise<number>>();
+const fetchQueue: (() => void)[] = [];
+let isProcessingQueue = false;
+
+async function processQueue() {
+  if (isProcessingQueue) return;
+  isProcessingQueue = true;
+  
+  while (fetchQueue.length > 0) {
+    const task = fetchQueue.shift();
+    if (task) {
+      task();
+      // Jeda 80ms antar request agar tidak terdeteksi spam/bot oleh Cloudflare
+      await new Promise(resolve => setTimeout(resolve, 80));
+    }
+  }
+  isProcessingQueue = false;
+}
 
 function fetchArticleViews(slug: string): Promise<number> {
   let cleanSlug = slug.trim();
@@ -26,19 +43,22 @@ function fetchArticleViews(slug: string): Promise<number> {
     return globalViewCache.get(fullSlugPath)!;
   }
 
-  const promise = fetch(`/api/views?slug=${encodeURIComponent(fullSlugPath)}`)
-    .then(async res => {
-      if (!res.ok) {
-        return { views: 0 };
+  const promise = new Promise<number>((resolve) => {
+    fetchQueue.push(async () => {
+      try {
+        const res = await fetch(`/api/views?slug=${encodeURIComponent(fullSlugPath)}`, { cache: 'no-store' });
+        if (!res.ok) {
+          resolve(0);
+          return;
+        }
+        const data = await res.json();
+        resolve(typeof data.views === 'number' ? data.views : 0);
+      } catch {
+        resolve(0);
       }
-      return res.json();
-    })
-    .then(data => {
-      return typeof data.views === 'number' ? data.views : 0;
-    })
-    .catch(() => {
-      return 0;
     });
+    processQueue();
+  });
 
   globalViewCache.set(fullSlugPath, promise);
   return promise;
