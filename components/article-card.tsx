@@ -1,9 +1,7 @@
-"use client"
-
 import Link from "next/link"
 import { Eye } from "lucide-react"
-import { useState, useEffect } from "react"
 import type { Article } from "@/lib/sample-data"
+import { SignJWT, importPKCS8 } from 'jose';
 
 // FUNGSI PENGAMAN ANGKA
 function formatViews(num: number): string {
@@ -12,56 +10,106 @@ function formatViews(num: number): string {
   return num.toString()
 }
 
-// SISTEM ANTREAN & CACHE ANTI-BLOKIR CLOUDFLARE
-const globalViewCache = new Map<string, Promise<number>>();
-const fetchQueue: (() => void)[] = [];
-let isProcessingQueue = false;
+// CACHE TOKEN DI MEMORI SERVER
+let cachedAccessToken: string | null = null;
+let tokenExpiresAt: number = 0;
 
-async function processQueue() {
-  if (isProcessingQueue) return;
-  isProcessingQueue = true;
-  
-  while (fetchQueue.length > 0) {
-    const task = fetchQueue.shift();
-    if (task) {
-      task();
-      // Jeda 80ms antar request agar tidak terdeteksi spam/bot oleh Cloudflare
-      await new Promise(resolve => setTimeout(resolve, 80));
-    }
+async function getAccessToken(clientEmail: string, privateKey: string): Promise<string | null> {
+  const now = Date.now();
+  if (cachedAccessToken && now < tokenExpiresAt - 60000) {
+    return cachedAccessToken;
   }
-  isProcessingQueue = false;
+
+  try {
+    const algorithm = 'RS256';
+    const privateKeyObj = await importPKCS8(privateKey, algorithm);
+    
+    const iat = Math.floor(now / 1000);
+    const exp = iat + 3600;
+
+    const token = await new SignJWT({
+      iss: clientEmail,
+      sub: clientEmail,
+      aud: 'https://oauth2.googleapis.com/token',
+      scope: 'https://www.googleapis.com/auth/analytics.readonly',
+    })
+      .setProtectedHeader({ alg: algorithm, typ: 'JWT' })
+      .setExpirationTime(exp)
+      .setIssuedAt(iat)
+      .sign(privateKeyObj);
+
+    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+        assertion: token,
+      }),
+      cache: 'no-store',
+    });
+
+    const tokenData = await tokenRes.json();
+    if (tokenData.access_token) {
+      cachedAccessToken = tokenData.access_token;
+      tokenExpiresAt = now + (tokenData.expires_in ? tokenData.expires_in * 1000 : 3600000);
+      return cachedAccessToken;
+    }
+  } catch {
+    return null;
+  }
+  return null;
 }
 
-function fetchArticleViews(slug: string): Promise<number> {
-  let cleanSlug = slug.trim();
-  if (!cleanSlug.startsWith('/')) {
-    cleanSlug = `/${cleanSlug}`;
-  }
-  const fullSlugPath = cleanSlug.startsWith('/post/') ? cleanSlug : `/post${cleanSlug}`;
-  
-  if (globalViewCache.has(fullSlugPath)) {
-    return globalViewCache.get(fullSlugPath)!;
-  }
+// FUNGSI FETCH VIEW LANGSUNG DI SERVER
+async function fetchArticleViewsServer(slug: string): Promise<number> {
+  try {
+    let cleanSlug = slug.trim();
+    if (!cleanSlug.startsWith('/')) {
+      cleanSlug = `/${cleanSlug}`;
+    }
+    const fullSlugPath = cleanSlug.startsWith('/post/') ? cleanSlug : `/post${cleanSlug}`;
 
-  const promise = new Promise<number>((resolve) => {
-    fetchQueue.push(async () => {
-      try {
-        const res = await fetch(`/api/views?slug=${encodeURIComponent(fullSlugPath)}`, { cache: 'no-store' });
-        if (!res.ok) {
-          resolve(0);
-          return;
-        }
-        const data = await res.json();
-        resolve(typeof data.views === 'number' ? data.views : 0);
-      } catch {
-        resolve(0);
+    const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
+    const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+    const propertyId = process.env.GA_PROPERTY_ID;
+
+    if (!clientEmail || !privateKey || !propertyId) return 0;
+
+    const accessToken = await getAccessToken(clientEmail, privateKey);
+    if (!accessToken) return 0;
+
+    const gaRes = await fetch(
+      `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          dateRanges: [{ startDate: '2020-01-01', endDate: 'today' }],
+          dimensions: [{ name: 'pagePath' }],
+          metrics: [{ name: 'screenPageViews' }],
+          dimensionFilter: {
+            filter: {
+              fieldName: 'pagePath',
+              stringFilter: {
+                value: fullSlugPath,
+                matchType: 'EXACT',
+              },
+            },
+          },
+        }),
+        next: { revalidate: 60 },
       }
-    });
-    processQueue();
-  });
+    );
 
-  globalViewCache.set(fullSlugPath, promise);
-  return promise;
+    const gaData = await gaRes.json();
+    const views = gaData.rows?.[0]?.metricValues?.[0]?.value || '0';
+    return parseInt(views, 10);
+  } catch {
+    return 0;
+  }
 }
 
 interface ArticleCardProps {
@@ -69,21 +117,8 @@ interface ArticleCardProps {
   hideViews?: boolean;
 }
 
-export function ArticleCard({ article, hideViews }: ArticleCardProps) {
-  const [views, setViews] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (hideViews) return;
-    let isMounted = true;
-
-    fetchArticleViews(article.slug).then(val => {
-      if (isMounted) setViews(val);
-    });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [article.slug, hideViews]);
+export async function ArticleCard({ article, hideViews }: ArticleCardProps) {
+  const views = hideViews ? 0 : await fetchArticleViewsServer(article.slug);
 
   return (
     <Link
@@ -112,7 +147,7 @@ export function ArticleCard({ article, hideViews }: ArticleCardProps) {
           {!hideViews && (
             <div className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded text-card-foreground shrink-0">
               <Eye className="w-3.5 h-3.5 text-muted-foreground" />
-              <span>{views !== null ? formatViews(views) : "..."}</span>
+              <span>{formatViews(views)}</span>
             </div>
           )}
           
@@ -122,21 +157,8 @@ export function ArticleCard({ article, hideViews }: ArticleCardProps) {
   )
 }
 
-export function ArticleCardSmall({ article, hideViews }: ArticleCardProps) {
-  const [views, setViews] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (hideViews) return;
-    let isMounted = true;
-
-    fetchArticleViews(article.slug).then(val => {
-      if (isMounted) setViews(val);
-    });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [article.slug, hideViews]);
+export async function ArticleCardSmall({ article, hideViews }: ArticleCardProps) {
+  const views = hideViews ? 0 : await fetchArticleViewsServer(article.slug);
 
   return (
     <Link
@@ -160,7 +182,7 @@ export function ArticleCardSmall({ article, hideViews }: ArticleCardProps) {
           {!hideViews && (
             <div className="flex items-center gap-1 bg-muted px-1.5 py-0.5 rounded text-card-foreground shrink-0">
               <Eye className="w-3 h-3 text-muted-foreground" />
-              <span>{views !== null ? formatViews(views) : "..."}</span>
+              <span>{formatViews(views)}</span>
             </div>
           )}
           
