@@ -1,27 +1,50 @@
+"use client"
+
 import Link from "next/link"
 import { Eye } from "lucide-react"
+import { useState, useEffect } from "react"
 import type { Article } from "@/lib/sample-data"
 
-// FUNGSI PENGAMAN: Mengubah view puluhan ribu menjadi format 1.5K
-// agar kotak tidak memanjang dan merusak desain grid Anda.
+// 1. FUNGSI PENGAMAN ANGKA
 function formatViews(num: number): string {
-  if (!num) return "0"
-  if (num >= 1000000) {
-    return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M'
-  }
-  if (num >= 1000) {
-    return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K'
-  }
+  if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M'
+  if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K'
   return num.toString()
 }
 
-// Menambahkan opsi hideViews agar bisa dimatikan dari luar
+// 2. SISTEM ANTI-SPAM (Berbagi 1 Request ke semua kartu yang sama)
+const globalViewCache = new Map<string, Promise<number>>();
+
+function getViewsAntiSpam(slug: string): Promise<number> {
+  // Jika artikel ini sudah pernah ditanyakan ke Google, ambil dari memori saja!
+  if (globalViewCache.has(slug)) {
+    return globalViewCache.get(slug)!;
+  }
+  
+  // Jika belum, baru kita tembak API-nya 1 kali
+  const promise = fetch(`/api/views?slug=/post/${slug}`)
+    .then(res => res.json())
+    .then(data => data.views ?? 0)
+    .catch(() => 0);
+    
+  globalViewCache.set(slug, promise);
+  return promise;
+}
+
 interface ArticleCardProps {
   article: Article;
   hideViews?: boolean;
 }
 
 export function ArticleCard({ article, hideViews }: ArticleCardProps) {
+  const [views, setViews] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (hideViews) return;
+    // Mengambil data dengan sistem Anti-Spam
+    getViewsAntiSpam(article.slug).then(setViews);
+  }, [article.slug, hideViews]);
+
   return (
     <Link
       href={`/post/${article.slug}`}
@@ -45,11 +68,10 @@ export function ArticleCard({ article, hideViews }: ArticleCardProps) {
         <div className="mt-auto flex items-center justify-between pt-2 text-xs text-muted-foreground">
           <span>{article.date}</span>
           
-          {/* LOGIKA PENYEMBUNYI: Hanya tampil jika hideViews TIDAK diaktifkan */}
           {!hideViews && (
             <div className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded text-card-foreground shrink-0">
               <Eye className="w-3.5 h-3.5 text-muted-foreground" />
-              <span>{formatViews(article.views ?? 0)}</span>
+              <span>{views !== null ? formatViews(views) : "..."}</span>
             </div>
           )}
           
@@ -60,6 +82,14 @@ export function ArticleCard({ article, hideViews }: ArticleCardProps) {
 }
 
 export function ArticleCardSmall({ article, hideViews }: ArticleCardProps) {
+  const [views, setViews] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (hideViews) return;
+    // Mengambil data dengan sistem Anti-Spam
+    getViewsAntiSpam(article.slug).then(setViews);
+  }, [article.slug, hideViews]);
+
   return (
     <Link
       href={`/post/${article.slug}`}
@@ -78,14 +108,13 @@ export function ArticleCardSmall({ article, hideViews }: ArticleCardProps) {
         <div className="flex items-center justify-between text-xs text-muted-foreground md:text-[10px]">
           <span>{article.date}</span>
           
-          {/* LOGIKA PENYEMBUNYI: Hanya tampil jika hideViews TIDAK diaktifkan */}
           {!hideViews && (
             <div className="flex items-center gap-1 bg-muted px-1.5 py-0.5 rounded text-card-foreground shrink-0">
               <Eye className="w-3 h-3 text-muted-foreground" />
-              <span>{formatViews(article.views ?? 0)}</span>
+              <span>{views !== null ? formatViews(views) : "..."}</span>
             </div>
           )}
-
+          
         </div>
       </div>
     </Link>
