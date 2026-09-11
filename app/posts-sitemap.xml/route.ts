@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
+
 export const runtime = 'edge';
+
 export async function GET() {
   const baseUrl = 'https://web.penaeducasi.com';
 
@@ -15,7 +17,10 @@ export async function GET() {
     const json = await response.json();
     const articles = json.data || [];
 
-    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+    // PENAMBAHAN TAG XML-STYLESHEET DI SINI
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/sitemap-style.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
     
     articles.forEach((post: any) => {
       const lastMod = new Date(post.created_at || Date.now()).toISOString();
