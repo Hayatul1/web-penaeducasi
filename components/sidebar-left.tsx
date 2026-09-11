@@ -239,6 +239,7 @@ export function SidebarLeft() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
+                    prefetch={false}
                     onClick={() => setIsOpen(false)}
                     className="
                       flex

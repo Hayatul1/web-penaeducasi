@@ -105,6 +105,7 @@ export function TopBar() {
               <Link
                 key={cat.href}
                 href={cat.href}
+                prefetch={false}
                 className="
                   flex-shrink-0
                   whitespace-nowrap

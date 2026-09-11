@@ -15,6 +15,7 @@ export function BentoBoxGrid({ articles }: { articles: Article[] }) {
       <div className="grid w-full grid-cols-1 gap-y-1 md:gap-3 md:grid-cols-4 md:grid-rows-2">
         <Link
           href={`/post/${a.slug}`}
+          prefetch={false}
           className="group relative col-span-1 row-span-1 aspect-[4/3] w-full overflow-hidden rounded-none md:col-span-2 md:row-span-2 md:rounded-2xl"
         >
           <img src={a.image || "/placeholder.svg"} alt={a.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
@@ -31,8 +32,14 @@ export function BentoBoxGrid({ articles }: { articles: Article[] }) {
             </div>
           </div>
         </Link>
+
         {[b, c, d, e].map((item) => (
-          <Link key={item.id} href={`/post/${item.slug}`} className="group relative aspect-video w-full overflow-hidden rounded-none md:rounded-2xl md:aspect-auto md:h-full">
+          <Link
+            key={item.id}
+            href={`/post/${item.slug}`}
+            prefetch={false}
+            className="group relative aspect-video w-full overflow-hidden rounded-none md:rounded-2xl md:aspect-auto md:h-full"
+          >
             <img src={item.image || "/placeholder.svg"} alt={item.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 flex items-end justify-between gap-2">
@@ -60,7 +67,11 @@ export function EditorialGrid({ articles }: { articles: Article[] }) {
     <section className="mb-10 w-full md:mb-12">
       <SectionHeader title="Kurikulum" category="kurikulum" />
       <div className="grid w-full gap-y-1 md:gap-4 md:grid-cols-3">
-        <Link href={`/post/${hero.slug}`} className="group relative w-full overflow-hidden rounded-none md:col-span-2 md:rounded-2xl">
+        <Link
+          href={`/post/${hero.slug}`}
+          prefetch={false}
+          className="group relative w-full overflow-hidden rounded-none md:col-span-2 md:rounded-2xl"
+        >
           <img src={hero.image || "/placeholder.svg"} alt={hero.title} className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-105 md:aspect-video" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 flex items-end justify-between gap-2">
@@ -74,9 +85,15 @@ export function EditorialGrid({ articles }: { articles: Article[] }) {
             </div>
           </div>
         </Link>
+
         <div className="flex w-full flex-col gap-0 md:gap-3">
           {rest.map((item) => (
-            <Link key={item.id} href={`/post/${item.slug}`} className="group flex w-full items-center gap-3 border-b border-border bg-card p-4 transition-all hover:bg-muted md:rounded-xl md:border md:shadow-sm md:hover:border-primary/30">
+            <Link
+              key={item.id}
+              href={`/post/${item.slug}`}
+              prefetch={false}
+              className="group flex w-full items-center gap-3 border-b border-border bg-card p-4 transition-all hover:bg-muted md:rounded-xl md:border md:shadow-sm md:hover:border-primary/30"
+            >
               <img src={item.image || "/placeholder.svg"} alt={item.title} className="h-20 w-24 flex-shrink-0 rounded-lg object-cover" loading="lazy" />
               <div className="flex flex-1 flex-col justify-between h-full gap-1">
                 <h4 className="line-clamp-2 text-sm font-semibold text-card-foreground transition-colors group-hover:text-primary md:text-base">{item.title}</h4>
@@ -110,6 +127,7 @@ export function JustifiedGrid({ articles }: { articles: Article[] }) {
           <Link
             key={item.id}
             href={`/post/${item.slug}`}
+            prefetch={false}
             className="group relative w-full overflow-hidden rounded-none md:min-w-[200px] md:flex-1 md:rounded-2xl"
           >
             <img src={item.image || "/placeholder.svg"} alt={item.title} className="aspect-video w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
@@ -139,7 +157,12 @@ export function SquareGrid({ articles }: { articles: Article[] }) {
       <SectionHeader title="Tutorial" category="tutorial" />
       <div className="grid w-full grid-cols-2 gap-0.5 md:gap-3 md:grid-cols-5">
         {articles.map((item) => (
-          <Link key={item.id} href={`/post/${item.slug}`} className="group relative w-full overflow-hidden rounded-none md:rounded-2xl">
+          <Link
+            key={item.id}
+            href={`/post/${item.slug}`}
+            prefetch={false}
+            className="group relative w-full overflow-hidden rounded-none md:rounded-2xl"
+          >
             <img src={item.image || "/placeholder.svg"} alt={item.title} className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
             <div className="absolute inset-0 bg-black/30 transition-colors duration-300 group-hover:bg-black/50" />
             <div className="absolute inset-0 flex flex-col items-center justify-center p-3 text-center opacity-100 md:opacity-0 md:group-hover:opacity-100">
@@ -167,7 +190,11 @@ export function AsymmetricGrid({ articles }: { articles: Article[] }) {
     <section className="mb-10 w-full md:mb-12">
       <SectionHeader title="Madrasah" category="madrasah" />
       <div className="grid w-full grid-cols-1 gap-y-1 md:gap-3 md:grid-cols-12 md:auto-rows-[180px]">
-        <Link href={`/post/${a.slug}`} className="group relative w-full overflow-hidden rounded-none md:col-span-7 md:row-span-2 md:rounded-2xl">
+        <Link
+          href={`/post/${a.slug}`}
+          prefetch={false}
+          className="group relative w-full overflow-hidden rounded-none md:col-span-7 md:row-span-2 md:rounded-2xl"
+        >
           <img src={a.image || "/placeholder.svg"} alt={a.title} className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-105 md:h-full md:aspect-auto" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 flex items-end justify-between gap-2">
@@ -181,8 +208,14 @@ export function AsymmetricGrid({ articles }: { articles: Article[] }) {
             </div>
           </div>
         </Link>
+
         {rest.map((item, i) => (
-          <Link key={item.id} href={`/post/${item.slug}`} className={`group relative w-full aspect-video overflow-hidden rounded-none md:rounded-2xl md:aspect-auto ${i === 0 || i === 1 ? 'md:col-span-5' : i === 2 ? 'md:col-span-4' : 'md:col-span-8'}`}>
+          <Link
+            key={item.id}
+            href={`/post/${item.slug}`}
+            prefetch={false}
+            className={`group relative w-full aspect-video overflow-hidden rounded-none md:rounded-2xl md:aspect-auto ${i === 0 || i === 1 ? 'md:col-span-5' : i === 2 ? 'md:col-span-4' : 'md:col-span-8'}`}
+          >
             <img src={item.image || "/placeholder.svg"} alt={item.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 flex items-end justify-between gap-2">
@@ -210,7 +243,11 @@ export function NewspaperGrid({ articles }: { articles: Article[] }) {
     <section className="mb-10 w-full md:mb-12">
       <SectionHeader title="Parenting" category="parenting" />
       <div className="border-y border-border py-4 md:py-0 md:border-y-0">
-        <Link href={`/post/${lead.slug}`} className="group grid w-full gap-4 md:grid-cols-[1.15fr_1fr] md:items-center">
+        <Link
+          href={`/post/${lead.slug}`}
+          prefetch={false}
+          className="group grid w-full gap-4 md:grid-cols-[1.15fr_1fr] md:items-center"
+        >
           <img src={lead.image || "/placeholder.svg"} alt={lead.title} className="aspect-video w-full object-cover transition-transform duration-500 group-hover:scale-[1.02] md:rounded-xl" loading="lazy" />
           <div className="flex flex-col justify-between gap-3 px-4 md:px-0 h-full">
             <div>
@@ -225,9 +262,15 @@ export function NewspaperGrid({ articles }: { articles: Article[] }) {
             </div>
           </div>
         </Link>
+
         <div className="mt-4 grid w-full gap-0 border-t border-border md:mt-6 md:gap-3 md:pt-4 md:grid-cols-4">
           {rest.map((item) => (
-            <Link key={item.id} href={`/post/${item.slug}`} className="group flex w-full gap-4 border-b border-border p-4 last:border-0 md:flex-col md:border-b-0 md:border-r md:p-0 md:pr-3 md:last:border-0">
+            <Link
+              key={item.id}
+              href={`/post/${item.slug}`}
+              prefetch={false}
+              className="group flex w-full gap-4 border-b border-border p-4 last:border-0 md:flex-col md:border-b-0 md:border-r md:p-0 md:pr-3 md:last:border-0"
+            >
               <img src={item.image || "/placeholder.svg"} alt={item.title} className="h-20 w-24 shrink-0 rounded-lg object-cover md:mb-2 md:h-24 md:w-full" loading="lazy" />
               <div className="flex flex-1 flex-col justify-between w-full">
                 <h4 className="line-clamp-2 text-sm font-semibold leading-snug text-foreground transition-colors group-hover:text-primary">{item.title}</h4>
@@ -256,7 +299,12 @@ export function TimelineGrid({ articles }: { articles: Article[] }) {
       <SectionHeader title="Tips" category="tips" />
       <div className="relative grid w-full gap-4 px-4 before:absolute before:bottom-3 before:left-[23px] before:top-3 before:w-px before:bg-border md:px-0 md:grid-cols-2 md:before:left-1/2">
         {articles.map((item, i) => (
-          <Link key={item.id} href={`/post/${item.slug}`} className={`group relative flex w-full gap-5 pl-8 md:pl-0 ${i % 2 ? "md:flex-row-reverse md:text-right" : ""}`}>
+          <Link
+            key={item.id}
+            href={`/post/${item.slug}`}
+            prefetch={false}
+            className={`group relative flex w-full gap-5 pl-8 md:pl-0 ${i % 2 ? "md:flex-row-reverse md:text-right" : ""}`}
+          >
             <span className="absolute left-0 top-5 size-4 rounded-full border-4 border-background bg-primary md:left-1/2 md:-translate-x-1/2" />
             <img src={item.image || "/placeholder.svg"} alt={item.title} className="aspect-square h-20 w-20 shrink-0 rounded-xl object-cover md:h-28 md:w-full" loading="lazy" />
             <div className="flex flex-col justify-between gap-1 md:absolute md:inset-x-3 md:bottom-3 md:rounded-lg md:bg-background/90 md:p-3">
@@ -285,7 +333,12 @@ export function PolaroidGrid({ articles }: { articles: Article[] }) {
       <SectionHeader title="Berita" category="berita" />
       <div className="grid w-full grid-cols-2 gap-2 px-2 md:grid-cols-5 md:gap-4 md:px-0">
         {articles.map((item, i) => (
-          <Link key={item.id} href={`/post/${item.slug}`} className={`group flex flex-col justify-between w-full rounded-xl bg-card p-2 shadow-sm ring-1 ring-border transition-transform hover:-translate-y-1 hover:shadow-md ${i === 0 ? "col-span-2 md:col-span-1" : ""}`}>
+          <Link
+            key={item.id}
+            href={`/post/${item.slug}`}
+            prefetch={false}
+            className={`group flex flex-col justify-between w-full rounded-xl bg-card p-2 shadow-sm ring-1 ring-border transition-transform hover:-translate-y-1 hover:shadow-md ${i === 0 ? "col-span-2 md:col-span-1" : ""}`}
+          >
             <div>
               <img src={item.image || "/placeholder.svg"} alt={item.title} className="aspect-square w-full rounded-lg object-cover" loading="lazy" />
               <div className="px-1 pt-3">
@@ -315,7 +368,11 @@ export function FeatureListGrid({ articles }: { articles: Article[] }) {
     <section className="mb-10 w-full md:mb-12">
       <SectionHeader title="Inspirasi" category="parenting" />
       <div className="grid w-full gap-1 md:gap-4 md:grid-cols-[1fr_1.15fr]">
-        <Link href={`/post/${feature.slug}`} className="group relative flex flex-col justify-between w-full overflow-hidden rounded-none bg-primary p-6 text-primary-foreground md:rounded-2xl md:p-8">
+        <Link
+          href={`/post/${feature.slug}`}
+          prefetch={false}
+          className="group relative flex flex-col justify-between w-full overflow-hidden rounded-none bg-primary p-6 text-primary-foreground md:rounded-2xl md:p-8"
+        >
           <div>
             <h3 className="text-2xl font-bold leading-tight md:text-3xl">{feature.title}</h3>
             <p className="mt-3 line-clamp-3 text-sm leading-6 opacity-90">{feature.excerpt}</p>
@@ -327,9 +384,15 @@ export function FeatureListGrid({ articles }: { articles: Article[] }) {
             </div>
           </div>
         </Link>
+
         <div className="w-full divide-y divide-border rounded-none border-y border-border bg-card px-4 md:rounded-2xl md:border-x">
           {rest.map((item, i) => (
-            <Link key={item.id} href={`/post/${item.slug}`} className="group flex w-full items-center justify-between gap-4 py-4">
+            <Link
+              key={item.id}
+              href={`/post/${item.slug}`}
+              prefetch={false}
+              className="group flex w-full items-center justify-between gap-4 py-4"
+            >
               <div className="flex items-center gap-4">
                 <span className="font-mono text-sm font-bold text-muted-foreground/50">0{i + 1}</span>
                 <img src={item.image || "/placeholder.svg"} alt={item.title} className="size-16 shrink-0 rounded-lg object-cover" loading="lazy" />
@@ -361,6 +424,7 @@ export function ReelGrid({ articles }: { articles: Article[] }) {
           <Link
             key={item.id}
             href={`/post/${item.slug}`}
+            prefetch={false}
             className="group relative min-w-[150px] snap-center overflow-hidden rounded-xl bg-card shadow-sm ring-1 ring-border transition-transform hover:-translate-y-1 md:min-w-0 md:rounded-2xl"
           >
             <div className="relative aspect-[4/5] w-full overflow-hidden">
@@ -394,7 +458,11 @@ function SectionHeader({ title, category }: { title: string; category: string })
       <h2 className="relative pl-3 text-lg font-bold text-foreground before:absolute before:left-0 before:top-1/2 before:h-full before:w-1 before:-translate-y-1/2 before:rounded-full before:bg-primary md:text-xl">
         {title}
       </h2>
-      <Link href={`/category/${category}`} className="text-sm font-semibold text-primary hover:underline">
+      <Link
+        href={`/category/${category}`}
+        prefetch={false}
+        className="text-sm font-semibold text-primary hover:underline"
+      >
         Lihat Semua
       </Link>
     </div>
