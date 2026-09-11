@@ -16,8 +16,10 @@ function formatViews(num: number): string {
 const globalViewCache = new Map<string, Promise<number>>();
 
 function fetchArticleViews(slug: string): Promise<number> {
-  // Membersihkan dan menormalkan format path slug agar akurat
-  const cleanSlug = slug.startsWith('/') ? slug : `/${slug}`;
+  let cleanSlug = slug.trim();
+  if (!cleanSlug.startsWith('/')) {
+    cleanSlug = `/${cleanSlug}`;
+  }
   const fullSlugPath = cleanSlug.startsWith('/post/') ? cleanSlug : `/post${cleanSlug}`;
   
   if (globalViewCache.has(fullSlugPath)) {
@@ -27,7 +29,6 @@ function fetchArticleViews(slug: string): Promise<number> {
   const promise = fetch(`/api/views?slug=${encodeURIComponent(fullSlugPath)}`)
     .then(async res => {
       if (!res.ok) {
-        console.error(`Gagal memuat view untuk ${fullSlugPath}:`, res.status);
         return { views: 0 };
       }
       return res.json();
@@ -35,8 +36,7 @@ function fetchArticleViews(slug: string): Promise<number> {
     .then(data => {
       return typeof data.views === 'number' ? data.views : 0;
     })
-    .catch(err => {
-      console.error(`Error fetch view ${fullSlugPath}:`, err);
+    .catch(() => {
       return 0;
     });
 
@@ -68,6 +68,7 @@ export function ArticleCard({ article, hideViews }: ArticleCardProps) {
   return (
     <Link
       href={`/post/${article.slug}`}
+      prefetch={false}
       className="group flex flex-col overflow-hidden rounded-none border-b border-border bg-card pb-4 shadow-none transition-all duration-200 md:rounded-xl md:border md:bg-card md:p-0 md:shadow-sm md:hover:-translate-y-1 md:hover:shadow-lg md:hover:border-primary/30"
     >
       <div className="relative aspect-video w-full overflow-hidden">
@@ -120,6 +121,7 @@ export function ArticleCardSmall({ article, hideViews }: ArticleCardProps) {
   return (
     <Link
       href={`/post/${article.slug}`}
+      prefetch={false}
       className="group flex gap-3 border-b border-border bg-card p-4 transition-all md:rounded-xl md:border md:p-3 md:shadow-sm md:hover:shadow-md md:hover:border-primary/30"
     >
       <img
