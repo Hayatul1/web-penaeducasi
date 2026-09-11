@@ -5,33 +5,38 @@ import { Eye } from "lucide-react"
 import { useState, useEffect } from "react"
 import type { Article } from "@/lib/sample-data"
 
-// FUNGSI PENGAMAN ANGKA (Format 1.5K / 1.2M)
+// FUNGSI PENGAMAN ANGKA
 function formatViews(num: number): string {
   if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M'
   if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K'
   return num.toString()
 }
 
-// SISTEM ANTI-SPAM (Cache memori agar browser tidak menembak API berulang kali untuk artikel yang sama)
+// SISTEM CACHE MEMORI ANTI-SPAM
 const globalViewCache = new Map<string, Promise<number>>();
 
 function fetchArticleViews(slug: string): Promise<number> {
-  const fullSlugPath = slug.startsWith('/post/') ? slug : `/post/${slug}`;
+  // Membersihkan dan menormalkan format path slug agar akurat
+  const cleanSlug = slug.startsWith('/') ? slug : `/${slug}`;
+  const fullSlugPath = cleanSlug.startsWith('/post/') ? cleanSlug : `/post${cleanSlug}`;
   
   if (globalViewCache.has(fullSlugPath)) {
     return globalViewCache.get(fullSlugPath)!;
   }
 
-  // Menggunakan encodeURIComponent agar karakter khusus pada slug aman dikirim ke API
   const promise = fetch(`/api/views?slug=${encodeURIComponent(fullSlugPath)}`)
-    .then(res => {
-      if (!res.ok) throw new Error("Gagal mengambil view");
+    .then(async res => {
+      if (!res.ok) {
+        console.error(`Gagal memuat view untuk ${fullSlugPath}:`, res.status);
+        return { views: 0 };
+      }
       return res.json();
     })
     .then(data => {
       return typeof data.views === 'number' ? data.views : 0;
     })
-    .catch(() => {
+    .catch(err => {
+      console.error(`Error fetch view ${fullSlugPath}:`, err);
       return 0;
     });
 
@@ -86,7 +91,6 @@ export function ArticleCard({ article, hideViews }: ArticleCardProps) {
           {!hideViews && (
             <div className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded text-card-foreground shrink-0">
               <Eye className="w-3.5 h-3.5 text-muted-foreground" />
-              {/* Menampilkan ... saat proses latar belakang berjalan, lalu berubah menjadi angka */}
               <span>{views !== null ? formatViews(views) : "..."}</span>
             </div>
           )}
