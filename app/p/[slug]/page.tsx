@@ -22,7 +22,7 @@ export default async function StaticPage({ params }: { params: Promise<{ slug: s
         
         <div className="mx-auto w-full max-w-[850px] px-4 py-8 md:py-12 flex-1">
           <nav className="mb-6 text-sm text-gray-500 font-medium flex items-center">
-            <Link href="/" className="hover:text-blue-600 transition-colors">Beranda</Link>
+            <Link href="/" prefetch={false} className="hover:text-blue-600 transition-colors">Beranda</Link>
             <span className="mx-2">/</span>
             <span className="capitalize text-gray-900">{pageTitle}</span>
           </nav>
@@ -49,7 +49,7 @@ export default async function StaticPage({ params }: { params: Promise<{ slug: s
               
               <div className="mt-12 pt-8 border-t border-gray-100 text-center">
                 <Link 
-                  href="/" 
+                  href="/" prefetch={false} 
                   className="inline-flex items-center justify-center px-6 py-3 bg-gray-900 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors duration-300 shadow-sm"
                 >
                   &larr; Kembali ke Beranda

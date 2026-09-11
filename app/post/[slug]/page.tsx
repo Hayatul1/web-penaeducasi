@@ -123,7 +123,7 @@ export default async function PostPage({
                 "
               >
                 <Link
-                  href="/"
+                  href="/" prefetch={false}
                   className="font-medium text-primary hover:underline"
                 >
                   Home

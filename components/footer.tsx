@@ -7,7 +7,7 @@ export function Footer() {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
-            <Link href="/" className="font-serif text-xl font-bold text-primary">
+            <Link href="/" prefetch={false} className="font-serif text-xl font-bold text-primary">
               PENA EDUKASI
             </Link>
             <p className="mt-3 text-xs leading-relaxed text-muted-foreground">

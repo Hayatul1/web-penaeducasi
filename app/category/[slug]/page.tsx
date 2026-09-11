@@ -41,9 +41,13 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-dashed border-gray-300">
               <span className="text-4xl mb-4">📭</span>
               <p className="text-gray-500 text-lg">Belum ada artikel dalam kategori ini.</p>
-              <Link href="/" className="mt-4 text-blue-600 hover:underline font-medium">
-                &larr; Kembali ke Beranda
-              </Link>
+              <Link
+  href="/"
+  prefetch={false}
+  className="mt-4 text-blue-600 hover:underline font-medium"
+>
+  &larr; Kembali ke Beranda
+</Link>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">

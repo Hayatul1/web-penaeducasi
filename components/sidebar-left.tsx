@@ -151,7 +151,7 @@ export function SidebarLeft() {
           "
         >
           <Link
-            href="/"
+            href="/" prefetch={false}
             className="
               font-serif
               text-xl
