@@ -2,7 +2,26 @@ import Link from "next/link"
 import { Eye } from "lucide-react"
 import type { Article } from "@/lib/sample-data"
 
-export function ArticleCard({ article }: { article: Article }) {
+// FUNGSI PENGAMAN: Mengubah view puluhan ribu menjadi format 1.5K
+// agar kotak tidak memanjang dan merusak desain grid Anda.
+function formatViews(num: number): string {
+  if (!num) return "0"
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M'
+  }
+  if (num >= 1000) {
+    return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K'
+  }
+  return num.toString()
+}
+
+// Menambahkan opsi hideViews agar bisa dimatikan dari luar
+interface ArticleCardProps {
+  article: Article;
+  hideViews?: boolean;
+}
+
+export function ArticleCard({ article, hideViews }: ArticleCardProps) {
   return (
     <Link
       href={`/post/${article.slug}`}
@@ -25,17 +44,22 @@ export function ArticleCard({ article }: { article: Article }) {
         </h3>
         <div className="mt-auto flex items-center justify-between pt-2 text-xs text-muted-foreground">
           <span>{article.date}</span>
-          <div className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded text-card-foreground">
-            <Eye className="w-3.5 h-3.5 text-muted-foreground" />
-            <span>{article.views ?? 0}</span>
-          </div>
+          
+          {/* LOGIKA PENYEMBUNYI: Hanya tampil jika hideViews TIDAK diaktifkan */}
+          {!hideViews && (
+            <div className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded text-card-foreground shrink-0">
+              <Eye className="w-3.5 h-3.5 text-muted-foreground" />
+              <span>{formatViews(article.views ?? 0)}</span>
+            </div>
+          )}
+          
         </div>
       </div>
     </Link>
   )
 }
 
-export function ArticleCardSmall({ article }: { article: Article }) {
+export function ArticleCardSmall({ article, hideViews }: ArticleCardProps) {
   return (
     <Link
       href={`/post/${article.slug}`}
@@ -53,10 +77,15 @@ export function ArticleCardSmall({ article }: { article: Article }) {
         </h4>
         <div className="flex items-center justify-between text-xs text-muted-foreground md:text-[10px]">
           <span>{article.date}</span>
-          <div className="flex items-center gap-1 bg-muted px-1.5 py-0.5 rounded text-card-foreground">
-            <Eye className="w-3 h-3 text-muted-foreground" />
-            <span>{article.views ?? 0}</span>
-          </div>
+          
+          {/* LOGIKA PENYEMBUNYI: Hanya tampil jika hideViews TIDAK diaktifkan */}
+          {!hideViews && (
+            <div className="flex items-center gap-1 bg-muted px-1.5 py-0.5 rounded text-card-foreground shrink-0">
+              <Eye className="w-3 h-3 text-muted-foreground" />
+              <span>{formatViews(article.views ?? 0)}</span>
+            </div>
+          )}
+
         </div>
       </div>
     </Link>

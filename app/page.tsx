@@ -25,23 +25,20 @@ export const runtime = "edge" // Tetap aman digunakan di Cloudflare!
 
 export default async function Home() {
   // =============================================================
-  // DATA ARTIKEL & INTEGRASI GA4 VIEWS
+  // 1. AMBIL DATA ARTIKEL MENTAH
   // =============================================================
   const allArticlesRaw = (await getPublishedArticles()) || []
 
-  const allArticles = await Promise.all(
-    allArticlesRaw.map(async (article: any) => {
-      // PERBAIKAN: Menambahkan "/post/" agar URL persis dengan data log Google Analytics
-      const views = await getPageViews(`/post/${article.slug}`)
-      return { ...article, views }
-    })
-  )
+  const baseArticles = allArticlesRaw.map((article: any) => ({
+    ...article,
+    views: article.views ?? 0,
+  }))
 
   // =============================================================
-  // FILTER KATEGORI
+  // 2. FILTER KATEGORI (Fungsi asli dipertahankan 100%)
   // =============================================================
   const getByCategory = (cat: string) =>
-    allArticles.filter(
+    baseArticles.filter(
       (a: any) =>
         a?.category?.toLowerCase() === cat.toLowerCase()
     )
@@ -56,20 +53,52 @@ export default async function Home() {
   const berita = getByCategory("Berita")
 
   // =============================================================
-  // PAD / FALLBACK
+  // 3. PAD / FALLBACK (Fungsi asli dipertahankan 100%)
   // =============================================================
   const pad = (arr: any[], needed: number) => {
     if (arr.length >= needed) {
       return arr.slice(0, needed)
     }
 
-    const extra = allArticles.filter(
+    const extra = baseArticles.filter(
       (a: any) =>
         !arr.find((e: any) => e.id === a.id)
     )
 
     return [...arr, ...extra].slice(0, needed)
   }
+
+  // =============================================================
+  // 4. OPTIMASI GA4: HANYA TARIK VIEW UNTUK ARTIKEL YANG TAMPIL SAJA
+  // =============================================================
+  const activeArticlesList = [
+    ...pad(pendidikan, 5),
+    ...pad(kurikulum, 5),
+    ...pad(materi, 5),
+    ...pad(tutorial, 5),
+    ...pad(madrasah, 5),
+    ...pad(parenting, 5),
+    ...pad(tips, 5),
+    ...pad(berita, 5),
+  ]
+
+  // Ambil slug unik agar tidak ada request ganda ke GA4 untuk artikel yang sama
+  const uniqueSlugs = Array.from(new Set(activeArticlesList.map((a: any) => a.slug)))
+
+  // Tarik data view secara paralel HANYA untuk artikel di beranda
+  const viewsMap: Record<string, number> = {}
+  await Promise.all(
+    uniqueSlugs.map(async (slug) => {
+      viewsMap[slug] = await getPageViews(`/post/${slug}`)
+    })
+  )
+
+  // Fungsi penyuntik view ke grid
+  const attachViews = (articles: any[]) =>
+    articles.map((article) => ({
+      ...article,
+      views: viewsMap[article.slug] ?? 0,
+    }))
 
   return (
     <div
@@ -119,16 +148,16 @@ export default async function Home() {
             id="main-content"
             role="main"
           >
-            <BentoBoxGrid articles={pad(pendidikan, 5)} />
-            <EditorialGrid articles={pad(kurikulum, 5)} />
-            <JustifiedGrid articles={pad(materi, 5)} />
-            <SquareGrid articles={pad(tutorial, 5)} />
-            <AsymmetricGrid articles={pad(madrasah, 5)} />
-            <NewspaperGrid articles={pad(parenting, 5)} />
-            <TimelineGrid articles={pad(tips, 5)} />
-            <PolaroidGrid articles={pad(berita, 5)} />
-            <FeatureListGrid articles={pad(parenting, 5)} />
-            <ReelGrid articles={pad(pendidikan, 5)} />
+            <BentoBoxGrid articles={attachViews(pad(pendidikan, 5))} />
+            <EditorialGrid articles={attachViews(pad(kurikulum, 5))} />
+            <JustifiedGrid articles={attachViews(pad(materi, 5))} />
+            <SquareGrid articles={attachViews(pad(tutorial, 5))} />
+            <AsymmetricGrid articles={attachViews(pad(madrasah, 5))} />
+            <NewspaperGrid articles={attachViews(pad(parenting, 5))} />
+            <TimelineGrid articles={attachViews(pad(tips, 5))} />
+            <PolaroidGrid articles={attachViews(pad(berita, 5))} />
+            <FeatureListGrid articles={attachViews(pad(parenting, 5))} />
+            <ReelGrid articles={attachViews(pad(pendidikan, 5))} />
 
             <LatestArticles />
           </main>
