@@ -4,7 +4,6 @@ import { SignJWT, importPKCS8 } from 'jose';
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
-// Cache token di memori untuk mencegah rate-limit / blocking Google saat request bersamaan
 let cachedAccessToken: string | null = null;
 let tokenExpiresAt: number = 0;
 
@@ -48,7 +47,9 @@ async function getAccessToken(clientEmail: string, privateKey: string): Promise<
       tokenExpiresAt = now + (tokenData.expires_in ? tokenData.expires_in * 1000 : 3600000);
       return cachedAccessToken;
     }
-  } catch {
+    console.error("Gagal mendapatkan OAuth Token:", tokenData);
+  } catch (err) {
+    console.error("Error pada getAccessToken:", err);
     return null;
   }
   return null;
@@ -66,6 +67,7 @@ export async function GET(request: Request) {
     const propertyId = process.env.GA_PROPERTY_ID;
 
     if (!clientEmail || !privateKey || !propertyId) {
+      console.error("Environment variables GA belum lengkap!");
       return NextResponse.json({ views: 0 });
     }
 
@@ -94,16 +96,24 @@ export async function GET(request: Request) {
             },
           },
         }),
-        next: { revalidate: 60 },
+        cache: 'no-store',
       }
     );
 
     const gaData = await gaRes.json();
+    
+    // Jika GA4 mengembalikan error, cetak di terminal
+    if (gaData.error) {
+      console.error("Google Analytics API Error:", gaData.error);
+      return NextResponse.json({ views: 0 });
+    }
+
     const views = gaData.rows?.[0]?.metricValues?.[0]?.value || '0';
 
     return NextResponse.json({ views: parseInt(views) });
 
-  } catch {
+  } catch (err) {
+    console.error("Fatal Error di API views:", err);
     return NextResponse.json({ views: 0 });
   }
 }
