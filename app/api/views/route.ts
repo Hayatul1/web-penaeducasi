@@ -4,25 +4,21 @@ import { SignJWT, importPKCS8 } from 'jose';
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: Request) {
+// Cache token di memori untuk mencegah rate-limit / blocking Google saat request bersamaan
+let cachedAccessToken: string | null = null;
+let tokenExpiresAt: number = 0;
+
+async function getAccessToken(clientEmail: string, privateKey: string): Promise<string | null> {
+  const now = Date.now();
+  if (cachedAccessToken && now < tokenExpiresAt - 60000) {
+    return cachedAccessToken;
+  }
+
   try {
-    const { searchParams } = new URL(request.url);
-    const slug = searchParams.get('slug');
-
-    if (!slug) return NextResponse.json({ views: 0 });
-
-    const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
-    const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
-    const propertyId = process.env.GA_PROPERTY_ID;
-
-    if (!clientEmail || !privateKey || !propertyId) {
-      return NextResponse.json({ views: 0 });
-    }
-
     const algorithm = 'RS256';
     const privateKeyObj = await importPKCS8(privateKey, algorithm);
     
-    const iat = Math.floor(Date.now() / 1000);
+    const iat = Math.floor(now / 1000);
     const exp = iat + 3600;
 
     const token = await new SignJWT({
@@ -47,8 +43,33 @@ export async function GET(request: Request) {
     });
 
     const tokenData = await tokenRes.json();
-    const accessToken = tokenData.access_token;
+    if (tokenData.access_token) {
+      cachedAccessToken = tokenData.access_token;
+      tokenExpiresAt = now + (tokenData.expires_in ? tokenData.expires_in * 1000 : 3600000);
+      return cachedAccessToken;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
 
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const slug = searchParams.get('slug');
+
+    if (!slug) return NextResponse.json({ views: 0 });
+
+    const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
+    const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+    const propertyId = process.env.GA_PROPERTY_ID;
+
+    if (!clientEmail || !privateKey || !propertyId) {
+      return NextResponse.json({ views: 0 });
+    }
+
+    const accessToken = await getAccessToken(clientEmail, privateKey);
     if (!accessToken) return NextResponse.json({ views: 0 });
 
     const gaRes = await fetch(
