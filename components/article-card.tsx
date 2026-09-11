@@ -5,29 +5,37 @@ import { Eye } from "lucide-react"
 import { useState, useEffect } from "react"
 import type { Article } from "@/lib/sample-data"
 
-// 1. FUNGSI PENGAMAN ANGKA
+// FUNGSI PENGAMAN ANGKA (Format 1.5K / 1.2M)
 function formatViews(num: number): string {
   if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M'
   if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K'
   return num.toString()
 }
 
-// 2. SISTEM ANTI-SPAM (Berbagi 1 Request ke semua kartu yang sama)
+// SISTEM ANTI-SPAM (Cache memori agar browser tidak menembak API berulang kali untuk artikel yang sama)
 const globalViewCache = new Map<string, Promise<number>>();
 
-function getViewsAntiSpam(slug: string): Promise<number> {
-  // Jika artikel ini sudah pernah ditanyakan ke Google, ambil dari memori saja!
-  if (globalViewCache.has(slug)) {
-    return globalViewCache.get(slug)!;
-  }
+function fetchArticleViews(slug: string): Promise<number> {
+  const fullSlugPath = slug.startsWith('/post/') ? slug : `/post/${slug}`;
   
-  // Jika belum, baru kita tembak API-nya 1 kali
-  const promise = fetch(`/api/views?slug=/post/${slug}`)
-    .then(res => res.json())
-    .then(data => data.views ?? 0)
-    .catch(() => 0);
-    
-  globalViewCache.set(slug, promise);
+  if (globalViewCache.has(fullSlugPath)) {
+    return globalViewCache.get(fullSlugPath)!;
+  }
+
+  // Menggunakan encodeURIComponent agar karakter khusus pada slug aman dikirim ke API
+  const promise = fetch(`/api/views?slug=${encodeURIComponent(fullSlugPath)}`)
+    .then(res => {
+      if (!res.ok) throw new Error("Gagal mengambil view");
+      return res.json();
+    })
+    .then(data => {
+      return typeof data.views === 'number' ? data.views : 0;
+    })
+    .catch(() => {
+      return 0;
+    });
+
+  globalViewCache.set(fullSlugPath, promise);
   return promise;
 }
 
@@ -41,8 +49,15 @@ export function ArticleCard({ article, hideViews }: ArticleCardProps) {
 
   useEffect(() => {
     if (hideViews) return;
-    // Mengambil data dengan sistem Anti-Spam
-    getViewsAntiSpam(article.slug).then(setViews);
+    let isMounted = true;
+
+    fetchArticleViews(article.slug).then(val => {
+      if (isMounted) setViews(val);
+    });
+
+    return () => {
+      isMounted = false;
+    };
   }, [article.slug, hideViews]);
 
   return (
@@ -71,6 +86,7 @@ export function ArticleCard({ article, hideViews }: ArticleCardProps) {
           {!hideViews && (
             <div className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded text-card-foreground shrink-0">
               <Eye className="w-3.5 h-3.5 text-muted-foreground" />
+              {/* Menampilkan ... saat proses latar belakang berjalan, lalu berubah menjadi angka */}
               <span>{views !== null ? formatViews(views) : "..."}</span>
             </div>
           )}
@@ -86,8 +102,15 @@ export function ArticleCardSmall({ article, hideViews }: ArticleCardProps) {
 
   useEffect(() => {
     if (hideViews) return;
-    // Mengambil data dengan sistem Anti-Spam
-    getViewsAntiSpam(article.slug).then(setViews);
+    let isMounted = true;
+
+    fetchArticleViews(article.slug).then(val => {
+      if (isMounted) setViews(val);
+    });
+
+    return () => {
+      isMounted = false;
+    };
   }, [article.slug, hideViews]);
 
   return (
