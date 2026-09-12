@@ -135,6 +135,7 @@ export default async function PostPage({
 
                 <Link
                   href={`/category/${article.category.toLowerCase()}`}
+                  prefetch={false}
                   className="font-medium text-primary hover:underline"
                 >
                   {article.category}
@@ -356,6 +357,7 @@ export default async function PostPage({
                   <Link
                     key={rel.id}
                     href={`/post/${rel.slug}`}
+                    prefetch={false}
                     className="
                       group
                       overflow-hidden
