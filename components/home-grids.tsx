@@ -1,6 +1,30 @@
+'use client'
+
 import Link from "next/link"
 import { Eye } from "lucide-react"
 import type { Article } from "@/lib/sample-data"
+import useSWR from "swr"
+
+// ===============================================================
+// KOMPONEN PENGAMBIL DATA ANGKA (Berjalan di Latar Belakang)
+// ===============================================================
+const fetcher = (url: string) => fetch(url).then((res) => res.json())
+
+function formatViews(num: number): string {
+  if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M'
+  if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K'
+  return num.toString()
+}
+
+function DynamicViewCount({ slug }: { slug: string }) {
+  const { data, error } = useSWR(`/api/views?slug=${slug}`, fetcher)
+  const isLoading = !data && !error
+  
+  if (error) return <>0</>
+  if (isLoading) return <span className="animate-pulse">...</span>
+  
+  return <>{formatViews(data.views || 0)}</>
+}
 
 /* ===============================================================
    1. BENTO BOX GRID - Pendidikan
@@ -28,7 +52,7 @@ export function BentoBoxGrid({ articles }: { articles: Article[] }) {
             </div>
             <div className="flex items-center gap-1.5 bg-black/50 backdrop-blur-sm text-white px-2.5 py-1 rounded-md text-xs shrink-0">
               <Eye className="w-3.5 h-3.5 text-gray-300" />
-              <span>{a.views ?? 0}</span>
+              <span><DynamicViewCount slug={`/post/${a.slug}`} /></span>
             </div>
           </div>
         </Link>
@@ -46,7 +70,7 @@ export function BentoBoxGrid({ articles }: { articles: Article[] }) {
               <h4 className="line-clamp-2 text-base font-semibold leading-snug text-white md:text-sm">{item.title}</h4>
               <div className="flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white px-2 py-0.5 rounded text-[11px] shrink-0">
                 <Eye className="w-3 h-3 text-gray-300" />
-                <span>{item.views ?? 0}</span>
+                <span><DynamicViewCount slug={`/post/${item.slug}`} /></span>
               </div>
             </div>
           </Link>
@@ -81,7 +105,7 @@ export function EditorialGrid({ articles }: { articles: Article[] }) {
             </div>
             <div className="flex items-center gap-1.5 bg-black/50 backdrop-blur-sm text-white px-2.5 py-1 rounded-md text-xs shrink-0">
               <Eye className="w-3.5 h-3.5 text-gray-300" />
-              <span>{hero.views ?? 0}</span>
+              <span><DynamicViewCount slug={`/post/${hero.slug}`} /></span>
             </div>
           </div>
         </Link>
@@ -101,7 +125,7 @@ export function EditorialGrid({ articles }: { articles: Article[] }) {
                   <span>{item.date}</span>
                   <div className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded text-card-foreground">
                     <Eye className="w-3 h-3 text-muted-foreground" />
-                    <span>{item.views ?? 0}</span>
+                    <span><DynamicViewCount slug={`/post/${item.slug}`} /></span>
                   </div>
                 </div>
               </div>
@@ -136,7 +160,7 @@ export function JustifiedGrid({ articles }: { articles: Article[] }) {
               <h4 className="line-clamp-2 text-base font-semibold text-white md:text-sm">{item.title}</h4>
               <div className="flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white px-2 py-0.5 rounded text-[11px] shrink-0">
                 <Eye className="w-3 h-3 text-gray-300" />
-                <span>{item.views ?? 0}</span>
+                <span><DynamicViewCount slug={`/post/${item.slug}`} /></span>
               </div>
             </div>
           </Link>
@@ -170,7 +194,7 @@ export function SquareGrid({ articles }: { articles: Article[] }) {
             </div>
             <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/60 backdrop-blur-sm text-white px-2 py-0.5 rounded text-[11px]">
               <Eye className="w-3 h-3 text-gray-300" />
-              <span>{item.views ?? 0}</span>
+              <span><DynamicViewCount slug={`/post/${item.slug}`} /></span>
             </div>
           </Link>
         ))}
@@ -204,7 +228,7 @@ export function AsymmetricGrid({ articles }: { articles: Article[] }) {
             </div>
             <div className="flex items-center gap-1.5 bg-black/50 backdrop-blur-sm text-white px-2.5 py-1 rounded-md text-xs shrink-0">
               <Eye className="w-3.5 h-3.5 text-gray-300" />
-              <span>{a.views ?? 0}</span>
+              <span><DynamicViewCount slug={`/post/${a.slug}`} /></span>
             </div>
           </div>
         </Link>
@@ -222,7 +246,7 @@ export function AsymmetricGrid({ articles }: { articles: Article[] }) {
               <h4 className="line-clamp-2 text-sm font-semibold text-white">{item.title}</h4>
               <div className="flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white px-2 py-0.5 rounded text-[11px] shrink-0">
                 <Eye className="w-3 h-3 text-gray-300" />
-                <span>{item.views ?? 0}</span>
+                <span><DynamicViewCount slug={`/post/${item.slug}`} /></span>
               </div>
             </div>
           </Link>
@@ -257,7 +281,7 @@ export function NewspaperGrid({ articles }: { articles: Article[] }) {
             <div className="flex items-center justify-end">
               <div className="flex items-center gap-1 bg-muted px-2.5 py-1 rounded text-xs text-card-foreground">
                 <Eye className="w-3.5 h-3.5 text-muted-foreground" />
-                <span>{lead.views ?? 0} Dilihat</span>
+                <span><DynamicViewCount slug={`/post/${lead.slug}`} /> Dilihat</span>
               </div>
             </div>
           </div>
@@ -277,7 +301,7 @@ export function NewspaperGrid({ articles }: { articles: Article[] }) {
                 <div className="flex items-center justify-end mt-2">
                   <div className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded text-[11px] text-card-foreground">
                     <Eye className="w-3 h-3 text-muted-foreground" />
-                    <span>{item.views ?? 0}</span>
+                    <span><DynamicViewCount slug={`/post/${item.slug}`} /></span>
                   </div>
                 </div>
               </div>
@@ -312,7 +336,7 @@ export function TimelineGrid({ articles }: { articles: Article[] }) {
               <div className={`flex items-center ${i % 2 ? "md:justify-start" : "md:justify-end"} justify-end mt-1`}>
                 <div className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded text-[11px] text-card-foreground">
                   <Eye className="w-3 h-3 text-muted-foreground" />
-                  <span>{item.views ?? 0}</span>
+                  <span><DynamicViewCount slug={`/post/${item.slug}`} /></span>
                 </div>
               </div>
             </div>
@@ -348,7 +372,7 @@ export function PolaroidGrid({ articles }: { articles: Article[] }) {
             <div className="flex items-center justify-end px-1 pb-1 pt-2">
               <div className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded text-[11px] text-card-foreground">
                 <Eye className="w-3 h-3 text-muted-foreground" />
-                <span>{item.views ?? 0}</span>
+                <span><DynamicViewCount slug={`/post/${item.slug}`} /></span>
               </div>
             </div>
           </Link>
@@ -380,7 +404,7 @@ export function FeatureListGrid({ articles }: { articles: Article[] }) {
           <div className="flex items-center justify-end mt-4">
             <div className="flex items-center gap-1 bg-black/20 text-primary-foreground px-2.5 py-1 rounded text-xs">
               <Eye className="w-3.5 h-3.5 text-primary-foreground/80" />
-              <span>{feature.views ?? 0} Dilihat</span>
+              <span><DynamicViewCount slug={`/post/${feature.slug}`} /> Dilihat</span>
             </div>
           </div>
         </Link>
@@ -400,7 +424,7 @@ export function FeatureListGrid({ articles }: { articles: Article[] }) {
               </div>
               <div className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded text-[11px] text-card-foreground shrink-0 ml-2">
                 <Eye className="w-3 h-3 text-muted-foreground" />
-                <span>{item.views ?? 0}</span>
+                <span><DynamicViewCount slug={`/post/${item.slug}`} /></span>
               </div>
             </Link>
           ))}
@@ -438,7 +462,7 @@ export function ReelGrid({ articles }: { articles: Article[] }) {
                 </div>
                 <div className="flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white px-1.5 py-0.5 rounded text-[10px] shrink-0">
                   <Eye className="w-3 h-3 text-gray-300" />
-                  <span>{item.views ?? 0}</span>
+                  <span><DynamicViewCount slug={`/post/${item.slug}`} /></span>
                 </div>
               </div>
             </div>
