@@ -86,6 +86,7 @@ export function SidebarRight() {
               <li key={post.id}>
                 <Link
                   href={`/post/${post.slug}`}
+                  prefetch={false}
                   className="
                     group
                     flex
@@ -180,6 +181,7 @@ export function SidebarRight() {
               <Link
                 key={label}
                 href={`/category/${label.toLowerCase()}`}
+                prefetch={false}
                 className="
                   rounded-full
                   bg-secondary
