@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
+
 export const runtime = 'edge';
+
 export async function GET() {
   const baseUrl = 'https://web.penaeducasi.com';
 
@@ -19,7 +21,8 @@ export async function GET() {
       new Set(articles.map((post: any) => post.category).filter(Boolean))
     ) as string[];
 
-    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+    // PENAMBAHAN TAG XML-STYLESHEET DI BAWAH INI
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<?xml-stylesheet type="text/xsl" href="/sitemap-style.xsl"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
     uniqueCategories.forEach((cat) => {
       const categorySlug = cat.toLowerCase().replace(/[^a-z0-9]+/g, '-');
