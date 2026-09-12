@@ -48,7 +48,7 @@ const images = [
   "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&h=400&fit=crop",
   "https://images.unsplash.com/photo-1471970394675-613138e45da3?w=600&h=400&fit=crop",
   "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=600&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1523050854058-8df90110c8f1?w=600&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=600&h=400&fit=crop",
 ]
 
 const categories = ["Pendidikan", "Kurikulum", "Materi", "Tutorial", "Madrasah", "Parenting", "Tips", "Berita"]
