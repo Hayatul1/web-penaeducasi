@@ -80,7 +80,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                         {article.date}
                       </span>
                       <Link 
-                        href={`/post/${article.slug}`} 
+                        href={`/post/${article.slug}`}
+                        prefetch={false} 
                         className="text-blue-600 font-semibold text-sm hover:text-blue-800 flex items-center gap-1 group/link"
                       >
                         Baca <span className="group-hover/link:translate-x-1 transition-transform">&rarr;</span>
