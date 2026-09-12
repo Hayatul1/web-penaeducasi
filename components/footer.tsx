@@ -25,6 +25,7 @@ export function Footer() {
                 <li key={item}>
                   <Link
                     href={`/category/${item.toLowerCase()}`}
+                    prefetch={false}
                     className="text-xs text-muted-foreground transition-colors hover:text-primary"
                   >
                     {item}
@@ -44,6 +45,7 @@ export function Footer() {
                 <li key={item}>
                   <Link
                     href={`/category/${item.toLowerCase()}`}
+                     prefetch={false}
                     className="text-xs text-muted-foreground transition-colors hover:text-primary"
                   >
                     {item}
@@ -68,6 +70,7 @@ export function Footer() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
+                     prefetch={false}
                     className="text-xs text-muted-foreground transition-colors hover:text-primary"
                   >
                     {item.label}
