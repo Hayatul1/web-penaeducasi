@@ -11,16 +11,17 @@
             <title>XML Sitemap</title>
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
             <style type="text/css">
-                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif; color: #444; margin: 0; padding: 20px; font-size: 14px; }
+                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif; color: #444; margin: 0; padding: 20px; font-size: 13px; }
                 #content { max-width: 960px; margin: 0 auto; }
                 h1 { color: #333; font-size: 24px; font-weight: bold; margin-bottom: 10px; }
                 p { margin-top: 0; line-height: 1.5; color: #555; }
                 a { color: #2563eb; text-decoration: none; }
                 a:hover { text-decoration: underline; }
                 .pena-brand { color: #d63638; font-weight: bold; }
-                table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
-                th { text-align: left; padding: 10px; border-bottom: 2px solid #ddd; font-weight: bold; color: #333; }
-                td { padding: 10px; border-bottom: 1px solid #eee; }
+                table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+                /* PERUBAHAN PADDING DI SINI: Dibuat lebih rapat (4px atas-bawah) */
+                th { text-align: left; padding: 4px 10px; border-bottom: 2px solid #ddd; font-weight: bold; color: #333; }
+                td { padding: 4px 10px; border-bottom: 1px solid #eee; }
                 tr:nth-child(even) td { background-color: #f9f9f9; }
                 td a { color: #333; }
                 td a:hover { color: #2563eb; }
