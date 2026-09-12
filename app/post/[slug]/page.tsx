@@ -1,5 +1,6 @@
 export const runtime = "edge"
 
+import type { Metadata } from "next"
 import Link from "next/link"
 import { SidebarLeft } from "@/components/sidebar-left"
 import { TopBar } from "@/components/top-bar"
@@ -10,6 +11,187 @@ import {
   getArticleBySlug,
   getRelatedArticles,
 } from "@/lib/sample-data"
+
+
+// =============================================================
+// SEO / SOCIAL MEDIA METADATA
+// =============================================================
+
+function cleanText(text: string = "") {
+  return text
+    .replace(/<[^>]*>/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+function limitDescription(text: string, maxLength = 160) {
+  const clean = cleanText(text)
+
+  if (clean.length <= maxLength) {
+    return clean
+  }
+
+  return clean.slice(0, maxLength).replace(/\s+\S*$/, "") + "..."
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+
+  const article = await getArticleBySlug(slug)
+
+  // -----------------------------------------------------------
+  // Jika artikel tidak ditemukan
+  // -----------------------------------------------------------
+  if (!article) {
+    return {
+      title: "Artikel Tidak Ditemukan | Pena Edukasi",
+      description: "Artikel yang Anda cari tidak ditemukan di Pena Edukasi.",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    }
+  }
+
+  const siteUrl = "https://web.penaeducasi.com"
+
+  const articleUrl = `${siteUrl}/post/${article.slug}`
+
+  // -----------------------------------------------------------
+  // Judul SEO
+  // -----------------------------------------------------------
+  const title = article.title
+
+  // -----------------------------------------------------------
+  // Description diambil dari Excerpt Studio
+  // -----------------------------------------------------------
+  const description = limitDescription(
+    article.excerpt || article.title
+  )
+
+  // -----------------------------------------------------------
+  // Gambar artikel dari Studio
+  // -----------------------------------------------------------
+  let imageUrl = ""
+
+  if (article.image) {
+    try {
+      imageUrl = new URL(article.image, siteUrl).toString()
+    } catch {
+      imageUrl = ""
+    }
+  }
+
+  // -----------------------------------------------------------
+  // Tags untuk keywords SEO
+  // -----------------------------------------------------------
+  const keywords = article.tags
+    ? article.tags
+        .split(",")
+        .map((tag: string) => tag.trim())
+        .filter(Boolean)
+    : []
+
+  // -----------------------------------------------------------
+  // Metadata dasar + SEO
+  // -----------------------------------------------------------
+  return {
+    metadataBase: new URL(siteUrl),
+
+    title: `${title} | Pena Edukasi`,
+
+    description,
+
+    keywords,
+
+    authors: [
+      {
+        name: article.author || "Pena Edukasi",
+      },
+    ],
+
+    creator: article.author || "Pena Edukasi",
+
+    publisher: "Pena Edukasi",
+
+    alternates: {
+      canonical: articleUrl,
+    },
+
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+    },
+
+    // =========================================================
+    // OPEN GRAPH
+    // Digunakan Facebook, WhatsApp, dan platform sosial lain
+    // =========================================================
+    openGraph: {
+      type: "article",
+
+      locale: "id_ID",
+
+      url: articleUrl,
+
+      siteName: "Pena Edukasi",
+
+      title,
+
+      description,
+
+      publishedTime: article.date,
+
+      authors: [
+        article.author || "Pena Edukasi",
+      ],
+
+      images: imageUrl
+        ? [
+            {
+              url: imageUrl,
+              width: 1200,
+              height: 630,
+              alt:
+                article.image_alt ||
+                article.title,
+            },
+          ]
+        : undefined,
+    },
+
+    // =========================================================
+    // TWITTER / X
+    // =========================================================
+    twitter: {
+      card: "summary_large_image",
+
+      title,
+
+      description,
+
+      images: imageUrl
+        ? [imageUrl]
+        : undefined,
+    },
+  }
+}
+
+
+// =============================================================
+// HALAMAN ARTIKEL
+// =============================================================
 
 export default async function PostPage({
   params,
@@ -123,7 +305,8 @@ export default async function PostPage({
                 "
               >
                 <Link
-                  href="/" prefetch={false}
+                  href="/"
+                  prefetch={false}
                   className="font-medium text-primary hover:underline"
                 >
                   Home
@@ -221,14 +404,14 @@ export default async function PostPage({
               <div className="mb-8 overflow-hidden rounded-none md:rounded-2xl">
                 <img
                   src={article.image || "/placeholder.svg"}
-                  alt={article.title}
+                  alt={article.image_alt || article.title}
                   className="aspect-video w-full object-cover"
                   fetchPriority="high"
                 />
               </div>
 
               {/* =================================================
-                  ARTICLE BODY (Ditambahkan article-container di sini)
+                  ARTICLE BODY
                   ================================================= */}
               <div
                 className="
@@ -285,6 +468,7 @@ export default async function PostPage({
                             <Link
                               key={index}
                               href={`/tag/${slugTag}`}
+                              prefetch={false}
                               className="
                                 rounded-full
                                 bg-secondary
@@ -380,7 +564,7 @@ export default async function PostPage({
                     <div className="aspect-video overflow-hidden">
                       <img
                         src={rel.image || "/placeholder.svg"}
-                        alt={rel.title}
+                        alt={rel.image_alt || rel.title}
                         className="
                           h-full
                           w-full
