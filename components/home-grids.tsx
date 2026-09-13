@@ -42,7 +42,8 @@ export function BentoBoxGrid({ articles }: { articles: Article[] }) {
           prefetch={false}
           className="group relative col-span-1 row-span-1 aspect-[4/3] w-full overflow-hidden rounded-none md:col-span-2 md:row-span-2 md:rounded-2xl"
         >
-          <img src={a.image || "/placeholder.svg"} alt={a.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+          <img src={a.image || "/placeholder.svg"} alt={a.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" 
+  fetchPriority="high" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 flex items-end justify-between gap-2">
             <div>
