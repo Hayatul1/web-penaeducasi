@@ -1,5 +1,5 @@
 'use client'
-import Image from "next/image"
+
 import Link from "next/link"
 import { Eye } from "lucide-react"
 import type { Article } from "@/lib/sample-data"
