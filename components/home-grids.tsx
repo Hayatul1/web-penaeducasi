@@ -64,7 +64,7 @@ export function BentoBoxGrid({ articles }: { articles: Article[] }) {
           </div>
         </Link>
 
-        {[b, c, d, e].map((item) => (
+        {[b, c, d, e].map((item, index) => (
           <Link
             key={item.id}
             href={`/post/${item.slug}`}
@@ -72,12 +72,13 @@ export function BentoBoxGrid({ articles }: { articles: Article[] }) {
             className="group relative aspect-video w-full overflow-hidden rounded-none md:rounded-2xl md:aspect-auto md:h-full"
           >
             <Image 
-  src={item.image || "/placeholder.svg"} 
-  alt={item.title}
-  fill
-  sizes="(max-width: 768px) 100vw, 25vw"
-  className="object-cover transition-transform duration-500 group-hover:scale-105" 
-/>
+              src={item.image || "/placeholder.svg"} 
+              alt={item.title} 
+              fill
+              priority={index === 0} // <--- KUNCI: Beri prioritas hanya pada item pertama di grup ini (artikel 'b')
+              sizes="(max-width: 768px) 100vw, 25vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105" 
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 flex items-end justify-between gap-2">
               <h4 className="line-clamp-2 text-base font-semibold leading-snug text-white md:text-sm">{item.title}</h4>
