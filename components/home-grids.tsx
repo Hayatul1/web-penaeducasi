@@ -74,9 +74,8 @@ export function BentoBoxGrid({ articles }: { articles: Article[] }) {
             <Image 
   src={item.image || "/placeholder.svg"} 
   alt={item.title}
-  fill
   sizes="(max-width: 768px) 100vw, 25vw"
-  className="object-cover transition-transform duration-500 group-hover:scale-105" 
+  className="object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" 
 />
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 flex items-end justify-between gap-2">
