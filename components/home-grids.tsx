@@ -40,7 +40,7 @@ export function BentoBoxGrid({ articles }: { articles: Article[] }) {
         <Link
           href={`/post/${a.slug}`}
           prefetch={false}
-          className="group relative col-span-1 row-span-1 aspect-[4/3] w-full overflow-hidden rounded-none md:col-span-2 md:row-span-2 md:rounded-2xl"
+          className="group relative col-span-1 row-span-1 aspect-[4/3] w-full overflow-hidden rounded-none md:col-span-2 md:row-span-2 md:rounded-2xl md:aspect-square md:h-full"
         >
             <img src={a.image || "/placeholder.svg"} alt={a.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" 
   priority
@@ -64,7 +64,7 @@ export function BentoBoxGrid({ articles }: { articles: Article[] }) {
             key={item.id}
             href={`/post/${item.slug}`}
             prefetch={false}
-            className="group relative aspect-video w-full overflow-hidden rounded-none md:rounded-2xl md:aspect-auto md:h-full"
+            className="group relative aspect-video w-full overflow-hidden rounded-none md:rounded-2xl md:aspect-square"
           >
             <img src={item.image || "/placeholder.svg"} alt={item.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
