@@ -15,6 +15,9 @@ import {
   X,
 } from "lucide-react"
 
+// IMPORT KOMPONEN FOOTER BARU DI SINI
+import SidebarFooter from "./sidebar-footer" 
+
 const navItems = [
   { label: "Beranda", href: "/", icon: Home },
   { label: "Pendidikan", href: "/category/pendidikan", icon: GraduationCap },
@@ -32,7 +35,6 @@ export function SidebarLeft() {
     <>
       {/* =========================================================
           MOBILE HAMBURGER
-
           Tetap melekat dengan TopBar.
           Jangan diubah karena posisi ini sudah berhasil.
           ========================================================= */}
@@ -219,8 +221,6 @@ export function SidebarLeft() {
 
         {/* =======================================================
             NAVIGATION
-
-            Tetap dipertahankan.
             ======================================================= */}
         <nav
           className="
@@ -228,6 +228,7 @@ export function SidebarLeft() {
             overflow-y-auto
             px-3
             py-3
+            scrollbar-hide
           "
           aria-label="Navigasi utama"
         >
@@ -262,7 +263,6 @@ export function SidebarLeft() {
                         flex-shrink-0
                       "
                     />
-
                     {item.label}
                   </Link>
                 </li>
@@ -272,15 +272,10 @@ export function SidebarLeft() {
         </nav>
 
         {/* =======================================================
-            FOOTER SIDEBAR DIHAPUS
-
-            Sebelumnya ada:
-            
-            © 2026 Pena Edukasi
-
-            Sekarang sengaja tidak ada karena copyright sudah
-            tersedia pada Footer utama website.
+            FOOTER SIDEBAR PREMIUM (DIINTEGRASIKAN DI SINI)
             ======================================================= */}
+        <SidebarFooter />
+        
       </aside>
     </>
   )
