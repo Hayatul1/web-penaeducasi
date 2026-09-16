@@ -23,7 +23,7 @@ export default function SidebarFooter() {
           href="https://news.google.com/..." 
           target="_blank"
           rel="noopener noreferrer"
-          className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-gray-900 px-4 py-3 text-sm font-medium text-white shadow-md transition-all hover:bg-gray-800 hover:shadow-lg"
+          className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-blue-600 px-4 py-3 text-sm font-medium text-white shadow-md transition-all hover:bg-blue-700 hover:shadow-lg"
         >
           <Newspaper size={16} className="transition-transform group-hover:-rotate-6" />
           <span>Ikuti di Google News</span>
