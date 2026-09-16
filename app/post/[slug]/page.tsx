@@ -214,6 +214,30 @@ export default async function PostPage({
   }
 
   // =============================================================
+  // SCHEMA MARKUP JSON-LD (DITAMBAHKAN DI SINI)
+  // =============================================================
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": article.title,
+    "image": article.image ? [article.image] : [],
+    "datePublished": article.date,
+    "dateModified": article.date,
+    "author": {
+      "@type": "Person",
+      "name": article.author || "Pena Edukasi",
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Pena Edukasi",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://image.penaeducasi.com/Logo/logo-web-penaeducasi.png",
+      },
+    },
+  }
+
+  // =============================================================
   // RELATED ARTICLES
   // =============================================================
   const related = await getRelatedArticles(article.id, 3)
@@ -285,6 +309,14 @@ export default async function PostPage({
               itemScope
               itemType="https://schema.org/BlogPosting"
             >
+              {/* =================================================
+                  SCHEMA MARKUP SCRIPT (DITAMBAHKAN DI SINI)
+                  ================================================= */}
+              <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+              />
+
               {/* =================================================
                   BREADCRUMB
                   ================================================= */}
@@ -494,7 +526,7 @@ export default async function PostPage({
 
             {/* ===================================================
                 RELATED ARTICLES
-                =================================================== */}
+                ================================================   */}
             <section
               className="
                 mt-12
@@ -615,7 +647,7 @@ export default async function PostPage({
 
       {/* =========================================================
           SCROLL TO TOP
-          ========================================================= */}
+          ======================================================== */}
       <ScrollToTop />
     </div>
   )
