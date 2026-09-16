@@ -21,7 +21,7 @@ export function SidebarRight() {
     <aside
       className="
         hidden
-        w-[340px]
+        w-[320px]
         flex-shrink-0
         self-stretch
         xl:block
