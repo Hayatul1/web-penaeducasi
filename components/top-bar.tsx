@@ -20,9 +20,11 @@ const categories = [
   { label: "Madrasah", href: "/category/madrasah" },
   { label: "Parenting", href: "/category/parenting" },
   { label: "Tips", href: "/category/tips" },
+  { label: "Produktivitas", href: "/category/produktivitas" },
   { label: "Berita", href: "/category/berita" },
-  { label: "Teknologi", href: "/category/teknologi" },
-  { label: "Bisnis&Ekonomi", href: "/category/bisnis&ekonomi" },
+  { label: "Edutech", href: "/category/edutech" },
+  { label: "Edupreneur", href: "/category/edupreneur" },
+
 ]
 
 export function TopBar() {
