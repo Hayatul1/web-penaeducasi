@@ -92,3 +92,142 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* ==========================================================================
+   STYLE KHUSUS KOTAK PRODUK AFILIASI (PENA EDUKASI)
+   Aman dari bentrok Tailwind CSS / Next.js Image
+   ========================================================================== */
+
+/* Kontainer Utama */
+.pe-product-section {
+  margin: 30px 0 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.pe-product-section .pe-product-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #ffffff;
+  padding: 10px 0;
+  margin-bottom: 12px;
+}
+
+/* Memaksa kontainer gambar tetap berukuran 150x150 */
+.pe-product-section .pe-img-container {
+  position: relative !important;
+  width: 150px !important;
+  height: 150px !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Mengalahkan CSS bawaan 'prose' Tailwind pada gambar */
+.pe-product-section .pe-img-container img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  object-fit: cover !important;
+  border-radius: 28px !important;
+  background-color: #f5f5f5;
+  border: 1px solid #eaeaea;
+  margin: 0 !important;  /* Menghilangkan jarak atas/bawah otomatis */
+  padding: 0 !important;
+  display: block !important;
+}
+
+/* Badge (Icon +) */
+.pe-product-section .pe-plus-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: bold;
+  color: #555;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* Info Produk (Teks) */
+.pe-product-section .pe-product-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.pe-product-section .pe-product-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 6px 0 !important;
+  line-height: 1.4;
+  text-decoration: none;
+  border-bottom: none !important; /* Menghilangkan garis bawah link dari Tailwind */
+}
+
+.pe-product-section .pe-product-title:hover {
+  color: #007bff;
+}
+
+.pe-product-section .pe-product-meta {
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 6px 0 !important;
+  font-weight: 500;
+}
+
+.pe-product-section .pe-product-rating {
+  font-size: 13px;
+  color: #777;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pe-product-section .pe-star-icon {
+  color: #f1c40f;
+}
+
+/* Deskripsi Bawah Kotak Produk */
+.pe-product-section .pe-description {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #333;
+  margin-top: 5px !important;
+  margin-bottom: 35px !important;
+}
+
+.pe-product-section .pe-link {
+  color: #333;
+  text-decoration: none;
+  border-bottom: 1px dotted #333;
+  font-weight: 600;
+}
+
+.pe-product-section .pe-link:hover {
+  color: #007bff;
+  border-bottom-color: #007bff;
+}
+
+/* Responsif Mobile */
+@media (max-width: 480px) {
+  .pe-product-section .pe-product-card {
+    gap: 15px;
+  }
+  .pe-product-section .pe-img-container {
+    width: 110px !important;
+    height: 110px !important;
+  }
+  .pe-product-section .pe-product-title {
+    font-size: 14px;
+  }
+}
