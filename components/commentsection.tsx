@@ -1,13 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-// Impor hooks dari next-auth untuk membaca status login Google secara nyata
 import { useSession, signIn } from "next-auth/react";
 
 type CommentType = {
   id: number;
   initial: string;
-  avatarUrl?: string; // Ditambahkan untuk menyimpan URL foto profil Google
+  avatarUrl?: string;
   bgColor: string;
   name: string;
   time: string;
@@ -17,7 +16,6 @@ type CommentType = {
 };
 
 export default function CommentSection() {
-  // Ambil data sesi aktif dari TopBar (NextAuth) Anda
   const { data: session, status } = useSession();
   const isLoggedIn = status === "authenticated";
 
@@ -33,15 +31,11 @@ export default function CommentSection() {
   // Mengecek "Draf Komentar" di localStorage
   // ==========================================
   useEffect(() => {
-    // Hanya jalan jika status sudah benar-benar authenticated dan ada data user
     if (isLoggedIn && session?.user) {
       const pendingComment = localStorage.getItem("pending_comment");
       
       if (pendingComment) {
-        // Tarik nama dari akun Google, jika kosong gunakan default
         const googleName = session.user.name || "Akun Pengunjung";
-        
-        // Buat inisial berdasarkan nama Google
         const words = googleName.trim().split(" ");
         const init = words.length === 1 
             ? words[0].substring(0, 2).toUpperCase()
@@ -50,7 +44,7 @@ export default function CommentSection() {
         const autoComment: CommentType = {
           id: Date.now(),
           initial: init,
-          avatarUrl: session.user.image || undefined, // Tarik foto Google jika ada
+          avatarUrl: session.user.image || undefined,
           bgColor: "#1e3a8a",
           name: googleName,
           time: "Baru saja",
@@ -59,10 +53,7 @@ export default function CommentSection() {
           dislikes: 0,
         };
 
-        // Tambahkan komentar ke layar
         setComments((prev) => [autoComment, ...prev]);
-        
-        // Bersihkan kotak teks & hapus draf dari browser agar tidak terkirim ulang
         setCommentText("");
         localStorage.removeItem("pending_comment");
       }
@@ -77,12 +68,17 @@ export default function CommentSection() {
 
     // SKENARIO 1: PENGUNJUNG BELUM LOGIN
     if (!isLoggedIn) {
-      // 1. Simpan diam-diam teksnya ke local storage
-      localStorage.setItem("pending_comment", commentText);
+      // Menampilkan pop-up peringatan sebelum lanjut login
+      const confirmLogin = window.confirm(
+        "Anda tidak bisa komentar sebelum login terlebih dahulu.\n\nKlik OK untuk lanjut login."
+      );
       
-      // 2. Panggil fungsi signIn dari next-auth persis seperti di TopBar Anda
-      // Ini akan me-redirect pengunjung ke halaman persetujuan akun Google
-      signIn("google");
+      if (confirmLogin) {
+        // Jika klik OK, simpan draf dan arahkan ke Google
+        localStorage.setItem("pending_comment", commentText);
+        signIn("google");
+      }
+      // Jika klik Cancel/Batal, tidak terjadi apa-apa (draf tidak disimpan, tidak pindah halaman)
       return;
     }
 
@@ -123,7 +119,6 @@ export default function CommentSection() {
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
             maxLength={maxChars}
-            // Dinamis Placeholder: Sebut nama mereka jika sudah login
             placeholder={isLoggedIn ? `Berkomentar sebagai ${session?.user?.name}...` : "Tulis Komentar..."}
             className="w-full resize-none outline-none bg-transparent text-sm text-foreground placeholder:text-slate-400 min-h-[60px]"
           />
@@ -178,7 +173,6 @@ export default function CommentSection() {
           comments.map((comment) => (
             <div key={comment.id} className="flex gap-4 py-5 border-b border-slate-100 dark:border-slate-800">
               
-              {/* AVATAR: Prioritaskan Foto Google, Fallback ke Inisial */}
               <div 
                 className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0 overflow-hidden"
                 style={{ backgroundColor: comment.bgColor }}
@@ -190,7 +184,6 @@ export default function CommentSection() {
                 )}
               </div>
 
-              {/* Konten Komentar */}
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-start mb-1">
                   <div>
