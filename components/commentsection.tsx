@@ -1,10 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+// Impor hooks dari next-auth untuk membaca status login Google secara nyata
+import { useSession, signIn } from "next-auth/react";
 
 type CommentType = {
   id: number;
   initial: string;
+  avatarUrl?: string; // Ditambahkan untuk menyimpan URL foto profil Google
   bgColor: string;
   name: string;
   time: string;
@@ -14,48 +17,57 @@ type CommentType = {
 };
 
 export default function CommentSection() {
+  // Ambil data sesi aktif dari TopBar (NextAuth) Anda
+  const { data: session, status } = useSession();
+  const isLoggedIn = status === "authenticated";
+
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState<CommentType[]>([]);
   const [activeTab, setActiveTab] = useState("Terbaru");
-  
-  // ==========================================
-  // SIMULASI STATE LOGIN (Untuk Testing di Localhost)
-  // ==========================================
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState<{ name: string; initial: string } | null>(null);
 
   const maxChars = 1000;
   const tabs = ["Terbaru", "Terpilih", "Terpopuler", "Teramai", "Komentar yang disematkan"];
 
   // ==========================================
   // EFEK SETELAH LOGIN SUKSES
-  // Mengecek apakah ada "draf komentar" yang tertunda
+  // Mengecek "Draf Komentar" di localStorage
   // ==========================================
   useEffect(() => {
-    if (isLoggedIn && user) {
+    // Hanya jalan jika status sudah benar-benar authenticated dan ada data user
+    if (isLoggedIn && session?.user) {
       const pendingComment = localStorage.getItem("pending_comment");
       
       if (pendingComment) {
-        // Otomatis kirim komentar yang tertunda
-        const newComment: CommentType = {
+        // Tarik nama dari akun Google, jika kosong gunakan default
+        const googleName = session.user.name || "Akun Pengunjung";
+        
+        // Buat inisial berdasarkan nama Google
+        const words = googleName.trim().split(" ");
+        const init = words.length === 1 
+            ? words[0].substring(0, 2).toUpperCase()
+            : (words[0][0] + words[1][0]).toUpperCase();
+
+        const autoComment: CommentType = {
           id: Date.now(),
-          initial: user.initial,
-          bgColor: "#1e3a8a", // Warna biru untuk user login
-          name: user.name,
+          initial: init,
+          avatarUrl: session.user.image || undefined, // Tarik foto Google jika ada
+          bgColor: "#1e3a8a",
+          name: googleName,
           time: "Baru saja",
           text: pendingComment,
           likes: 0,
           dislikes: 0,
         };
 
-        setComments((prev) => [newComment, ...prev]);
+        // Tambahkan komentar ke layar
+        setComments((prev) => [autoComment, ...prev]);
         
-        // Bersihkan kotak teks dan hapus draf dari local storage
+        // Bersihkan kotak teks & hapus draf dari browser agar tidak terkirim ulang
         setCommentText("");
         localStorage.removeItem("pending_comment");
       }
     }
-  }, [isLoggedIn, user]);
+  }, [isLoggedIn, session]);
 
   // ==========================================
   // FUNGSI TOMBOL KIRIM
@@ -63,34 +75,30 @@ export default function CommentSection() {
   const handleKirim = () => {
     if (commentText.trim() === "") return;
 
-    // SKENARIO 1: JIKA BELUM LOGIN
+    // SKENARIO 1: PENGUNJUNG BELUM LOGIN
     if (!isLoggedIn) {
-      // 1. Simpan teks ke local storage
+      // 1. Simpan diam-diam teksnya ke local storage
       localStorage.setItem("pending_comment", commentText);
       
-      // 2. Arahkan ke Login (Simulasi redirect login google)
-      const confirmLogin = window.confirm("Anda harus login untuk berkomentar. Arahkan ke Login Google?");
-      
-      if (confirmLogin) {
-        // Simulasi proses login berhasil setelah beberapa detik
-        setTimeout(() => {
-          setIsLoggedIn(true);
-          setUser({ name: "Hayatul Makki", initial: "HM" }); // Data didapat dari Google
-          alert("Login Google Sukses! Komentar Anda otomatis diterbitkan.");
-        }, 800);
-      } else {
-        // Batal login, hapus draf
-        localStorage.removeItem("pending_comment");
-      }
+      // 2. Panggil fungsi signIn dari next-auth persis seperti di TopBar Anda
+      // Ini akan me-redirect pengunjung ke halaman persetujuan akun Google
+      signIn("google");
       return;
     }
 
-    // SKENARIO 2: JIKA SUDAH LOGIN (Jalan Normal)
+    // SKENARIO 2: PENGUNJUNG SUDAH LOGIN (Jalan Normal)
+    const googleName = session?.user?.name || "Akun Pengunjung";
+    const words = googleName.trim().split(" ");
+    const init = words.length === 1 
+        ? words[0].substring(0, 2).toUpperCase()
+        : (words[0][0] + words[1][0]).toUpperCase();
+
     const newComment: CommentType = {
       id: Date.now(),
-      initial: user?.initial || "U",
+      initial: init,
+      avatarUrl: session?.user?.image || undefined,
       bgColor: "#1e3a8a",
-      name: user?.name || "User",
+      name: googleName,
       time: "Baru saja",
       text: commentText,
       likes: 0,
@@ -104,21 +112,9 @@ export default function CommentSection() {
   return (
     <div className="w-full mt-10 font-sans">
       
-      {/* HEADER & TOMBOL LOGOUT (Hanya untuk testing) */}
-      <div className="flex justify-between items-end mb-4">
-        <h3 className="text-xl font-bold text-foreground">
-          Komentar <span className="font-normal">({comments.length})</span>
-        </h3>
-        
-        {isLoggedIn && (
-          <button 
-            onClick={() => { setIsLoggedIn(false); setUser(null); }}
-            className="text-xs text-red-500 hover:underline"
-          >
-            Logout Simulasi
-          </button>
-        )}
-      </div>
+      <h3 className="text-xl font-bold text-foreground mb-4">
+        Komentar <span className="font-normal">({comments.length})</span>
+      </h3>
 
       {/* Box Input Komentar */}
       <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl mb-6">
@@ -127,7 +123,8 @@ export default function CommentSection() {
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
             maxLength={maxChars}
-            placeholder={isLoggedIn ? `Berkomentar sebagai ${user?.name}...` : "Tulis Komentar..."}
+            // Dinamis Placeholder: Sebut nama mereka jika sudah login
+            placeholder={isLoggedIn ? `Berkomentar sebagai ${session?.user?.name}...` : "Tulis Komentar..."}
             className="w-full resize-none outline-none bg-transparent text-sm text-foreground placeholder:text-slate-400 min-h-[60px]"
           />
           
@@ -180,12 +177,20 @@ export default function CommentSection() {
         ) : (
           comments.map((comment) => (
             <div key={comment.id} className="flex gap-4 py-5 border-b border-slate-100 dark:border-slate-800">
+              
+              {/* AVATAR: Prioritaskan Foto Google, Fallback ke Inisial */}
               <div 
-                className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
+                className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0 overflow-hidden"
                 style={{ backgroundColor: comment.bgColor }}
               >
-                {comment.initial}
+                {comment.avatarUrl ? (
+                  <img src={comment.avatarUrl} alt={comment.name} className="w-full h-full object-cover" />
+                ) : (
+                  comment.initial
+                )}
               </div>
+
+              {/* Konten Komentar */}
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-start mb-1">
                   <div>
