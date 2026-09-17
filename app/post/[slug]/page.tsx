@@ -7,6 +7,8 @@ import { TopBar } from "@/components/top-bar"
 import { SidebarRight } from "@/components/sidebar-right"
 import { Footer } from "@/components/footer"
 import { ScrollToTop } from "@/components/scroll-to-top"
+import ArticleActions from "@/components/articleactions"
+import CommentSection from "@/components/commentsection"
 import {
   getArticleBySlug,
   getRelatedArticles,
@@ -525,6 +527,13 @@ export default async function PostPage({
             </article>
 
             {/* ===================================================
+                TOMBOL AKSI (SHARE, LIKE, SIMPAN) DITAMBAHKAN DI SINI
+                =================================================== */}
+            <div className="px-4 md:px-0">
+               <ArticleActions />
+            </div>
+
+            {/* ===================================================
                 RELATED ARTICLES
                 ================================================   */}
             <section
@@ -631,6 +640,16 @@ export default async function PostPage({
                 ))}
               </div>
             </section>
+
+            {/* ===================================================
+              GARIS PEMISAH & KOLOM KOMENTAR
+              =================================================== */}
+          <div className="px-4 md:px-0">
+            <hr className="my-10 border-t border-border opacity-60" />
+            <CommentSection />
+          </div>
+          {/* =================================================== */}
+          
           </main>
 
           {/* =====================================================
