@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { sendContactEmail } from "@/app/actions/contact"
 
 export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -13,17 +12,42 @@ export default function ContactForm() {
     setStatus("idle")
 
     const formData = new FormData(event.currentTarget)
-    const result = await sendContactEmail(formData)
+    
+    // Ubah FormData menjadi objek biasa agar bisa dikirim sebagai JSON
+    const data = Object.fromEntries(formData.entries())
 
-    if (result.success) {
-      setStatus("success")
-    } else {
+    try {
+      // Menggunakan FormSubmit metode AJAX agar halaman tidak loading/redirect
+      const response = await fetch("https://formsubmit.co/ajax/admin@penaeducasi.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          Nama: data.Nama,
+          Email: data.Email,
+          WhatsApp: data.WhatsApp,
+          Pesan: data.Pesan,
+          _subject: `Pesan Baru dari Website: ${data.Nama}`,
+          _template: "table"
+        }),
+      })
+
+      if (response.ok) {
+        setStatus("success")
+      } else {
+        setStatus("error")
+      }
+    } catch (error) {
+      console.error("FormSubmit Error:", error)
       setStatus("error")
     }
+
     setIsSubmitting(false)
   }
 
-  // Jika sukses, tampilkan ucapan terima kasih
+  // Tampilan jika sukses terkirim
   if (status === "success") {
     return (
       <div className="rounded-xl border border-green-200 bg-green-50 p-8 text-center shadow-sm">
@@ -39,6 +63,7 @@ export default function ContactForm() {
     )
   }
 
+  // Tampilan Form Utama
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -61,7 +86,7 @@ export default function ContactForm() {
       </div>
       
       {status === "error" && (
-        <p className="text-sm font-semibold text-red-500">Gagal mengirim pesan. Silakan coba lagi atau kirim manual ke email kami.</p>
+        <p className="text-sm font-semibold text-red-500">Gagal mengirim pesan. Pastikan Anda terhubung ke internet.</p>
       )}
 
       <button type="submit" disabled={isSubmitting} className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-8 py-3.5 text-sm font-bold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70 md:w-auto self-start">
