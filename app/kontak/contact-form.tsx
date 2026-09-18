@@ -18,7 +18,7 @@ export default function ContactForm() {
 
     try {
       // Menggunakan FormSubmit metode AJAX agar halaman tidak loading/redirect
-      const response = await fetch("https://formsubmit.co/ajax/admin@penaeducasi.com", {
+      const response = await fetch("https://formsubmit.co/ajax/1b08f4b8063980ae1c7f59490cf86366", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
