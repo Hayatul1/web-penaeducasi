@@ -1,46 +1,49 @@
 import { NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
 
-// WAJIB: Cloudflare D1 mengharuskan API berjalan di Edge Runtime
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
-// [GET] FUNGSI UNTUK MENGAMBIL DATA FOLLOWER DARI DATABASE
 export async function GET() {
   try {
-    // PERBAIKAN: Tambahkan "as any" untuk menghilangkan error TypeScript
-    const db = (getRequestContext().env as any).DB;
+    const env = getRequestContext().env as any;
     
-    // Ambil data dan urutkan dari yang paling baru follow (DESC)
-    const { results } = await db.prepare(
+    // Pengecekan apakah binding DB benar-benar ada
+    if (!env || !env.DB) {
+      return NextResponse.json({ error: "Database binding 'DB' tidak ditemukan di Cloudflare!" }, { status: 500 });
+    }
+
+    const { results } = await env.DB.prepare(
       "SELECT * FROM followers ORDER BY created_at DESC"
     ).all();
 
-    return NextResponse.json(results, { status: 200 });
+    return NextResponse.json(results || [], { status: 200 });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: "DB Error (GET): " + error.message }, { status: 500 });
   }
 }
 
-// [POST] FUNGSI UNTUK MENYIMPAN FOLLOWER BARU KE DATABASE
 export async function POST(request: Request) {
   try {
-    const { email, name, avatar } = await request.json();
+    const body = await request.json();
+    const { email, name, avatar } = body;
     
-    // PERBAIKAN: Tambahkan "as any" untuk menghilangkan error TypeScript
-    const db = (getRequestContext().env as any).DB;
+    const env = getRequestContext().env as any;
+
+    if (!env || !env.DB) {
+      return NextResponse.json({ error: "Database binding 'DB' tidak ditemukan di Cloudflare!" }, { status: 500 });
+    }
 
     if (!email || !name) {
       return NextResponse.json({ error: "Email dan nama wajib diisi" }, { status: 400 });
     }
 
-    // Insert ke tabel. "ON CONFLICT DO NOTHING" mencegah error jika orang yang sama klik 2x
-    await db.prepare(
+    await env.DB.prepare(
       "INSERT INTO followers (email, name, avatar) VALUES (?, ?, ?) ON CONFLICT(email) DO NOTHING"
     ).bind(email, name, avatar).run();
 
     return NextResponse.json({ success: true, message: "Berhasil follow" }, { status: 200 });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: "DB Error (POST): " + error.message }, { status: 500 });
   }
 }
