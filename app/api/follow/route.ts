@@ -3,6 +3,7 @@ import { getRequestContext } from '@cloudflare/next-on-pages';
 
 // WAJIB: Cloudflare D1 mengharuskan API berjalan di Edge Runtime
 export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 // [GET] FUNGSI UNTUK MENGAMBIL DATA FOLLOWER DARI DATABASE
 export async function GET() {
