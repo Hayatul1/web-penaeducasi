@@ -62,10 +62,11 @@ export function Footer() {
             </h3>
             <ul className="flex flex-col gap-2">
               {[
-                { label: "Tentang", href: "/p/tentang" },
-                { label: "Kontak", href: "/p/kontak" },
-                { label: "Privasi", href: "/p/privasi" },
-                { label: "Disclaimer", href: "/p/disclaimer" },
+                { label: "Tentang", href: "/about" },
+                { label: "Kontak", href: "/kontak" },
+                { label: "Privasi", href: "/privacy-policy" },
+                { label: "Disclaimer", href: "/disclaimer" },
+                { label: "Sitemap", href: "/sitemap" },
               ].map((item) => (
                 <li key={item.href}>
                   <Link
