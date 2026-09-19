@@ -2,6 +2,9 @@
 
 import Link from "next/link"
 import { allArticles } from "@/lib/sample-data"
+// 1. Impor komponen FollowersWidget yang sudah dibuat
+// Sesuaikan path import ini dengan lokasi file FollowersWidget Anda
+import FollowersWidget from "./followerswidget" 
 
 const popularPosts = allArticles.slice(0, 5)
 
@@ -27,19 +30,6 @@ export function SidebarRight() {
         xl:block
       "
     >
-      {/* =========================================================
-          STICKY SIDEBAR KANAN
-
-          TETAP STICKY
-          TIDAK ADA INTERNAL SCROLLBAR
-
-          Sebelumnya terdapat:
-          max-h-[calc(100vh-88px)]
-          overflow-y-auto
-
-          Keduanya sengaja DIHAPUS agar tidak muncul scrollbar
-          kedua di dalam sidebar.
-          ========================================================= */}
       <div
         className="
           sticky
@@ -51,6 +41,11 @@ export function SidebarRight() {
           pb-5
         "
       >
+        {/* =======================================================
+            FOLLOWERS WIDGET (Diletakkan Paling Atas)
+            ======================================================= */}
+        <FollowersWidget />
+
         {/* =======================================================
             ARTIKEL POPULER
             ======================================================= */}
